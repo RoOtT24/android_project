@@ -1,0 +1,69 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:startColor="@color/orange_color_3"
+                android:endColor="#00FFFFFF"
+                android:gradientRadius="400" />
+        </shape>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="30"
+            android:toDegrees="60"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:startColor="@color/orange_color_3"
+                    android:endColor="#00FFFFFF"
+                    android:angle="0" />
+            </shape>
+        </rotate>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="120"
+            android:toDegrees="150"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:startColor="@color/orange_color_2"
+                    android:endColor="#00FFFFFF"
+                    android:angle="0" />
+            </shape>
+        </rotate>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="210"
+            android:toDegrees="240"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:startColor="@color/orange_color_2"
+                    android:endColor="#00FFFFFF"
+                    android:angle="0" />
+            </shape>
+        </rotate>
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="300"
+            android:toDegrees="330"
+            android:pivotX="50%"
+            android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <gradient
+                    android:startColor="@color/orange_color_3"
+                    android:endColor="#00FFFFFF"
+                    android:angle="0" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
