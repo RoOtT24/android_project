@@ -8,13 +8,7 @@
     android:orientation="vertical"
     tools:context=".SignupActivity">
 
-    <ImageView
-        android:id="@+id/PersonalPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/default_photo"
-        android:contentDescription="@string/personal_photo" />
+
 
     <ImageView
         android:id="@+id/imageView5"

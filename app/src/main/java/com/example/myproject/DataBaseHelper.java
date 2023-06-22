@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
 import java.util.regex.Pattern;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
@@ -17,7 +19,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_EMAIL = "Email";
     private static final String COLUMN_USER_PHONE = "Phone";
     private static final String COLUMN_USER_ADDRESS = "Address";
-    private static final String COLUMN_USER_PASSWORD = "Password";
+    public static final String COLUMN_USER_PASSWORD = "Password";
 
     public DataBaseHelper(Context context, String database, Object o, int i) {
         super(context, "DATABASE", null, DATABASE_VERSION);
@@ -61,6 +63,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (isValidPassword(student.getPassword())) {
             values.put(COLUMN_USER_PASSWORD, student.getPassword());
+
+
         } else {
             throw new IllegalArgumentException("Invalid password format");
         }

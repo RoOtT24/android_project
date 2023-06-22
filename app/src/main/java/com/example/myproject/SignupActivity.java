@@ -10,22 +10,20 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
 
-    private DataBaseHelper dbHelper = new DataBaseHelper(SignupActivity.this, "DATABASE", null, 1);
-    private ImageView personalPhoto;
+    private  DataBaseHelper dbHelper ;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         int x =0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
+        dbHelper = new DataBaseHelper(SignupActivity.this, "DATABASE", null, 1);
 
         Button signup = findViewById(R.id.SignUp);
         EditText firstName = findViewById(R.id.FirstName);
@@ -36,41 +34,6 @@ public class SignupActivity extends AppCompatActivity {
         EditText password = findViewById(R.id.Password);
         EditText confirmPassword = findViewById(R.id.ConfrimPassword);
 
-        personalPhoto = findViewById(R.id.PersonalPhoto);
-        personalPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-            }
-        });
-    /*    signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String fName = firstName.getText().toString();
-                String lName = lastName.getText().toString();
-                String userEmail = email.getText().toString();
-                String userPhone = phone.getText().toString();
-                String userAddress = address.getText().toString();
-                String userPassword = password.getText().toString();
-                String confirmPass = confirmPassword.getText().toString();
-
-                if (userPassword.equals(confirmPass)) {
-                    // Create a new Student object
-                    Student student = new Student(fName, lName, userEmail, userPhone, userAddress, userPassword);
-
-                    // Insert the student into the database
-                    dbHelper.insertUser(student);
-
-                    // Show a success message with the first name
-                    String toastMessage = "Signup successful. Welcome, " + fName + "!";
-                    Toast.makeText(SignupActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
-                    // Clear the input fields
-                    clearInputFields();
-                } else {
-                    Toast.makeText(SignupActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,8 +93,6 @@ public class SignupActivity extends AppCompatActivity {
                 if (!userPassword.isEmpty() && !isValidPassword(userPassword)) {
                     isValid = false;
                     password.setError("Invalid password format, must be 8-15 character and contain at least one number, one lowercase letter, and one uppercase letter. ");
-
-
                 }
 
                 if (isValid && userPassword.equals(confirmPass)) {
@@ -143,6 +104,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     // Show a success message
                     Toast.makeText(SignupActivity.this, "Signup successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, student.getPassword(), Toast.LENGTH_SHORT).show();
 
                     // Clear the input fields
                     clearInputFields();
@@ -194,7 +156,7 @@ public class SignupActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            personalPhoto.setImageBitmap(imageBitmap);
+
         }
     }
 }
