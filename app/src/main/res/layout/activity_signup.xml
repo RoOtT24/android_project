@@ -8,25 +8,14 @@
     android:orientation="vertical"
     tools:context=".SignupActivity">
 
-<<<<<<< HEAD
-
-=======
-<!--    <ImageView-->
-<!--        android:id="@+id/PersonalPhoto"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:src="@drawable/student"-->
-<!--        android:contentDescription="@string/personal_photo"-->
-<!--        />-->
->>>>>>> Tariq
-
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/profilePic"
         android:layout_width="168dp"
         android:layout_height="183dp"
         android:layout_marginLeft="130dp"
-        app:srcCompat="@drawable/student" />
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="15dp"
+        app:srcCompat="@drawable/upload_image" />
 
     <EditText
         android:id="@+id/FirstName"
