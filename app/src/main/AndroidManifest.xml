@@ -18,6 +18,20 @@
         <activity
             android:name=".homeActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".WhoAreYou"
+            android:exported="false" />
+
+        <activity
+            android:name=".SignUpAdmin"
+            android:exported="false" />
+
+        <activity
+            android:name=".SignUpInstructor"
+            android:exported="false" />
+
+
         <activity
             android:name=".SignupActivity"
             android:exported="false" />

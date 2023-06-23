@@ -88,10 +88,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_FIRST_NAME, student.getFirstName());
         values.put(COLUMN_USER_LAST_NAME, student.getLastName());
-<<<<<<< HEAD
+
         values.put(COLUMN_USER_IMAGE, student.getImage());
-=======
->>>>>>> Roa
+
 
         if (isValidEmail(student.getEmail())) {
             values.put(COLUMN_USER_EMAIL, student.getEmail());
@@ -151,7 +150,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_USER_DEGREE, instructor.getDegree());
         values.put(COLUMN_USER_SPECIALIZATION, instructor.getSpecialization());
-        values.put(COLUMN_USER_COURSES, instructor.getCourses());
+        values.put(COLUMN_USER_COURSES, instructor.getCourses().toString());
 
         if (isValidPassword(instructor.getPassword())) {
             values.put(COLUMN_USER_PASSWORD, instructor.getPassword());

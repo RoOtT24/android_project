@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class SignUpInstructor extends AppCompatActivity {
@@ -40,9 +41,12 @@ public class SignUpInstructor extends AppCompatActivity {
         EditText password = findViewById(R.id.Password);
         EditText confirmPassword = findViewById(R.id.ConfrimPassword);
 
-        signup.setOnClickListener(new View.OnClickListener() {
+
+
+            signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String[] courseNames={};
                 String fName = firstName.getText().toString().trim();
                 String lName = lastName.getText().toString().trim();
                 String userEmail = email.getText().toString().trim();
@@ -91,9 +95,12 @@ public class SignUpInstructor extends AppCompatActivity {
                     isValid = false;
                     specialization.setError("Specialization is required");
                 }
-                if (usercourse.isEmpty()) {
+               if (usercourse.isEmpty()) {
                     isValid = false;
                     courses.setError("Courses is required");
+                }
+                else{
+                    courseNames=usercourse.split(",");
                 }
                 if (userPassword.isEmpty()) {
                     isValid = false;
@@ -118,7 +125,7 @@ public class SignUpInstructor extends AppCompatActivity {
 
                 if (isValid && userPassword.equals(confirmPass)) {
                     // Create a new Student object
-                    Instructor instructor = new Instructor(fName, lName, userEmail, userPhone, userAddress, userPassword, userSpecialization,userDegree, usercourse);
+                    Instructor instructor = new Instructor(fName, lName, userEmail, userPhone, userAddress, userPassword, userSpecialization,userDegree, courseNames);
                     // Insert the instructor into the database
                     dbHelper.insertInstructor(instructor);
 

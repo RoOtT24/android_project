@@ -12,10 +12,10 @@ public class Instructor {
     private String password;
     private String specialization;
     private String degree;
-    private List<String> courses;
+    private String[] courses;
 
     public Instructor(String firstName, String lastName, String email, String phone, String address, String password,
-                      String specialization, String degree, String courses) {
+                      String specialization, String degree, String[] courses) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -24,7 +24,7 @@ public class Instructor {
         this.password = password;
         this.specialization = specialization;
         this.degree = degree;
-        this.courses = Collections.singletonList(courses);
+        this.courses = courses;
     }
 
     // Getters and Setters for the attributes
@@ -92,11 +92,12 @@ public class Instructor {
         this.degree = degree;
     }
 
-    public List<String> getCourses() {
+    public String[] getCourses() {
         return courses;
     }
 
-    public void setCourses(List<String> courses) {
+    public void setCourses(String[] courses) {
+
         this.courses = courses;
     }
 }

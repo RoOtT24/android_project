@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     Button login ;
     CheckBox remember;
+    Button Signupbtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         password =(EditText) findViewById(R.id.password);
         login= (Button) findViewById(R.id.login);
+        Signupbtn= (Button) findViewById(R.id.Signupbtn);
+
         remember  = (CheckBox) findViewById(R.id.checkBox);
 
         emailEditText.setText(savedEmail);
@@ -56,7 +59,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-       remember.setOnClickListener(new View.OnClickListener() {
+        Signupbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+//                toSignup(view);
+                Intent intent = new Intent(LoginActivity.this,WhoAreYou.class);
+                startActivity(intent);
+                finish();
+//                getUsers();
+            }
+        });
+
+
+
+
+
+        remember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
               rem[0]= !rem[0];
@@ -66,10 +85,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void toSignup(View view) {
-        Intent intent = new Intent(this,WhoAreYou.class);
-        startActivity(intent);
-    }
+//    public void toSignup(View view) {
+//        Intent intent = new Intent(LoginActivity.this,WhoAreYou.class);
+//        startActivity(intent);
+//        finish();
+//    }
     private boolean loginUser() {
         String username = emailEditText.getText().toString().trim();
         String pass = password.getText().toString().trim();

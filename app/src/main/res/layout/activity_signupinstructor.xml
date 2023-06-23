@@ -9,11 +9,10 @@
     tools:context=".SignUpInstructor">
 
 
-
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="168dp"
-        android:layout_height="183dp"
+        android:layout_width="122dp"
+        android:layout_height="96dp"
         android:layout_marginLeft="130dp"
         app:srcCompat="@drawable/student" />
 

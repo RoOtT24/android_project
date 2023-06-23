@@ -74,13 +74,13 @@
             android:textSize="17dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/Signupbtn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:backgroundTint="@android:color/transparent"
-            android:onClick="toSignup"
+
             android:text="Signup"
             android:textColor="@android:color/holo_red_dark"
             android:textStyle="bold" />
