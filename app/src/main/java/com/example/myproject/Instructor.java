@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Instructor {
@@ -14,7 +15,7 @@ public class Instructor {
     private List<String> courses;
 
     public Instructor(String firstName, String lastName, String email, String phone, String address, String password,
-                      String specialization, String degree, List<String> courses) {
+                      String specialization, String degree, String courses) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -23,7 +24,7 @@ public class Instructor {
         this.password = password;
         this.specialization = specialization;
         this.degree = degree;
-        this.courses = courses;
+        this.courses = Collections.singletonList(courses);
     }
 
     // Getters and Setters for the attributes

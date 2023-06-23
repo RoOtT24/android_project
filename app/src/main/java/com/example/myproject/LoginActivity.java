@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void toSignup(View view) {
-        Intent intent = new Intent(this,SignupActivity.class);
+        Intent intent = new Intent(this,WhoAreYou.class);
         startActivity(intent);
     }
     private void loginUser() {

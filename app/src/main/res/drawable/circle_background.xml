@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circle_background.xml xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:ignore="MissingClass">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="#000000" />
+        <corners android:radius="1000dp" /> <!-- Half of the width or height of ImageView -->
+    </shape>
+
+</circle_background.xml>
+
