@@ -97,43 +97,11 @@ public class SignupActivity extends AppCompatActivity {
 
                 // Validate required fields
                 boolean []isValid = {true};
-
+                byte []bytes = {};
 
                 if(bitmap != null){
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
-                    byte [] bytes = byteArrayOutputStream.toByteArray();
-                    final String Base64Image = Base64.encodeToString(bytes, Base64.DEFAULT);
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                    String url = "";
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-//                                    textView.setText("Response is: "+ response);
-                                    if(!response.equals("success")){
-                                     isValid[0] = false;
-                                        Toast.makeText(getApplicationContext(), "Uploading image failed!", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else{
-                                        Toast.makeText(getApplicationContext(), "Image was uploaded successfully!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-//                            textView.setText("That didn't work!");
-                            Toast.makeText(getApplicationContext(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            isValid[0] = false;
-                        }
-                    }){
-                        protected Map<String, String> getParams(){
-                            Map<String, String> paramV = new HashMap<>();
-                            paramV.put("image", Base64Image);
-                            return paramV;
-                        }
-                    };
-                    queue.add(stringRequest);
+                    bytes = byteArrayOutputStream.toByteArray();
                 }
                 else{
                     isValid[0] = false;
@@ -194,7 +162,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 if (isValid[0] && userPassword.equals(confirmPass)) {
                     // Create a new Student object
-                    Student student = new Student(fName, lName, userEmail, userPhone, userAddress, userPassword);
+                    Student student = new Student(fName, lName, userEmail, userPhone, userAddress, userPassword, bytes);
 
                     // Insert the student into the database
                     dbHelper.insertUser(student);

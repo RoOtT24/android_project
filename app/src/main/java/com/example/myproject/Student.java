@@ -7,14 +7,26 @@ public class Student {
     private String address;
     private String password;
 
-    public Student(String firstName, String lastName, String email, String phone, String address, String password) {
+    private byte []image;
+
+    public Student(String firstName, String lastName, String email, String phone, String address, String password, byte[] image) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.password = password;
+        this.image = image;
     }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
 
     // Getters and Setters for the attributes
     public String getFirstName() {

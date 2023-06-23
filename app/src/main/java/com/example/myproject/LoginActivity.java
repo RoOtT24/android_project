@@ -33,18 +33,26 @@ public class LoginActivity extends AppCompatActivity {
         rem[0] = false;
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String savedEmail = sharedPreferences.getString("email", "");
+        String savedPassword = sharedPreferences.getString("password", "");
         emailEditText = (EditText) findViewById(R.id.emailEditText);
         password =(EditText) findViewById(R.id.password);
         login= (Button) findViewById(R.id.login);
         remember  = (CheckBox) findViewById(R.id.checkBox);
 
+        emailEditText.setText(savedEmail);
+        password.setText(savedPassword);
+
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Intent intent = new Intent(LoginActivity.this, homeActivity.class);
-              //  startActivity(intent);
-                loginUser();
-               // finish();
+
+                if(loginUser()) {
+                    Intent intent = new Intent(LoginActivity.this, homeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+//                getUsers();
             }
         });
 
@@ -62,13 +70,13 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this,SignupActivity.class);
         startActivity(intent);
     }
-    private void loginUser() {
+    private boolean loginUser() {
         String username = emailEditText.getText().toString().trim();
         String pass = password.getText().toString().trim();
 
         if (username.isEmpty() || pass.isEmpty()) {
             Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         if (dbHelper.isEmailExists(username)) {
@@ -76,17 +84,23 @@ public class LoginActivity extends AppCompatActivity {
             if (cursor.moveToFirst()) {
                 @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
                 Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(this, "here3", Toast.LENGTH_SHORT).show();
                 if (pass.equals(storedPassword)) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                     if (rem[0]){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    EditText emailEditText = findViewById(R.id.emailEditText);
-                    String email = emailEditText.getText().toString();
-                    editor.putString("email", email);
+                    editor.putString("email", username);
+                    editor.putString("password", pass);
                     editor.apply();
                         Toast.makeText(this, "shared Preferences done", Toast.LENGTH_SHORT).show();
                     }
+                    else {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("email", "");
+                        editor.putString("password", "");
+                        editor.apply();
+                    }
+                    return true;
                 } else {
 
                     Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
@@ -97,5 +111,14 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
         }
+        return false;
+    }
+    public void getUsers(){
+        Cursor c =dbHelper.getAllStudent();
+        while(c.moveToNext()){
+            Toast.makeText(this, "email : "+c.getString(2), Toast.LENGTH_SHORT).show();
+        }
+        c.close();
+        Toast.makeText(this, "done looping", Toast.LENGTH_SHORT).show();
     }
 }

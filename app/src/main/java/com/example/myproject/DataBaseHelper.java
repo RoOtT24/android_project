@@ -21,8 +21,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_ADDRESS = "Address";
     public static final String COLUMN_USER_PASSWORD = "Password";
 
+    public static final String COLUMN_USER_IMAGE = "Image";
+
     public DataBaseHelper(Context context, String database, Object o, int i) {
-        super(context, "DATABASE", null, DATABASE_VERSION);
+        super(context, "ANDROID_DATABASE1", null, DATABASE_VERSION);
     }
 
     @Override
@@ -34,7 +36,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_EMAIL + " TEXT NOT NULL," +
                 COLUMN_USER_PHONE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
-                COLUMN_USER_PASSWORD + " TEXT NOT NULL" +
+                COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
+                COLUMN_USER_IMAGE + " BLOB NOT NULL" +
                 ")";
         db.execSQL(CREATE_USER_TABLE);
     }
@@ -50,7 +53,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_FIRST_NAME, student.getFirstName());
         values.put(COLUMN_USER_LAST_NAME, student.getLastName());
-
+        values.put(COLUMN_USER_IMAGE, student.getImage());
 
         if (isValidEmail(student.getEmail())) {
             values.put(COLUMN_USER_EMAIL, student.getEmail());
@@ -71,6 +74,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_USER, null, values);
         db.close();
+//        Toast.makeText(SignupActivity.class, "", Toast.LENGTH_SHORT).show();
     }
 
     private boolean isValidEmail(String email) {
@@ -87,17 +91,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllStudent() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        return sqLiteDatabase.rawQuery("SELECT * FROM Student", null);
+        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER, null);
     }
 
     public Cursor getStudentByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+//        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
+
     }
 
     public boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+//        Cursor cursor = db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
