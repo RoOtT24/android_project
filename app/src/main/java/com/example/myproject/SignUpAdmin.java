@@ -92,6 +92,10 @@ public class SignUpAdmin extends AppCompatActivity {
                     // Show a success message
                     Toast.makeText(SignUpAdmin.this, "Signup successful", Toast.LENGTH_SHORT).show();
                     Toast.makeText(SignUpAdmin.this, admin.getPassword(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpAdmin.this, admin.getEmail(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SignUpAdmin.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
 
                     // Clear the input fields
                     clearInputFields();

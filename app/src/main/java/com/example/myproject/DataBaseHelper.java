@@ -3,6 +3,7 @@ package com.example.myproject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_PHONE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
-                COLUMN_USER_IMAGE + " BLOB NOT NULL" +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_USER_TABLE);
 
@@ -195,4 +196,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return exists;
     }
+    public int getUserType(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query TABLE_USER
+        Cursor userCursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (userCursor.moveToFirst()) {
+            return 1; // User type 1
+        }
+
+        // Query TABLE_Admin
+        Cursor adminCursor = db.rawQuery("SELECT * FROM " + TABLE_Admin + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (adminCursor.moveToFirst()) {
+            return 2; // User type 2 (Admin)
+        }
+
+        // Query TABLE_INSTRUCTOR
+        Cursor instructorCursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (instructorCursor.moveToFirst()) {
+            return 3; // User type 3 (Instructor)
+        }
+
+        // No user found, return default value
+        return -1; // Unknown user type
+    }
+
 }

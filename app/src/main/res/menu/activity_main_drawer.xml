@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/nav_create_course"
+    android:title="Create Course" />
+<item
+    android:id="@+id/nav_view_courses"
+    android:title="View Courses" />
+<item
+    android:id="@+id/nav_previous_courses"
+    android:title="Previous Courses" />
+<!-- Add more menu items as needed -->
+</menu>
