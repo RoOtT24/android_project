@@ -6,4 +6,6 @@
     <string name="drawer_close" />
     <string name="navigation_drawer_open" />
     <string name="navigation_drawer_close" />
+    <string name="open_nav">navigation_view_opened</string>
+    <string name="close_nav">navigation_view_closed</string>
 </resources>

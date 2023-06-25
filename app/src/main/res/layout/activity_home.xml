@@ -3,26 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:context=".homeActivity"
+    tools:openDrawer="start"
+    android:id="@+id/drawer_layout">
 
-    <!-- Content FrameLayout -->
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#EF7BA2" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/actionBarSize">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolBar"
+            android:background="#9C27B0"
+            android:layout_width="fill_parent"
+            android:layout_height="?attr/actionBarSize"/>
+    </RelativeLayout>
 
-    <!-- Navigation View -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="320dp"
+        android:layout_height="fill_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/nav_view_menu_admin"
+        app:headerLayout="@layout/activity_nav_header_admin"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
