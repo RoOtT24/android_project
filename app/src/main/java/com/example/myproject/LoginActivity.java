@@ -51,9 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(loginUser()) {
-                    Intent intent = new Intent(LoginActivity.this, homeActivity.class);
+                   // if (dbHelper.getUserType(emailEditText.getText().toString()) == 2) {// admin
+                    Intent intent = new Intent(LoginActivity.this, AdminFragment.class);
                     startActivity(intent);
                     finish();
+                //}
+                    // add another cases 1+3
                 }
 //                getUsers();
             }

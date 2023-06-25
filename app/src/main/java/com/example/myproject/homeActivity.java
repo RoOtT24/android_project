@@ -30,13 +30,13 @@ public class homeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+       // drawer = findViewById(R.id.drawer_layout);
+      //  navigationView = findViewById(R.id.nav_view);
         currentUserType = dbHelper.getUserType(login.emailEditText.getText().toString());
         // Load appropriate layout based on user type
         switch (currentUserType) {
             case 1:
-                loadInstructorLayout();
+               // loadInstructorLayout();
                 break;
            // case 2:
                // loadUserType2Layout();
@@ -72,13 +72,13 @@ public class homeActivity extends AppCompatActivity {
         });
     }
 
-    private void loadInstructorLayout() {
+ /*   private void loadInstructorLayout() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View userType1Layout = inflater.inflate(R.layout.fragment_instructor, null);
+        View userType1Layout = inflater.inflate(R.layout.activity_create_course, null);
         FrameLayout container = findViewById(R.id.content_frame);
         container.removeAllViews();
         container.addView(userType1Layout);
-    }
+    }*/
 
 //    private void loadUserType2Layout() {
 //        LayoutInflater inflater = LayoutInflater.from(this);
