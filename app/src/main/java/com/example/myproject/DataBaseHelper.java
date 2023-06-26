@@ -34,10 +34,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_USER_IMAGE = "Image";
 
-    public static final Integer COLUMN_USER_COURSEID = 1;
+    public static final String COLUMN_USER_COURSEID = "courseId";
     public static final String COLUMN_USER_TITLE = "TITLE";
     public static final String COLUMN_USER_MAINTOPICES = "mainTopics";
     public static final String COLUMN_USER_PREEQUISITES = "prerequisites";
+
 
 
 
@@ -49,7 +50,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_COURSE_TABLE = "CREATE TABLE " + TABLE_COURSES +
                 "(" +
-                COLUMN_USER_COURSEID + "INT NOT NULL," +
+                COLUMN_USER_COURSEID + " INT NOT NULL," +
                 COLUMN_USER_TITLE + " TEXT NOT NULL," +
                 COLUMN_USER_MAINTOPICES + " TEXT NOT NULL," +
                 COLUMN_USER_PREEQUISITES + " TEXT," +
@@ -75,7 +76,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_EMAIL + " TEXT NOT NULL," +
-                COLUMN_USER_PASSWORD + " TEXT NOT NULL" +
+                COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_Admin_TABLE);
 
@@ -89,7 +91,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_SPECIALIZATION + "TEXT NOT NULL,"+
                 COLUMN_USER_DEGREE + "TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
-                COLUMN_USER_PASSWORD + " TEXT NOT NULL" +
+                COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_INSTRUCTOR_TABLE);
     }
@@ -225,6 +228,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 //        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
         return db.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
+
+    }
+
+
+    public Cursor getAdminByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_Admin+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
+
+    }
+
+
+    public Cursor getInstructorByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
 
     }
 
