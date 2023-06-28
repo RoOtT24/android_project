@@ -3,6 +3,7 @@ package com.example.myproject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_USER = "User";
+    public static final String TABLE_COURSES = "Course";
     private static final String TABLE_Admin = "Admin";
     private static final String TABLE_INSTRUCTOR = "instrcutor";
     private static final String COLUMN_USER_FIRST_NAME = "FirstName";
@@ -32,12 +34,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_USER_IMAGE = "Image";
 
+    public static final String COLUMN_USER_COURSEID = "courseId";
+    public static final String COLUMN_USER_TITLE = "TITLE";
+    public static final String COLUMN_USER_MAINTOPICES = "mainTopics";
+    public static final String COLUMN_USER_PREEQUISITES = "prerequisites";
+
+
+
+
     public DataBaseHelper(Context context, String database, Object o, int i) {
-        super(context, "ANDROID_DATABASE1", null, DATABASE_VERSION);
+        super(context, "DATABASE", null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_COURSE_TABLE = "CREATE TABLE " + TABLE_COURSES +
+                "(" +
+                COLUMN_USER_COURSEID + " INT NOT NULL," +
+                COLUMN_USER_TITLE + " TEXT NOT NULL," +
+                COLUMN_USER_MAINTOPICES + " TEXT NOT NULL," +
+                COLUMN_USER_PREEQUISITES + " TEXT," +
+                COLUMN_USER_IMAGE + " BLOB" +
+                ")";
+        db.execSQL(CREATE_COURSE_TABLE);
+
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER +
                 "(" +
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
@@ -46,7 +66,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_PHONE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
-                COLUMN_USER_IMAGE + " BLOB NOT NULL" +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_USER_TABLE);
 
@@ -56,7 +76,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_EMAIL + " TEXT NOT NULL," +
-                COLUMN_USER_PASSWORD + " TEXT NOT NULL" +
+                COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_Admin_TABLE);
 
@@ -70,7 +91,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_SPECIALIZATION + "TEXT NOT NULL,"+
                 COLUMN_USER_DEGREE + "TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
-                COLUMN_USER_PASSWORD + " TEXT NOT NULL" +
+                COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
+                COLUMN_USER_IMAGE + " BLOB" +
                 ")";
         db.execSQL(CREATE_INSTRUCTOR_TABLE);
     }
@@ -80,6 +102,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Admin);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTRUCTOR);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         onCreate(db);
     }
 
@@ -163,6 +186,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //        Toast.makeText(SignupActivity.class, "", Toast.LENGTH_SHORT).show();
     }
 
+    public void insertCourse(Courses course) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(String.valueOf(COLUMN_USER_COURSEID), String.valueOf(course.getCourseNumber()));
+        values.put(COLUMN_USER_TITLE, course.gettitle());
+        values.put(COLUMN_USER_MAINTOPICES, convertArrayToString(course.getMainTopics()));
+        values.put(COLUMN_USER_PREEQUISITES, convertArrayToString(course.getPrerequisites()));
+        values.put(COLUMN_USER_IMAGE, course.getPhotoUrl());
+        db.insert(TABLE_COURSES, null, values);
+        db.close();
+    }
+    private String convertArrayToString(String[] array) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            stringBuilder.append(array[i]);
+            if (i < array.length - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
     private boolean isValidEmail(String email) {
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         return Pattern.matches(emailPattern, email);
@@ -187,12 +231,132 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+    public Cursor getAdminByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_Admin+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
+
+    }
+
+
+    public Cursor getInstructorByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        return db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
+        return db.rawQuery("SELECT * FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
+
+    }
+
     public boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.query(TABLE_USER, null, COLUMN_USER_EMAIL + "=?", new String[]{email}, null, null, null);
-        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_USER_EMAIL+" =?", new String[]{email});
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-        return exists;
+
+        // Query TABLE_USER
+        Cursor userCursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (userCursor.getCount() > 0) {
+            userCursor.close();
+            return true;
+        }
+        userCursor.close();
+
+        // Query TABLE_Admin
+        Cursor adminCursor = db.rawQuery("SELECT * FROM " + TABLE_Admin + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (adminCursor.getCount() > 0) {
+            adminCursor.close();
+            return true;
+        }
+        adminCursor.close();
+
+        // Query TABLE_INSTRUCTOR
+        Cursor instructorCursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (instructorCursor.getCount() > 0) {
+            instructorCursor.close();
+            return true;
+        }
+        instructorCursor.close();
+
+        return false;
     }
+    public int getUserType(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query TABLE_USER
+        Cursor userCursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (userCursor.moveToFirst()) {
+            return 1; // User type 1
+        }
+
+        // Query TABLE_Admin
+        Cursor adminCursor = db.rawQuery("SELECT * FROM " + TABLE_Admin + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (adminCursor.moveToFirst()) {
+            return 2; // User type 2 (Admin)
+        }
+
+        // Query TABLE_INSTRUCTOR
+        Cursor instructorCursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR + " WHERE " + COLUMN_USER_EMAIL + "=?", new String[]{email});
+        if (instructorCursor.moveToFirst()) {
+            return 3; // User type 3 (Instructor)
+        }
+
+        // No user found, return default value
+        return -1; // Unknown user type
+    }
+    public Courses getCourseData(String courseTitle) {
+        Courses courseData = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            // Query the database for the course data based on the title
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_COURSES + " WHERE " + COLUMN_USER_TITLE + " = ?", new String[]{courseTitle});
+
+            if (cursor.moveToFirst()) {
+                // Extract the data from the cursor
+               // int idIndex = cursor.getColumnIndex(String.valueOf(COLUMN_USER_COURSEID));
+                int titleIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+                int topicsIndex = cursor.getColumnIndex(COLUMN_USER_MAINTOPICES);
+                int prerequisitesIndex = cursor.getColumnIndex(COLUMN_USER_PREEQUISITES);
+                int photoUrlIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
+
+                // Create a new CourseData object with the retrieved data
+              //  int courseId = cursor.getInt(idIndex);
+                String title = cursor.getString(titleIndex);
+                String topics = cursor.getString(topicsIndex);
+                String prerequisites = cursor.getString(prerequisitesIndex);
+                String photoUrl = cursor.getString(photoUrlIndex);
+
+                courseData = new Courses( title, convertStringToArray(topics), convertStringToArray(prerequisites), photoUrl);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return courseData;
+    }
+    public String[] convertStringToArray(String str) {
+        String[] array = str.split(",");
+        return array;
+    }
+
+    public void updateCourseData(Courses course) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("COLUMN_USER_TITLE", course.gettitle());
+        contentValues.put("COLUMN_USER_MAINTOPICES", convertArrayToString(course.getMainTopics()));
+        contentValues.put("COLUMN_USER_PREEQUISITES", convertArrayToString(course.getPrerequisites()));
+        contentValues.put("COLUMN_USER_IMAGE",course.getPhotoUrl());
+        sqLiteDatabase.update("TABLE_COURSES", contentValues, "CourseID = ?", new String[]{String.valueOf(course.getCourseNumber())});
+        sqLiteDatabase.close();
+    }
+
+    public void deleteCourse(String courseName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_COURSES, COLUMN_USER_TITLE + " = ?", new String[]{courseName});
+        db.close();
+    }
+
+
 }

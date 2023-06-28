@@ -51,9 +51,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(loginUser()) {
+                   // if (dbHelper.getUserType(emailEditText.getText().toString()) == 2) {// admin
                     Intent intent = new Intent(LoginActivity.this, homeActivity.class);
                     startActivity(intent);
                     finish();
+                //}
+                    // add another cases 1+3
                 }
 //                getUsers();
             }
@@ -103,8 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             Cursor cursor = dbHelper.getStudentByEmail(username);
             if (cursor.moveToFirst()) {
                 @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
-                Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "here3", Toast.LENGTH_SHORT).show();
+
                 if (pass.equals(storedPassword)) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                     if (rem[0]){
@@ -124,6 +126,37 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
 
                     Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else{
+                cursor = dbHelper.getInstructorByEmail(username);
+                if(cursor.moveToFirst()){
+                    // go to instructor's home page after password check
+                }
+                cursor = dbHelper.getAdminByEmail(username);
+                if(cursor.moveToFirst()){
+                    @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
+                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
+                    if (pass.equals(storedPassword)) {
+                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
+                        if (rem[0]){
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", username);
+                            editor.putString("password", pass);
+                            editor.apply();
+                            Toast.makeText(this, "shared Preferences done", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", "");
+                            editor.putString("password", "");
+                            editor.apply();
+                        }
+                        return true;
+                    } else {
+
+                        Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
             cursor.close();

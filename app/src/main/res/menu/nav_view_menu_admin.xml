@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/createCourse" android:title="Create New Course" />
+        <item android:id="@+id/editDeleteCourse" android:title="Edit/Delete an existing course"/>
+        <item android:id="@+id/makeCourseAvailable" android:title="Make a course available"/>
+        <item android:id="@+id/acceptReject" android:title="Accept/Reject Registration"/>
+        <item android:id="@+id/viewStudents" android:title="View the profiles of students"/>
+        <item android:id="@+id/viewInstructors" android:title="View the profiles of instructors"/>
+        <item android:id="@+id/viewOfferingHistory" android:title="View the offering history of a certain course"/>
+    </group>
+
+</menu>

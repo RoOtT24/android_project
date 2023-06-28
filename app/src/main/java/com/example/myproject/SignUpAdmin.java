@@ -1,22 +1,34 @@
 package com.example.myproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class SignUpAdmin extends AppCompatActivity {
 
     private  DataBaseHelper dbHelper ;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    Bitmap bitmap;
+
     protected void onCreate(Bundle savedInstanceState) {
         int x =0;
         super.onCreate(savedInstanceState);
@@ -30,6 +42,35 @@ public class SignUpAdmin extends AppCompatActivity {
 
         EditText password = findViewById(R.id.Password);
         EditText confirmPassword = findViewById(R.id.ConfrimPassword);
+        ImageView profileImageView = (ImageView) findViewById(R.id.profilePic);
+        Boolean []imageChanged = {false};
+
+
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK ){
+                    Intent data = result.getData();
+                    Uri uri = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        profileImageView.setImageBitmap(bitmap);
+                        imageChanged[0] = true;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intent);
+            }
+        });
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,9 +80,24 @@ public class SignUpAdmin extends AppCompatActivity {
                 String userEmail = email.getText().toString().trim();
                 String userPassword = password.getText().toString().trim();
                 String confirmPass = confirmPassword.getText().toString().trim();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                boolean isValid = true;
+
+
+                byte []bytes = {};
+
+                if(bitmap != null){
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+                    bytes = byteArrayOutputStream.toByteArray();
+                }
+                else{
+                    isValid = false;
+                }
 
                 // Validate required fields
-                boolean isValid = true;
+
+
+
                 if (fName.isEmpty()) {
                     isValid = false;
                     firstName.setError("First name is required");
@@ -84,7 +140,7 @@ public class SignUpAdmin extends AppCompatActivity {
 
                 if (isValid && userPassword.equals(confirmPass)) {
                     // Create a new Student object
-                    Admin admin = new Admin(fName, lName, userEmail, userPassword);
+                    Admin admin = new Admin(fName, lName, userEmail, userPassword, bytes);
 
                     // Insert the admin into the database
                     dbHelper.insertAdmin(admin);
@@ -92,6 +148,10 @@ public class SignUpAdmin extends AppCompatActivity {
                     // Show a success message
                     Toast.makeText(SignUpAdmin.this, "Signup successful", Toast.LENGTH_SHORT).show();
                     Toast.makeText(SignUpAdmin.this, admin.getPassword(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpAdmin.this, admin.getEmail(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SignUpAdmin.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
 
                     // Clear the input fields
                     clearInputFields();
