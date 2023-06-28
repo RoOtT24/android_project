@@ -10,32 +10,33 @@ public class Courses extends AppCompatActivity {
     private String[] prerequisites;
     private String photoUrl;
 
-    private String instructorName;
+//    private String instructorName;
+//
+//    private String registrationDeadline;
+//
+//    private String courseStartDate;
+//
+//    private String courseSchedule;
+//
+//    private String venue;
 
-    private String registrationDeadline;
-
-    private String courseStartDate;
-
-    private String courseSchedule;
-
-    private String venue;
-
-    public Courses(String title, String[] mainTopics, String[] prerequisites, String photoUrl,
-                   String instructorName, String registrationDeadline, String courseStartDate,
-                   String courseSchedule, String venue) {
+    public Courses(String title, String[] mainTopics, String[] prerequisites, String photoUrl
+//                   String instructorName, String registrationDeadline, String courseStartDate,
+//                   String courseSchedule, String venue) {
+    ){
         this.courseNumber = nextCourseNumber++;
         this.title = title;
         this.mainTopics = mainTopics;
         this.prerequisites = prerequisites;
         this.photoUrl = photoUrl;
-        this.instructorName = instructorName;
-        this.registrationDeadline = registrationDeadline;
-        this.courseStartDate = courseStartDate;
-        this.courseSchedule = courseSchedule;
-        this.venue = venue;
+//        this.instructorName = instructorName;
+//        this.registrationDeadline = registrationDeadline;
+//        this.courseStartDate = courseStartDate;
+//        this.courseSchedule = courseSchedule;
+//        this.venue = venue;
     }
 
-    public Courses(String title, String[] strings, String[] convertStringToArray, String photoUrl){}
+//    public Courses(String title, String[] strings, String[] convertStringToArray, String photoUrl){}
 
     public int getCourseNumber() {
         return courseNumber;
@@ -77,43 +78,43 @@ public class Courses extends AppCompatActivity {
         this.photoUrl = photoUrl;
     }
 
-    public String getInstructorName() {
-        return instructorName;
-    }
-
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
-
-    public String getRegistrationDeadline() {
-        return registrationDeadline;
-    }
-
-    public void setRegistrationDeadline(String registrationDeadline) {
-        this.registrationDeadline = registrationDeadline;
-    }
-
-    public String getCourseStartDate() {
-        return courseStartDate;
-    }
-
-    public void setCourseStartDate(String courseStartDate) {
-        this.courseStartDate = courseStartDate;
-    }
-
-    public String getCourseSchedule() {
-        return courseSchedule;
-    }
-
-    public void setCourseSchedule(String courseSchedule) {
-        this.courseSchedule = courseSchedule;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
+//    public String getInstructorName() {
+//        return instructorName;
+//    }
+//
+//    public void setInstructorName(String instructorName) {
+//        this.instructorName = instructorName;
+//    }
+//
+//    public String getRegistrationDeadline() {
+//        return registrationDeadline;
+//    }
+//
+//    public void setRegistrationDeadline(String registrationDeadline) {
+//        this.registrationDeadline = registrationDeadline;
+//    }
+//
+//    public String getCourseStartDate() {
+//        return courseStartDate;
+//    }
+//
+//    public void setCourseStartDate(String courseStartDate) {
+//        this.courseStartDate = courseStartDate;
+//    }
+//
+//    public String getCourseSchedule() {
+//        return courseSchedule;
+//    }
+//
+//    public void setCourseSchedule(String courseSchedule) {
+//        this.courseSchedule = courseSchedule;
+//    }
+//
+//    public String getVenue() {
+//        return venue;
+//    }
+//
+//    public void setVenue(String venue) {
+//        this.venue = venue;
+//    }
 }
