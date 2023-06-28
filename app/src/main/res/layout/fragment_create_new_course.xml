@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E8D4EC"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="Create New Course"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/Title"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Course Title"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+
+    <EditText
+        android:id="@+id/topices"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Main Topics"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#0C0C0C" />
+
+    <EditText
+        android:id="@+id/Prerequisites"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Prerequisites"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+
+    <EditText
+        android:id="@+id/Photo"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Photo URL"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+
+    <Button
+        android:id="@+id/Update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Course"
+        android:textColor="#FFFFFF"></Button>
+</LinearLayout>
