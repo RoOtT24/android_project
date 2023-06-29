@@ -47,7 +47,7 @@
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginLeft="10dp"
         android:text="Remember me" />
 
@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:backgroundTint="@android:color/transparent"
+
 
             android:text="Signup"
             android:textColor="@android:color/holo_red_dark"

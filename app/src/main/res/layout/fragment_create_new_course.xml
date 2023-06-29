@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8D4EC"
+
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -13,9 +13,10 @@
         android:layout_height="46dp"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:gravity="center"
         android:text="Create New Course"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="24sp" />
 
     <EditText
@@ -23,44 +24,49 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Course Title"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/topices"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Main Topics"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#0C0C0C" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/Prerequisites"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Prerequisites"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/Photo"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Photo URL"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <Button
         android:id="@+id/create_course_button_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#E24CAF50"
         android:text="create_course" />
 </LinearLayout>

@@ -19,52 +19,61 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Course Title"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/topices"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Main Topics"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#0C0C0C" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/Prerequisites"
         android:layout_width="match_parent"
         android:layout_height="66dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Prerequisites"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/Photo"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
         android:hint="Photo URL"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <Button
         android:id="@+id/ceate_course"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="71dp"
+        android:background="#EE4CAF50"
         android:text="Update"
-        android:textColor="#FFFFFF"></Button>
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/Delete"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete" />
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:background="#E24CAF50"
+        android:text="Delete"
+        android:textColor="#FFFFFF" />
+
 
 </LinearLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bac_color_4">
+   >
 
     <TextView
         android:id="@+id/textView4"
@@ -27,9 +27,11 @@
         android:layout_width="296dp"
         android:layout_height="82dp"
         android:layout_marginBottom="32dp"
+        android:background="#E24CAF50"
         android:text="Admin"
         android:textAlignment="center"
         android:textSize="24sp"
+
         app:layout_constraintBottom_toTopOf="@+id/Studentbtn"
         app:layout_constraintEnd_toEndOf="@+id/Studentbtn"
         app:layout_constraintHorizontal_bias="0.0"
@@ -41,6 +43,7 @@
         android:layout_width="303dp"
         android:layout_height="78dp"
         android:layout_marginStart="52dp"
+        android:background="#E24CAF50"
         android:layout_marginBottom="14dp"
         android:text="Student"
         android:textSize="24sp"
@@ -54,6 +57,7 @@
         android:layout_height="81dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="24dp"
+        android:background="#E24CAF50"
         android:text="Trainer"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/Studentbtn"
