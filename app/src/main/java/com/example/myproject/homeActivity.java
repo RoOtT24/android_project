@@ -5,6 +5,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -31,16 +33,31 @@ public class homeActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view) ;
 
         // if user select item from the navigation view it will be detected here
+        final createNewCourse createNewCourse = new createNewCourse();
+        final edit_delete_course edit_delete_course = new edit_delete_course();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.add(R.id.fragment_conatiner, createNewCourse, "create new course"); // initial fragment
+        ft.commit();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                FragmentTransaction ft = fragmentManager.beginTransaction();
                 switch (menuItem.getItemId()){
-                    case R.id.createCourse:  System.out.println("item 1 selected") ; break;
-                    case R.id.editDeleteCourse : System.out.println("item 2 selected") ; break;
+                    case R.id.createCourse:
+                        ft.replace(R.id.fragment_conatiner, createNewCourse);
+
+                        break;
+                    case R.id.editDeleteCourse :
+                        ft.replace(R.id.fragment_conatiner, edit_delete_course);
+                        break;
                 }
+                ft.addToBackStack(null);
+                ft.commit();
                 return true;
             }
         });
+
 
         // this is important part to add button in the toolbar
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_nav,R.string.close_nav) ;
@@ -48,5 +65,10 @@ public class homeActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle) ;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return actionBarDrawerToggle.onOptionsItemSelected(item)||super.onOptionsItemSelected(item);
     }
 }

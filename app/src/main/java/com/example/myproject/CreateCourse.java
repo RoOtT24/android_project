@@ -27,7 +27,7 @@ public class CreateCourse extends AppCompatActivity {
         editTextPhotoUrl = findViewById(R.id.Photo);
 
         // Find the Create Course button
-        Button buttonCreateCourse = findViewById(R.id.Update);
+        Button buttonCreateCourse = findViewById(R.id.ceate_course);
         buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

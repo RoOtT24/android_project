@@ -59,9 +59,8 @@
         android:textColorHint="#000000" />
 
     <Button
-        android:id="@+id/Update"
+        android:id="@+id/create_course_button_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Course"
-        android:textColor="#FFFFFF"></Button>
+        android:text="create_course" />
 </LinearLayout>

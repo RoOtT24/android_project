@@ -2,6 +2,7 @@ package com.example.myproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,20 +63,6 @@ public class createNewCourse extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.Title);
-        editTextMainTopics = getActivity().findViewById(R.id.topices);
-        editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
-        editTextPhotoUrl = getActivity().findViewById(R.id.Photo);
-
-        // Find the Create Course button
-        Button buttonCreateCourse = getActivity().findViewById(R.id.Update);
-        buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createCourse();
-            }
-        });
     }
 
     @Override
@@ -94,13 +80,38 @@ public class createNewCourse extends Fragment {
 
         // Create a new course object using the input values
         Courses newCourse = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), photoUrl);
-
-//        dbHelper.insertCourse(newCourse);
+        
+        DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "data base", null , 1);
+        db.insertCourse(newCourse);
 //        Toast.makeText(this, "Course created successfully", Toast.LENGTH_SHORT).show();
-//        dbHelper.close();
+        db.close();
 
     }
     private String[] convertStringToArray(String string) {
         return string.split(", ");
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+
+
+        // Find the EditText fields
+        editTextTitle = getActivity().findViewById(R.id.Title);
+        editTextMainTopics = getActivity().findViewById(R.id.topices);
+        editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+        editTextPhotoUrl = getActivity().findViewById(R.id.Photo);
+
+        // Find the Create Course button
+        Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.create_course_button_admin);
+        buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createCourse();
+            }
+        });
     }
 }

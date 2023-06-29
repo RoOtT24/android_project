@@ -20,6 +20,14 @@
             style="tariqTheme"
             android:theme="@style/tariqTheme"
             />
+
+        <FrameLayout
+            android:id="@+id/fragment_conatiner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="55dp">
+
+        </FrameLayout>
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

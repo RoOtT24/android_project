@@ -2,7 +2,6 @@ package com.example.myproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,7 +42,7 @@ public class Edit_DeleteCourse extends AppCompatActivity {
         editTextMainTopics = findViewById(R.id.topices);
         editTextPrerequisites = findViewById(R.id.Prerequisites);
         editTextPhotoUrl = findViewById(R.id.Photo);
-        update = findViewById(R.id.Update);
+        update = findViewById(R.id.ceate_course);
         delete = findViewById(R.id.Delete);
 
         // Retrieve course titles from the database
