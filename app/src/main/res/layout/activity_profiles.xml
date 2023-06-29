@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="206dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/personalImg"
+                android:layout_width="wrap_content"
+                android:layout_height="173dp"
+
+                app:srcCompat="@drawable/admin" />
+
+            <TextView
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="77dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textColor="#4CAF50"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="204dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="91dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/border"
+                android:paddingTop="20dp"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/emailview"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="#4CAF50"
+            android:text="Email"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/emailtext"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:text="TextView"
+            android:textAlignment="center"
+
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+
+
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/phoneview"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="#4CAF50"
+            android:text="Phone"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/phonetext"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="@drawable/border"
+            android:text="TextView"
+            android:textAlignment="center"
+
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+
+
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/addressview"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="#4CAF50"
+            android:text="Address"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+
+
+        <TextView
+            android:id="@+id/addresstext"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:background="@drawable/border"
+
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
