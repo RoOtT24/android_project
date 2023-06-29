@@ -42,7 +42,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_INSTRUCTOR_NAME = "instructor_name";
 
-    public static final String COLUMN_REGISTRATION_DEADLINE = "registration_deadline";
+    public static final String COLUMN_mRATION_DEADLINE = "registration_deadline";
 
     public static final String COLUMN_START_DATE = "start_date";
 
