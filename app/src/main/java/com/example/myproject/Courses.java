@@ -10,8 +10,8 @@ public class Courses {//extends AppCompatActivity {
     private String[] prerequisites;
     private String photoUrl;
 
-    public Courses(int courseId, String title, String[] mainTopics, String[] prerequisites, String photoUrl) {
-        this.courseId = courseId;
+    public Courses(int id, String title, String[] mainTopics, String[] prerequisites, String photoUrl) {
+        this.courseId = id;
         this.title = title;
         this.mainTopics = mainTopics;
         this.prerequisites = prerequisites;

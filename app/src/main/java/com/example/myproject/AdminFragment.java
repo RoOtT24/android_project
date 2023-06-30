@@ -50,7 +50,7 @@ public class AdminFragment extends Fragment {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CreateCourse.class);
+                Intent intent = new Intent(getActivity(), createNewCourse.class);
                 startActivity(intent);
             }
 
@@ -59,7 +59,7 @@ public class AdminFragment extends Fragment {
         editDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Edit_DeleteCourse.class);
+                Intent intent = new Intent(getActivity(), edit_delete_course.class);
                 startActivity(intent);
             }
         });

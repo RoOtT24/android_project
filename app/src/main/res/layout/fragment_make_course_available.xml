@@ -6,13 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".edit_delete_course">
-
-    <Spinner
-        android:id="@+id/courseSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:contentDescription="Select a course"/>
+    tools:context=".make_course_available">
 
     <EditText
         android:id="@+id/editTextCourseId"
@@ -20,60 +14,73 @@
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/border"
-        android:hint="Course Title"
+        android:hint="Course ID"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 
     <EditText
-        android:id="@+id/topices"
+        android:id="@+id/editTextInstructorEmail"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/border"
-        android:hint="Main Topics"
+        android:hint="Instructor email"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
-
     <EditText
-        android:id="@+id/Prerequisites"
+        android:id="@+id/editTextRegistrationDeadline"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="58dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/border"
-        android:hint="Prerequisites"
+        android:hint="Deadline"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
+    <EditText
+        android:id="@+id/editTextCourseStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:hint="Start Date"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 
     <EditText
-        android:id="@+id/Photo"
+        android:id="@+id/editTextCourseSchedule"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/border"
-        android:hint="Photo URL"
+        android:hint="Schedule"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/editTextVenue"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:hint="venue"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 
     <Button
-        android:id="@+id/ceate_course"
+        android:id="@+id/buttonAdd"
         android:layout_width="match_parent"
         android:layout_height="71dp"
         android:background="#EE4CAF50"
-        android:text="Update"
+        android:text="ADD"
         android:textColor="#FFFFFF" />
 
-    <Button
-        android:id="@+id/Delete"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="20dp"
-        android:background="#E24CAF50"
-        android:text="Delete"
-        android:textColor="#FFFFFF" />
+
 
 
 </LinearLayout>

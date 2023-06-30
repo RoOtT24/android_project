@@ -27,9 +27,6 @@
             android:name=".Edit_DeleteCourse"
             android:exported="false" />
         <activity
-            android:name=".CreateCourse"
-            android:exported="false" />
-        <activity
             android:name=".homeActivity"
             android:exported="false" />
         <activity

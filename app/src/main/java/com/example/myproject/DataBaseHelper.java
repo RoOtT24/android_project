@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -18,11 +20,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_USER = "User";
-    public static final String TABLE_COURSES = "Course";
+    public static final String TABLE_COURSES = "Courses";
     private static final String TABLE_Admin = "Admin";
     private static final String TABLE_INSTRUCTOR = "instrcutor";
-    private static final String COLUMN_USER_FIRST_NAME = "FirstName";
-    private static final String COLUMN_USER_LAST_NAME = "LastName";
+    public static final String COLUMN_USER_FIRST_NAME = "FirstName";
+    public static final String COLUMN_USER_LAST_NAME = "LastName";
     private static final String COLUMN_USER_EMAIL = "Email";
     private static final String COLUMN_USER_PHONE = "Phone";
     private static final String COLUMN_USER_ADDRESS = "Address";
@@ -463,5 +465,149 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR + "INNER JOIN "+ TABLE_OFFERING
                 + " ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_COURSEID+ "=?", new String[]{Integer.toString(courseId)});
     }
+//
+//    public List<String> getStudentsByCourseId(int courseId) {
+//        List<String> studentNames = new ArrayList<>();
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = null;
+//
+//        try {
+//            String query = "SELECT " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_LAST_NAME +
+//                    " FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " LIKE '%" + courseId + "%'";
+//            cursor = db.rawQuery(query, null);
+//
+//            while (cursor.moveToNext()) {
+//                @SuppressLint("Range") String firstName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_FIRST_NAME));
+//                @SuppressLint("Range") String lastName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_LAST_NAME));
+//                String fullName = firstName + " " + lastName;
+//                studentNames.add(fullName);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//
+//        return studentNames;
+//    }
+
+
+        public Cursor getStudentsByCourseId(int courseId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " LIKE '%" + courseId + "%'";
+        return db.rawQuery(query, null);
+    }
+    public List<String> getAllCourses() {
+        List<String> courseList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_USER_TITLE + " FROM " + TABLE_COURSES;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String courseName = null;
+                try {
+                    int columnIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+                    if (columnIndex >= 0) {
+                        courseName = cursor.getString(columnIndex);
+                    } else {
+                        // Handle the case when the column index is -1 (column not found)
+                        // You can choose to assign a default value or take appropriate action here
+                    }
+                } catch (Exception e) {
+                    // Handle any other exceptions that may occur during the retrieval of the course name
+                    e.printStackTrace();
+                }
+               // String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
+                courseList.add(courseName);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return courseList;
+    }
+    public int getCourseId(String courseName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int courseId = -1; // Default value if course not found
+
+        Cursor cursor = null;
+        try {
+            String[] projection = {COLUMN_USER_COURSEID};
+            String selection = COLUMN_USER_TITLE + "=?";
+            String[] selectionArgs = {courseName};
+
+            cursor = db.query(TABLE_COURSES, projection, selection, selectionArgs, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                try {
+                    int columnIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+                    if (columnIndex >= 0) {
+                        courseId = cursor.getInt(columnIndex);
+                    } else {
+                        // Handle the case when the column index is -1 (column not found)
+                        // You can choose to assign a default value or take appropriate action here
+                    }
+                } catch (Exception e) {
+                    // Handle any other exceptions that may occur during the retrieval of the course name
+                    e.printStackTrace();
+                }
+              //  courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return courseId;
+    }
+
+//    public List<Instructor> getAllInstructors() {
+//        List<Instructor> instructors = new ArrayList<>();
+//
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = null;
+//
+//        try {
+//            cursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR, null);
+//
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    String firstName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_FIRST_NAME));
+//                    String lastName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_LAST_NAME));
+//                    String email = cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL));
+//                    String phone = cursor.getString(cursor.getColumnIndex(COLUMN_USER_PHONE));
+//                    String address = cursor.getString(cursor.getColumnIndex(COLUMN_USER_ADDRESS));
+//                    String degree = cursor.getString(cursor.getColumnIndex(COLUMN_USER_DEGREE));
+//                    String specialization = cursor.getString(cursor.getColumnIndex(COLUMN_USER_SPECIALIZATION));
+//                    String courses = cursor.getString(cursor.getColumnIndex(COLUMN_USER_COURSES));
+//                    String password = cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD));
+//                    byte[] image = cursor.getBlob(cursor.getColumnIndex(COLUMN_USER_IMAGE));
+//
+//                    // Create an Instructor object with the retrieved data
+//                    Instructor instructor = new Instructor(firstName, lastName, email, phone, address, degree,
+//                            specialization, courses, password, image);
+//
+//                    // Add the instructor to the list
+//                    instructors.add(instructor);
+//                } while (cursor.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (cursor != null) {
+//                cursor.close();
+//            }
+//        }
+//
+//        return instructors;
+//    }
+
+
 
 }

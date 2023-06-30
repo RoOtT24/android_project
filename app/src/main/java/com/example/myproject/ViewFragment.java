@@ -59,45 +59,6 @@ public class ViewFragment extends Fragment {
         }
     }
 
-    @Override
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Create the parent ViewGroup
-        LinearLayout parentLayout = new LinearLayout(requireContext());
-        parentLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        parentLayout.setOrientation(LinearLayout.VERTICAL);
 
-        // Create the TextView
-        TextView studentTextView = new TextView(requireContext());
-        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        textViewParams.setMargins(16, 16, 16, 16);
-        studentTextView.setLayoutParams(textViewParams);
-        parentLayout.addView(studentTextView);
-
-        // Retrieve all students from the database
-        DataBaseHelper dbHelper = new DataBaseHelper(requireContext());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = dbHelper.getAllStudent();
-
-        StringBuilder studentsInfo = new StringBuilder();
-        if (cursor.moveToFirst()) {
-            do {
-                String firstName = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_FIRST_NAME));
-                String lastName = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_LAST_NAME));
-                String email = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_EMAIL));
-
-                // Append student information to the StringBuilder
-                studentsInfo.append("First Name: ").append(firstName).append("\n")
-                        .append("Last Name: ").append(lastName).append("\n")
-                        .append("Email: ").append(email).append("\n\n");
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-
-        // Set the student information to the TextView
-        studentTextView.setText(studentsInfo.toString());
-
-        return parentLayout;
-    }
 }
