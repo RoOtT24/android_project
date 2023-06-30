@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -31,8 +32,8 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
-
+import java.util.HashSet;
+import java.util.List;
 
 
 public class edit_delete_course extends Fragment {
@@ -43,11 +44,15 @@ public class edit_delete_course extends Fragment {
     EditText editTextTitle;
     EditText editTextMainTopics;
     EditText editTextPrerequisites;
+
+    EditText idEditText;
     ImageView courseImage;
     Button update;
     Button delete;
 
     Bitmap bitmap;
+
+    int id;
 
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -103,8 +108,8 @@ public class edit_delete_course extends Fragment {
                 } while (cursor.moveToNext());
             }
         }
-        cursor.close();
 
+        cursor.close();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, courseTitles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         courseSpinner.setAdapter(adapter);
@@ -147,11 +152,12 @@ public class edit_delete_course extends Fragment {
         editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
         editTextMainTopics = getActivity().findViewById(R.id.topices);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+        idEditText = getActivity().findViewById(R.id.course_id_edit_text);
         courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);
         update = getActivity().findViewById(R.id.ceate_course);
         delete = getActivity().findViewById(R.id.Delete);
 
-
+        refreshSpinner();
 
         courseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,28 +168,18 @@ public class edit_delete_course extends Fragment {
             }
         });
 
-        // Retrieve course titles from the database
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + DataBaseHelper.COLUMN_USER_TITLE + " FROM " + DataBaseHelper.TABLE_COURSES, null);
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_TITLE);
-            if (columnIndex >= 0) {
-                do {
-                    String title = cursor.getString(columnIndex);
-                    courseTitles.add(title);
-                } while (cursor.moveToNext());
-            }
-        }
-        cursor.close();
-        // Set the adapter for the Spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, courseTitles);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        courseSpinner.setAdapter(adapter);
-
-
         courseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
+                editTextMainTopics = getActivity().findViewById(R.id.topices);
+                editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+                courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);
+                update = getActivity().findViewById(R.id.ceate_course);
+                delete = getActivity().findViewById(R.id.Delete);
+                idEditText = getActivity().findViewById(R.id.course_id_edit_text);
+
+
                 String selectedCourse = courseTitles.get(position);
                 // Retrieve course data from the database based on the selected course title
                 Courses courseData = dbHelper.getCourseData(selectedCourse);
@@ -191,10 +187,16 @@ public class edit_delete_course extends Fragment {
                     String topics = convertArrayToString(courseData.getMainTopics());
                     String Prerequisites = convertArrayToString(courseData.getPrerequisites());
                     // Set the retrieved data to the EditText fields
+                    Toast.makeText(getActivity(), convertArrayToString(courseData.getMainTopics()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), convertArrayToString(courseData.getPrerequisites()), Toast.LENGTH_SHORT).show();
+                    idEditText.setText(Integer.toString(courseData.getId()));
                     editTextTitle.setText(courseData.gettitle());
-                    editTextMainTopics.setText(topics);
-                    editTextPrerequisites.setText(Prerequisites);
+                    editTextMainTopics.setText(convertArrayToString(courseData.getMainTopics()));
+                    editTextPrerequisites.setText(convertArrayToString(courseData.getPrerequisites()));
                     courseImage.setImageBitmap(BitmapFactory.decodeByteArray(courseData.getImage(), 0, courseData.getImage().length));
+                }
+                else {
+                    Toast.makeText(getActivity(), "no data found", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -216,18 +218,19 @@ public class edit_delete_course extends Fragment {
                 String prerequisites = editTextPrerequisites.getText().toString();
 //                String photoUrl = editTextPhotoUrl.getText().toString();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                int id = Integer.parseInt(idEditText.getText().toString());
 
                 byte []bytes;
-                if(bitmap != null){
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
-                    bytes = byteArrayOutputStream.toByteArray();
+
+                if(bitmap == null){
+                    bitmap = ((BitmapDrawable)courseImage.getDrawable()).getBitmap();
                 }
-                else{
-                    Toast.makeText(getActivity(), "Photo is not inserted, try again!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+                bytes = byteArrayOutputStream.toByteArray();
+
                 // Update the course data in the database
-                Courses courseData = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), bytes);
+                Courses courseData = new Courses(id, title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), bytes);
                 dbHelper.updateCourseData(courseData);
 
                 // Show a success message or perform any other necessary actions

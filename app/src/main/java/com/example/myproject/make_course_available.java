@@ -1,20 +1,25 @@
 package com.example.myproject;
 
 import android.app.DatePickerDialog;
+import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -36,6 +41,10 @@ public class make_course_available extends Fragment {
     private Calendar calendar;
     private DateFormat dateFormat;
 
+    Spinner course_spinner;
+
+    Spinner instructor_spinner;
+
 
 
     @Override
@@ -44,37 +53,7 @@ public class make_course_available extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_make_course_available, container, false);
 
-        courseIdEditText = view.findViewById(R.id.editTextCourseId);
-        instructorEmailEditText = view.findViewById(R.id.editTextInstructorEmail);
-        registrationDeadlineEditText = view.findViewById(R.id.editTextRegistrationDeadline);
-        courseStartDateEditText = view.findViewById(R.id.editTextCourseStartDate);
-        courseScheduleEditText = view.findViewById(R.id.editTextCourseSchedule);
-        venueEditText = view.findViewById(R.id.editTextVenue);
-        addButton = view.findViewById(R.id.buttonAdd);
 
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        registrationDeadlineEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePicker(registrationDeadlineEditText);
-            }
-        });
-
-        courseStartDateEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePicker(courseStartDateEditText);
-            }
-        });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addOffer();
-            }
-        });
 
         return view;
     }
@@ -135,4 +114,60 @@ public class make_course_available extends Fragment {
         venueEditText.setText("");
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
+        courseIdEditText = getActivity().findViewById(R.id.editTextCourseId);
+        instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
+        registrationDeadlineEditText = getActivity().findViewById(R.id.editTextRegistrationDeadline);
+        courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);
+        courseScheduleEditText = getActivity().findViewById(R.id.editTextCourseSchedule);
+        venueEditText = getActivity().findViewById(R.id.editTextVenue);
+        addButton = getActivity().findViewById(R.id.buttonAdd);
+        course_spinner = getActivity().findViewById(R.id.courses_spinner_available);
+        instructor_spinner = getActivity().findViewById(R.id.instructor_spinner_available);
+
+
+        ///////////////////////////////////////////////////////////
+        // filling instructors spinner
+        DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
+        ArrayList<Instructor> instructors = (ArrayList<Instructor>) db.getAllInstructors();
+
+        ArrayList<String> instructorEmails = new ArrayList<>();
+        for (int i = 0; i < instructors.size(); ++i)
+            instructorEmails.add(instructors.get(i).getEmail());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, instructorEmails);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        instructor_spinner.setAdapter(adapter);
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        registrationDeadlineEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(registrationDeadlineEditText);
+            }
+        });
+
+        courseStartDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(courseStartDateEditText);
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addOffer();
+            }
+        });
+    }
 }

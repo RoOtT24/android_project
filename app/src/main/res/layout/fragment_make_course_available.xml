@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context=".make_course_available">
 
+    <Spinner
+        android:id="@+id/courses_spinner_available"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp" />
+
     <EditText
         android:id="@+id/editTextCourseId"
         android:layout_width="match_parent"
@@ -17,7 +24,16 @@
         android:hint="Course ID"
         android:padding="10dp"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:enabled="false"
+        />
+
+    <Spinner
+        android:id="@+id/instructor_spinner_available"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp" />
 
     <EditText
         android:id="@+id/editTextInstructorEmail"
@@ -28,7 +44,9 @@
         android:hint="Instructor email"
         android:padding="10dp"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:enabled="false"
+        />
     <EditText
         android:id="@+id/editTextRegistrationDeadline"
         android:layout_width="match_parent"

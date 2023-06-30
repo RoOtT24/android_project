@@ -250,7 +250,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_COURSES, null, values);
         db.close();
     }
-    private String convertArrayToString(String[] array) {
+    public String convertArrayToString(String[] array) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             stringBuilder.append(array[i]);
@@ -276,6 +276,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER, null);
     }
+
+
 
     public Cursor getStudentByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -376,7 +378,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 String topics = cursor.getString(topicsIndex);
                 String prerequisites = cursor.getString(prerequisitesIndex);
                 byte[] photoUrl = cursor.getBlob(photoUrlIndex); //.getString(photoUrlIndex);
-
+                System.out.println("topics : "+topics);
                 courseData = new Courses(courseId, title, convertStringToArray(topics), convertStringToArray(prerequisites), photoUrl);
             }
         } catch (Exception e) {
@@ -391,6 +393,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
     public String[] convertStringToArray(String str) {
         String[] array = str.split(",");
+        for(int i = 0; i < array.length; ++i)
+            array[i] = array[i].trim();
         return array;
     }
 
@@ -401,7 +405,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_USER_MAINTOPICES, convertArrayToString(course.getMainTopics()));
         contentValues.put(COLUMN_USER_PREEQUISITES, convertArrayToString(course.getPrerequisites()));
         contentValues.put(COLUMN_USER_IMAGE, course.getImage());
-        sqLiteDatabase.update("TABLE_COURSES", contentValues, "CourseID = ?", new String[]{String.valueOf(course.getId())});
+        sqLiteDatabase.update(TABLE_COURSES, contentValues, COLUMN_USER_COURSEID+" = ?", new String[]{Integer.toString(course.getId())});
         sqLiteDatabase.close();
     }
 
