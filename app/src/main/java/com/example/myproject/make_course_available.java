@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,58 +8,131 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link make_course_available#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class make_course_available extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public make_course_available() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment make_course_available.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static make_course_available newInstance(String param1, String param2) {
-        make_course_available fragment = new make_course_available();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private EditText courseIdEditText;
+    private EditText instructorEmailEditText;
+    private EditText registrationDeadlineEditText;
+    private EditText courseStartDateEditText;
+    private EditText courseScheduleEditText;
+    private EditText venueEditText;
+    private Button addButton;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private Calendar calendar;
+    private DateFormat dateFormat;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_make_course_available, container, false);
+        View view = inflater.inflate(R.layout.fragment_make_course_available, container, false);
+
+        courseIdEditText = view.findViewById(R.id.editTextCourseId);
+        instructorEmailEditText = view.findViewById(R.id.editTextInstructorEmail);
+        registrationDeadlineEditText = view.findViewById(R.id.editTextRegistrationDeadline);
+        courseStartDateEditText = view.findViewById(R.id.editTextCourseStartDate);
+        courseScheduleEditText = view.findViewById(R.id.editTextCourseSchedule);
+        venueEditText = view.findViewById(R.id.editTextVenue);
+        addButton = view.findViewById(R.id.buttonAdd);
+
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        registrationDeadlineEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(registrationDeadlineEditText);
+            }
+        });
+
+        courseStartDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(courseStartDateEditText);
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addOffer();
+            }
+        });
+
+        return view;
     }
+
+    private void showDatePicker(final EditText editText) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, month);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        String date = dateFormat.format(calendar.getTime());
+                        editText.setText(date);
+                    }
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        datePickerDialog.show();
+    }
+
+    private void addOffer() {
+        int courseId = Integer.parseInt(courseIdEditText.getText().toString());
+        String instructorEmail = instructorEmailEditText.getText().toString();
+        String registrationDeadlineString = registrationDeadlineEditText.getText().toString();
+        String courseStartDateString = courseStartDateEditText.getText().toString();
+        String courseSchedule = courseScheduleEditText.getText().toString();
+        String venue = venueEditText.getText().toString();
+        try {
+            Date registrationDeadline = dateFormat.parse(registrationDeadlineString);
+            Date courseStartDate = dateFormat.parse(courseStartDateString);
+
+            Offer offer = new Offer(courseId, instructorEmail, registrationDeadline, courseStartDate, courseSchedule, venue);
+            addOfferToDatabase(offer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Offer offer = new Offer(courseId, instructorEmail, registrationDeadline, courseStartDate, courseSchedule, venue);
+//        addOfferToDatabase(offer);
+    }
+
+    private void addOfferToDatabase(Offer offer) {
+        DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
+        dbHelper.addOffer(offer);
+        Toast.makeText(getContext(), "Offer added successfully", Toast.LENGTH_SHORT).show();
+        clearFields();
+    }
+
+    private void clearFields() {
+        courseIdEditText.setText("");
+        instructorEmailEditText.setText("");
+        registrationDeadlineEditText.setText("");
+        courseStartDateEditText.setText("");
+        courseScheduleEditText.setText("");
+        venueEditText.setText("");
+    }
+
 }

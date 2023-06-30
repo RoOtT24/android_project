@@ -35,6 +35,8 @@ public class homeActivity extends AppCompatActivity {
         // if user select item from the navigation view it will be detected here
         final createNewCourse createNewCourse = new createNewCourse();
         final edit_delete_course edit_delete_course = new edit_delete_course();
+        final make_course_available make_course_available = new make_course_available();
+        final View_student_in_course view_student_in_course = new View_student_in_course();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, createNewCourse, "create new course"); // initial fragment
@@ -50,6 +52,12 @@ public class homeActivity extends AppCompatActivity {
                         break;
                     case R.id.editDeleteCourse :
                         ft.replace(R.id.fragment_conatiner, edit_delete_course);
+                        break;
+                    case R.id.makeCourseAvailable :
+                        ft.replace(R.id.fragment_conatiner, make_course_available);
+                        break;
+                    case R.id.viewStudents :
+                        ft.replace(R.id.fragment_conatiner, view_student_in_course);
                         break;
                 }
                 ft.addToBackStack(null);

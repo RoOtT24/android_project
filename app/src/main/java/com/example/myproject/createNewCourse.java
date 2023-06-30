@@ -1,56 +1,51 @@
 package com.example.myproject;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link createNewCourse#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+
 public class createNewCourse extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 //    private DataBaseHelper dbHelper = new DataBaseHelper(createNewCourse.this, "DATABASE", null, 1);
+
     private EditText editTextTitle;
     private EditText editTextMainTopics;
     private EditText editTextPrerequisites;
-    private EditText editTextPhotoUrl;
+    private ImageView courseImage;
+    ActivityResultLauncher<Intent> activityResultLauncher;
+
+    Bitmap bitmap;
 
     public createNewCourse() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment createNewCourse.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static createNewCourse newInstance(String param1, String param2) {
+    public static createNewCourse newInstance() {
         createNewCourse fragment = new createNewCourse();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,10 +54,25 @@ public class createNewCourse extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK ){
+                    Intent data = result.getData();
+                    Uri uri = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                        courseImage.setImageBitmap(bitmap);
+//                        imageChanged[0] = true;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -76,14 +86,25 @@ public class createNewCourse extends Fragment {
         String title = editTextTitle.getText().toString();
         String mainTopics = editTextMainTopics.getText().toString();
         String prerequisites = editTextPrerequisites.getText().toString();
-        String photoUrl = editTextPhotoUrl.getText().toString();
+//        String photoUrl = editTextPhotoUrl.getText().toString();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        byte []bytes;
+        if(bitmap != null){
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+            bytes = byteArrayOutputStream.toByteArray();
+        }
+        else{
+            Toast.makeText(getActivity(), "Photo is not inserted, try again!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Create a new course object using the input values
-        Courses newCourse = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), photoUrl);
-        
-        DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "data base", null , 1);
+        Courses newCourse = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), bytes);
+        DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
+
         db.insertCourse(newCourse);
-//        Toast.makeText(this, "Course created successfully", Toast.LENGTH_SHORT).show();
+
         db.close();
 
     }
@@ -100,10 +121,22 @@ public class createNewCourse extends Fragment {
 
 
         // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.Title);
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
         editTextMainTopics = getActivity().findViewById(R.id.topices);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
-        editTextPhotoUrl = getActivity().findViewById(R.id.Photo);
+        courseImage = getActivity().findViewById(R.id.course_photo);
+
+
+
+
+        courseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intent);
+            }
+        });
 
         // Find the Create Course button
         Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.create_course_button_admin);
@@ -111,6 +144,8 @@ public class createNewCourse extends Fragment {
             @Override
             public void onClick(View v) {
                 createCourse();
+                Toast.makeText(getContext(), "ALL DONE", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
