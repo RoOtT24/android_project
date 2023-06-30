@@ -3,29 +3,44 @@ package com.example.myproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Courses {//extends AppCompatActivity {
-    private int courseId = 1;
+    private int id;
 
     private String title;
     private String[] mainTopics;
     private String[] prerequisites;
-    private String photoUrl;
+    private byte []image;
 
-    public Courses(int id, String title, String[] mainTopics, String[] prerequisites, String photoUrl) {
-        this.courseId = id;
+
+    public Courses(int id, String title, String[] mainTopics, String[] prerequisites, byte[] image) {
+        this.id = id;
         this.title = title;
         this.mainTopics = mainTopics;
         this.prerequisites = prerequisites;
-        this.photoUrl = photoUrl;
+        this.image = image;
     }
 
-    public Courses(String title, String[] mainTopics, String[] prerequisites, String photoUrl){
+    public Courses(String title, String[] mainTopics, String[] prerequisites, byte[] image) {
         this.title = title;
         this.mainTopics = mainTopics;
         this.prerequisites = prerequisites;
-        this.photoUrl = photoUrl;
-
+        this.image = image;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public String gettitle() {
         return title;
@@ -49,22 +64,6 @@ public class Courses {//extends AppCompatActivity {
 
     public void setPrerequisites(String[] prerequisites) {
         this.prerequisites = prerequisites;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
     }
 
     public String getTitle() {

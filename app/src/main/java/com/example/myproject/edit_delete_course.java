@@ -1,13 +1,22 @@
 package com.example.myproject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +24,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -31,9 +43,13 @@ public class edit_delete_course extends Fragment {
     EditText editTextTitle;
     EditText editTextMainTopics;
     EditText editTextPrerequisites;
-    EditText editTextPhotoUrl;
+    ImageView courseImage;
     Button update;
     Button delete;
+
+    Bitmap bitmap;
+
+    ActivityResultLauncher<Intent> activityResultLauncher;
 
     public edit_delete_course() {
         // Required empty public constructor
@@ -51,6 +67,25 @@ public class edit_delete_course extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
+
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK ){
+                    Intent data = result.getData();
+                    Uri uri = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                        courseImage.setImageBitmap(bitmap);
+//                        imageChanged[0] = true;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
 
     }
 
@@ -112,9 +147,20 @@ public class edit_delete_course extends Fragment {
         editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
         editTextMainTopics = getActivity().findViewById(R.id.topices);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
-        editTextPhotoUrl = getActivity().findViewById(R.id.Photo);
+        courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);
         update = getActivity().findViewById(R.id.ceate_course);
         delete = getActivity().findViewById(R.id.Delete);
+
+
+
+        courseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intent);
+            }
+        });
 
         // Retrieve course titles from the database
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -142,13 +188,13 @@ public class edit_delete_course extends Fragment {
                 // Retrieve course data from the database based on the selected course title
                 Courses courseData = dbHelper.getCourseData(selectedCourse);
                 if (courseData != null) {
-                    String topices = convertArrayToString(courseData.getMainTopics());
+                    String topics = convertArrayToString(courseData.getMainTopics());
                     String Prerequisites = convertArrayToString(courseData.getPrerequisites());
                     // Set the retrieved data to the EditText fields
                     editTextTitle.setText(courseData.gettitle());
-                    editTextMainTopics.setText(topices);
+                    editTextMainTopics.setText(topics);
                     editTextPrerequisites.setText(Prerequisites);
-                    editTextPhotoUrl.setText(courseData.getPhotoUrl());
+                    courseImage.setImageBitmap(BitmapFactory.decodeByteArray(courseData.getImage(), 0, courseData.getImage().length));
                 }
             }
 
@@ -158,7 +204,8 @@ public class edit_delete_course extends Fragment {
                 editTextTitle.setText(" ");
                 editTextMainTopics.setText(" ");
                 editTextPrerequisites.setText(" ");
-                editTextPhotoUrl.setText(" ");           }
+                courseImage.setImageDrawable(null);
+            }
         });
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,10 +214,20 @@ public class edit_delete_course extends Fragment {
                 String title = editTextTitle.getText().toString();
                 String mainTopics = editTextMainTopics.getText().toString();
                 String prerequisites = editTextPrerequisites.getText().toString();
-                String photoUrl = editTextPhotoUrl.getText().toString();
+//                String photoUrl = editTextPhotoUrl.getText().toString();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
+                byte []bytes;
+                if(bitmap != null){
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+                    bytes = byteArrayOutputStream.toByteArray();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Photo is not inserted, try again!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 // Update the course data in the database
-                Courses courseData = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), photoUrl);
+                Courses courseData = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), bytes);
                 dbHelper.updateCourseData(courseData);
 
                 // Show a success message or perform any other necessary actions

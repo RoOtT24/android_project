@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,6 +19,14 @@
         android:text="Create New Course"
         android:textColor="#FFFFFF"
         android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/course_photo"
+        android:layout_width="176dp"
+        android:layout_height="138dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginBottom="20dp"
+        app:srcCompat="@drawable/pick_an_image" />
 
     <EditText
         android:id="@+id/editTextCourseId"
@@ -48,17 +57,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/border"
         android:hint="Prerequisites"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
-
-    <EditText
-        android:id="@+id/Photo"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="Photo URL"
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />

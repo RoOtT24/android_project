@@ -47,16 +47,13 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 
-    <EditText
-        android:id="@+id/Photo"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="Photo URL"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+    <ImageView
+        android:id="@+id/course_Image_on_update_fragment"
+        android:layout_width="177dp"
+        android:layout_height="144dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/border" />
 
     <Button
         android:id="@+id/ceate_course"

@@ -246,7 +246,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_USER_TITLE, course.gettitle());
         values.put(COLUMN_USER_MAINTOPICES, convertArrayToString(course.getMainTopics()));
         values.put(COLUMN_USER_PREEQUISITES, convertArrayToString(course.getPrerequisites()));
-        values.put(COLUMN_USER_IMAGE, course.getPhotoUrl());
+        values.put(COLUMN_USER_IMAGE, course.getImage());
         db.insert(TABLE_COURSES, null, values);
         db.close();
     }
@@ -364,20 +364,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
             if (cursor.moveToFirst()) {
                 // Extract the data from the cursor
-               // int idIndex = cursor.getColumnIndex(String.valueOf(COLUMN_USER_COURSEID));
+                int idIndex = cursor.getColumnIndex(String.valueOf(COLUMN_USER_COURSEID));
                 int titleIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
                 int topicsIndex = cursor.getColumnIndex(COLUMN_USER_MAINTOPICES);
                 int prerequisitesIndex = cursor.getColumnIndex(COLUMN_USER_PREEQUISITES);
                 int photoUrlIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
 
                 // Create a new CourseData object with the retrieved data
-              //  int courseId = cursor.getInt(idIndex);
+                int courseId = cursor.getInt(idIndex);
                 String title = cursor.getString(titleIndex);
                 String topics = cursor.getString(topicsIndex);
                 String prerequisites = cursor.getString(prerequisitesIndex);
-                String photoUrl = cursor.getString(photoUrlIndex);
+                byte[] photoUrl = cursor.getBlob(photoUrlIndex); //.getString(photoUrlIndex);
 
-                courseData = new Courses( title, convertStringToArray(topics), convertStringToArray(prerequisites), photoUrl);
+                courseData = new Courses(courseId, title, convertStringToArray(topics), convertStringToArray(prerequisites), photoUrl);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -400,8 +400,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_USER_TITLE, course.gettitle());
         contentValues.put(COLUMN_USER_MAINTOPICES, convertArrayToString(course.getMainTopics()));
         contentValues.put(COLUMN_USER_PREEQUISITES, convertArrayToString(course.getPrerequisites()));
-        contentValues.put(COLUMN_USER_IMAGE, course.getPhotoUrl());
-        sqLiteDatabase.update("TABLE_COURSES", contentValues, "CourseID = ?", new String[]{String.valueOf(course.getCourseId())});
+        contentValues.put(COLUMN_USER_IMAGE, course.getImage());
+        sqLiteDatabase.update("TABLE_COURSES", contentValues, "CourseID = ?", new String[]{String.valueOf(course.getId())});
         sqLiteDatabase.close();
     }
 
