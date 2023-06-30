@@ -436,10 +436,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public Cursor getOfferingStudents(int offeringId){
+    public Cursor getOfferingStudents(int courseId){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_OFFERING + "INNER JOIN "+ TABLE_USER
-                + " ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_OFFERING_ID+ "=?", new String[]{Integer.toString(offeringId)});
+        return db.rawQuery("SELECT * FROM " + TABLE_OFFERING + " INNER JOIN "+ TABLE_USER
+                + " ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_COURSEID+ " =?", new String[]{Integer.toString(courseId)});
     }
 
     public void setAccepted(String userEmail){
@@ -472,40 +472,41 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-        public Cursor getStudentsByCourseId(int courseId) {
-        SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " LIKE '%" + courseId + "%'";
-        return db.rawQuery(query, null);
-    }
-    public List<String> getAllCourses() {
+//        public Cursor getStudentsByCourseId(int courseId) {
+//        SQLiteDatabase db = getReadableDatabase();
+//        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " =" + courseId + "";
+//        return db.rawQuery(query, null);
+//    }
+    public Cursor getAllCourses() {
         List<String> courseList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
-        String query = "SELECT " + COLUMN_USER_TITLE + " FROM " + TABLE_COURSES;
+        String query = "SELECT * FROM " + TABLE_COURSES;
         Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String courseName = null;
-                try {
-                    int columnIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
-                    if (columnIndex >= 0) {
-                        courseName = cursor.getString(columnIndex);
-                    } else {
-                        // Handle the case when the column index is -1 (column not found)
-                        // You can choose to assign a default value or take appropriate action here
-                    }
-                } catch (Exception e) {
-                    // Handle any other exceptions that may occur during the retrieval of the course name
-                    e.printStackTrace();
-                }
-               // String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
-                courseList.add(courseName);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        return courseList;
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                String courseName = null;
+//                try {
+//                    int columnIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+//                    if (columnIndex >= 0) {
+//                        courseName = cursor.getString(columnIndex);
+//                    } else {
+//                        // Handle the case when the column index is -1 (column not found)
+//                        // You can choose to assign a default value or take appropriate action here
+//                    }
+//                } catch (Exception e) {
+//                    // Handle any other exceptions that may occur during the retrieval of the course name
+//                    e.printStackTrace();
+//                }
+//               // String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
+//                courseList.add(courseName);
+//            } while (cursor.moveToNext());
+//        }
+//
+//        cursor.close();
+//        return courseList;
+        return cursor;
     }
     public int getCourseId(String courseName) {
         SQLiteDatabase db = this.getReadableDatabase();
