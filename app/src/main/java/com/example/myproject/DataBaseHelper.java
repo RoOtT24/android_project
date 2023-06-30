@@ -18,7 +18,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_USER = "User";
-    public static final String TABLE_COURSES = "Course";
+    public static final String TABLE_COURSES = "Courses";
     private static final String TABLE_Admin = "Admin";
     private static final String TABLE_INSTRUCTOR = "instrcutor";
     private static final String COLUMN_USER_FIRST_NAME = "FirstName";
