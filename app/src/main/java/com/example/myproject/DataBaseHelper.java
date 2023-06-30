@@ -81,17 +81,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String CREATE_OFFERING_TABLE = "CREATE TABLE " + TABLE_OFFERING +
                 "(" +
-                COLUMN_OFFERING_ID+" INT PRIMARY KEY AUTOINCREMENT,"+
-                COLUMN_USER_COURSEID + " INT NOT NULL," +
-                COLUMN_REGISTRATION_DEADLINE + " INT," +
-                COLUMN_START_DATE+" INT,"+
+                COLUMN_OFFERING_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                COLUMN_USER_COURSEID + " INTEGER NOT NULL," +
+                COLUMN_REGISTRATION_DEADLINE + " INTEGER," +
+                COLUMN_START_DATE+" INTEGER,"+
                 COLUMN_COURSE_SCHEDULE+" TEXT,"+
                 COLUMN_VENUE+" TEXT"+
                 ")";
+        db.execSQL(CREATE_OFFERING_TABLE);
 
         String CREATE_COURSE_TABLE = "CREATE TABLE " + TABLE_COURSES +
                 "(" +
-                COLUMN_USER_COURSEID + " INT PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_USER_COURSEID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_USER_TITLE + " TEXT NOT NULL," +
                 COLUMN_USER_MAINTOPICES + " TEXT NOT NULL," +
                 COLUMN_USER_PREEQUISITES + " TEXT," +
@@ -108,7 +109,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INT DEFAULT 0 CHECK("+COLUMN_ACCPETED+"IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_USER_TABLE);
 
@@ -120,7 +121,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INT DEFAULT 0 CHECK("+COLUMN_ACCPETED+"IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_Admin_TABLE);
 
@@ -130,19 +131,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_PHONE + " TEXT," +
-                COLUMN_USER_COURSES + "TEXT NOT NULL," +
-                COLUMN_USER_SPECIALIZATION + "TEXT NOT NULL,"+
-                COLUMN_USER_DEGREE + "TEXT," +
+                COLUMN_USER_COURSES + " TEXT NOT NULL," +
+                COLUMN_USER_SPECIALIZATION + " TEXT NOT NULL,"+
+                COLUMN_USER_DEGREE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INT DEFAULT 0 CHECK("+COLUMN_ACCPETED+"IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_INSTRUCTOR_TABLE);
 
         String CREATE_ENROLL_TABLE = "CREATE TABLE "+TABLE_ENROLL+
                 " ("
-                +COLUMN_ENROLL_ID+"INT PRIMARY KEY AUTOINCREMENT, "
+                +COLUMN_ENROLL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +COLUMN_USER_EMAIL+" TEXT NOT NULL,"
                 +COLUMN_OFFERING_ID+" INT NOT NULL"+
                 ")";

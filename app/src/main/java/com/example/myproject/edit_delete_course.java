@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -95,7 +96,15 @@ public class edit_delete_course extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_edit_delete_course, container, false);
+
+        return inflater.inflate(R.layout.fragment_edit_delete_course, container, false);
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         // Initialize the Spinner and ArrayList
         courseSpinner = getActivity().findViewById(R.id.courseSpinner);
         courseTitles = new ArrayList<>();
@@ -190,7 +199,5 @@ public class edit_delete_course extends Fragment {
                 startActivity(intent);
             }
         });
-        return inflater.inflate(R.layout.fragment_edit_delete_course, container, false);
-
     }
 }
