@@ -156,6 +156,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTRUCTOR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERING);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENROLL);
         onCreate(db);
     }
 
@@ -236,7 +237,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_USER, null, values);
         db.close();
-//        Toast.makeText(SignupActivity.class, "", Toast.LENGTH_SHORT).show();
     }
 
     public void insertCourse(Courses course) {
@@ -249,6 +249,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_COURSES, null, values);
         db.close();
     }
+
+
+
     private String convertArrayToString(String[] array) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
@@ -467,7 +470,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-        public Cursor getStudentsByCourseId(int courseId) {
+    public Cursor getStudentsByCourseId(int courseId) {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " LIKE '%" + courseId + "%'";
         return db.rawQuery(query, null);
@@ -701,5 +704,451 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return studentList;
     }
+    public boolean isCourseOffered(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_OFFERING_ID};
+        String selection = COLUMN_OFFERING_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(courseId)};
+
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        boolean isOffered = cursor.moveToFirst();
+
+        cursor.close();
+        db.close();
+
+        return isOffered;
+    }
+    //////////////////////////////// new for student enroll
+    public boolean enrollStudentInCourse(String studentEmail, String courseTitle) {
+        Student student = getStudentByEmailforEnroll(studentEmail);
+        Courses course = getCourseData(courseTitle);
+        // Check if the course is available
+        if (!isCourseOffered(course.getCourseId())){
+            return false;
+        }
+        // Check if the student has already completed the prerequisites
+        if (!hasCompletedPrerequisites(student, course)) {
+            return false; // Prerequisites not completed
+        }
+
+        // Check for time conflicts with other enrolled courses
+        if (hasTimeConflict(student, course)) {
+            return false; // Time conflict with other courses
+        }
+
+        // Enroll the student in the course
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_EMAIL, student.getEmail());
+       // Offer offer = getCourseofferById(course.getCourseId());
+       // values.put(COLUMN_OFFERING_ID, offer.);
+        long result = db.insert(TABLE_ENROLL, null, values);
+
+        db.close();
+
+        return result != -1; // Enrollment successful if insertion was successful
+    }
+    public Student getStudentByEmailforEnroll(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_EMAIL + " =?", new String[]{email});
+
+        Student student = null;
+        if (cursor.moveToFirst()) {
+            int firstNameIndex = cursor.getColumnIndex(COLUMN_USER_FIRST_NAME);
+            int lastNameIndex = cursor.getColumnIndex(COLUMN_USER_LAST_NAME);
+            int phoneIndex = cursor.getColumnIndex(COLUMN_USER_PHONE);
+            int addressIndex = cursor.getColumnIndex(COLUMN_USER_ADDRESS);
+
+            if (firstNameIndex != -1 && lastNameIndex != -1 && phoneIndex != -1 && addressIndex != -1) {
+                String firstName = cursor.getString(firstNameIndex);
+                String lastName = cursor.getString(lastNameIndex);
+                String phone = cursor.getString(phoneIndex);
+                String address = cursor.getString(addressIndex);
+
+                // Assuming you have a Student class with appropriate constructor
+                student = new Student(firstName, lastName, email, phone, address,null,null);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return student;
+    }
+
+    // Check if a student has completed the prerequisites for a specific course
+   public boolean hasCompletedPrerequisites(Student student, Courses course) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Check if the student has completed all the prerequisites for the course
+        for (String prerequisite : course.getPrerequisites()) {
+            if (!isCourseCompletedByStudent(prerequisite, student.getEmail())) {
+                return false;
+            }
+        }
+
+        db.close();
+
+        return true;
+    }
+
+    // Check if a specific course is completed by the student
+    private boolean isCourseCompletedByStudent(String courseName, String studentEmail) {
+        String[] columns = {COLUMN_ENROLL_ID};
+        String selection = COLUMN_USER_EMAIL + " = ? AND " + COLUMN_USER_TITLE + " = ?";
+        String[] selectionArgs = {studentEmail, courseName};
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_ENROLL, columns, selection, selectionArgs, null, null, null);
+
+        boolean isCompleted = cursor.moveToFirst();
+
+        cursor.close();
+        return isCompleted;
+    }
+
+    // Check for time conflicts with other enrolled courses
+    public boolean hasTimeConflict(Student student, Courses course) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Get the course schedule for the new course
+        List<String> newCourseSchedule = getCourseSchedule(course.getCourseId());
+
+        // Retrieve the enrolled courses of the student
+        List<Integer> enrolledCourses = getEnrolledCourseIds(student.getEmail());
+
+        // Check for time conflicts with each enrolled course
+        for (Integer enrolledCourse : enrolledCourses) {
+            List<String> enrolledCourseSchedule = getCourseSchedule(enrolledCourse);
+
+            // Compare the schedules of the new course and enrolled course
+            if (isScheduleConflict(newCourseSchedule, enrolledCourseSchedule)) {
+                db.close();
+                return true; // Time conflict found
+            }
+        }
+
+        db.close();
+
+        return false; // No time conflicts with other courses
+    }
+
+    // Retrieve the course schedule from the table_offering based on the course ID
+    private List<String> getCourseSchedule(int courseId) {
+        List<String> courseSchedule = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_COURSE_SCHEDULE};
+        String selection = COLUMN_OFFERING_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(courseId)};
+
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String schedule = null;
+            int scheduleIndex = cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE);
+            if (scheduleIndex >= 0) {
+                schedule = cursor.getString(scheduleIndex);
+            }
+           /// String schedule = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE));
+
+            // Add the schedule to the course schedule list
+            courseSchedule.add(schedule);
+        }
+
+        cursor.close();
+
+        return courseSchedule;
+    }
+
+    public List<Integer> getEnrolledCourseIds(String userEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Integer> enrolledCourseIds = new ArrayList<>();
+
+        // Query to retrieve the enrolled course IDs for the given student email
+        String query = "SELECT " + COLUMN_USER_COURSEID +
+                " FROM " + TABLE_ENROLL +
+                " WHERE " + COLUMN_USER_EMAIL + " = '" + userEmail + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while (cursor.moveToNext()) {
+            int courseId = 0;
+            int courseIdIndex = cursor.getColumnIndex(COLUMN_USER_COURSEID);
+            if (courseIdIndex >= 0) {
+                courseId = cursor.getInt(courseIdIndex);
+            }
+           // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
+            enrolledCourseIds.add(courseId);
+        }
+
+        cursor.close();
+
+        return enrolledCourseIds;
+    }
+
+    private boolean isScheduleConflict(List<String> newCourseSchedule, List<String> enrolledCourseSchedule) {
+        for (String newSchedule : newCourseSchedule) {
+            for (String enrolledSchedule : enrolledCourseSchedule) {
+                if (isScheduleConflict(newSchedule, enrolledSchedule)) {
+                    return true; // There is a schedule conflict
+                }
+            }
+        }
+        return false; // No schedule conflict
+    }
+
+    private boolean isScheduleConflict(String newSchedule, String enrolledSchedule) {
+        // Assuming the schedule format is in a specific format (e.g., start time - end time)
+
+        // Split the schedule strings to extract the start and end times
+        String[] newScheduleParts = newSchedule.split("-");
+        String[] enrolledScheduleParts = enrolledSchedule.split("-");
+
+        // Extract the start and end times from the schedule parts
+        String newStartTime = newScheduleParts[0].trim();
+        String newEndTime = newScheduleParts[1].trim();
+
+        String enrolledStartTime = enrolledScheduleParts[0].trim();
+        String enrolledEndTime = enrolledScheduleParts[1].trim();
+
+        // Compare the start and end times to check for conflicts
+        // Assuming the time format is in HH:mm (24-hour format)
+        if (newStartTime.compareTo(enrolledEndTime) < 0 && newEndTime.compareTo(enrolledStartTime) > 0) {
+            // There is a schedule conflict between the new course and the enrolled course
+            return true;
+        }
+
+        // No schedule conflict
+        return false;
+    }
+
+// for search in available courses
+public List<Courses> getOfferedCourses() {
+    List<Courses> offeredCourses = new ArrayList<>();
+    SQLiteDatabase db = this.getReadableDatabase();
+    String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+    Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+
+    while (cursor.moveToNext()) {
+        Integer courseId = 0;
+        int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+        if (courseIdIndex >= 0) {
+            courseId = cursor.getInt(courseIdIndex);
+        }
+        Courses course = getCourseById(courseId);
+        offeredCourses.add(course);
+    }
+
+    cursor.close();
+    db.close();
+
+    return offeredCourses;
+}
+
+    public Courses getCourseById(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_USER_TITLE, COLUMN_USER_MAINTOPICES, COLUMN_USER_PREEQUISITES};
+        String selection = COLUMN_USER_COURSEID + " = ?";
+        String[] selectionArgs = {String.valueOf(courseId)};
+        Cursor cursor = db.query(TABLE_COURSES, columns, selection, selectionArgs, null, null, null);
+
+        Courses course = null;
+        if (cursor.moveToFirst()) {
+            String title = null;
+            int titleIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+            if (titleIndex >= 0) {
+                title = cursor.getString(titleIndex);
+            }
+            String[] mainTopics = null;
+            int mainTopicsIndex = cursor.getColumnIndex(COLUMN_USER_MAINTOPICES);
+            if (mainTopicsIndex >= 0) {
+                mainTopics = convertStringToArray(cursor.getString(mainTopicsIndex));
+            }
+            String[] prerequisites = null;
+            int prerequisitesIndex = cursor.getColumnIndex(COLUMN_USER_PREEQUISITES);
+            if (prerequisitesIndex >= 0) {
+                prerequisites = convertStringToArray(cursor.getString(prerequisitesIndex));
+            }
+
+            course = new Courses(courseId, title, mainTopics, prerequisites, null);
+        }
+
+        cursor.close();
+        db.close();
+
+        return course;
+    }
+
+    public Offer getCourseofferById(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_REGISTRATION_DEADLINE, COLUMN_START_DATE, COLUMN_COURSE_SCHEDULE,COLUMN_VENUE};
+        String selection = COLUMN_USER_COURSEID + " = ?";
+        String[] selectionArgs = {String.valueOf(courseId)};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        Offer offer = null;
+        if (cursor.moveToFirst()) {
+            Date DEADLINE = null;
+            int DEADLINEIndex = cursor.getColumnIndex(COLUMN_REGISTRATION_DEADLINE);
+            if (DEADLINEIndex >= 0) {
+                long deadlineValue = cursor.getLong(DEADLINEIndex);
+                DEADLINE = new Date(deadlineValue);
+            }
+            Date START_DATE = null;
+            int START_DATEIndex = cursor.getColumnIndex(COLUMN_START_DATE);
+            if (START_DATEIndex >= 0) {
+                long startDateValue = cursor.getLong(START_DATEIndex);
+                START_DATE = new Date(startDateValue);
+            }
+            String SCHEDULE = null;
+            int SCHEDULEIndex = cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE);
+            if (SCHEDULEIndex >= 0) {
+                SCHEDULE = cursor.getString(SCHEDULEIndex);
+            }
+            String VENUE = null;
+            int VENUEIndex = cursor.getColumnIndex(COLUMN_VENUE);
+            if (VENUEIndex >= 0) {
+                VENUE = cursor.getString(VENUEIndex);
+            }
+
+            offer = new Offer(0, null, DEADLINE, START_DATE, SCHEDULE,VENUE);
+        }
+
+        cursor.close();
+        db.close();
+
+        return offer;
+    }
+    public List<Courses> getOfferedCoursesHistory() {
+        List<Courses> offeredCourses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+        int courseId = 0;
+        while (cursor.moveToNext()) {
+            int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+            if (courseIdIndex >= 0) {
+                 courseId = cursor.getInt(courseIdIndex);
+            }
+           // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
+            Courses course = getCourseById(courseId);
+
+
+            // Check if the course's registration deadline has passed
+            if (isRegistrationDeadlinePassed(course)) {
+                offeredCourses.add(course);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return offeredCourses;
+    }
+
+    private boolean isRegistrationDeadlinePassed(Courses course) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_REGISTRATION_DEADLINE};
+        String selection = COLUMN_USER_COURSEID + " = ?";
+        String[] selectionArgs = {String.valueOf(course.getCourseId())};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        long registrationDeadline = 0;
+
+        if (cursor.moveToFirst()) {
+            int registrationDeadlineIndex = cursor.getColumnIndex(COLUMN_REGISTRATION_DEADLINE);
+            if (registrationDeadlineIndex >= 0) {
+                registrationDeadline = cursor.getLong(registrationDeadlineIndex);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        long currentTimestamp = System.currentTimeMillis();
+
+        return currentTimestamp > registrationDeadline;
+    }
+    public List<String> enrollIN(String userEmail) {
+        List<String> enrolledCourseTitles = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to join the TABLE_COURSES and TABLE_ENROLL tables
+        String query = "SELECT " +
+                TABLE_COURSES + "." + COLUMN_USER_TITLE +
+                " FROM " + TABLE_COURSES +
+                " INNER JOIN " + TABLE_ENROLL +
+                " ON " + TABLE_COURSES + "." + COLUMN_USER_COURSEID + " = " + TABLE_ENROLL + "." + COLUMN_OFFERING_ID +
+                " WHERE " + TABLE_ENROLL + "." + COLUMN_USER_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{userEmail});
+
+        while (cursor.moveToNext()) {
+            String title = null;
+            int titleIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
+            if (titleIndex >= 0) {
+                title = cursor.getString(titleIndex);
+            }
+           // String title = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
+            enrolledCourseTitles.add(title);
+        }
+
+        cursor.close();
+        db.close();
+
+        return enrolledCourseTitles;
+    }
+
+    public void deleteEnrollCource(String email, String title) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Get the offering ID for the course title
+        int offeringId = getOfferingIdByTitle(title);
+
+        // Define the WHERE clause to delete the enrollment entry
+        String whereClause = COLUMN_USER_EMAIL + " = ? AND " + COLUMN_OFFERING_ID + " = ?";
+        String[] whereArgs = {email, String.valueOf(offeringId)};
+
+        // Perform the delete operation
+        int rowsAffected = db.delete(TABLE_ENROLL, whereClause, whereArgs);
+
+        db.close();
+
+        if (rowsAffected > 0) {
+            // Deletion successful
+          //  Toast.makeText(, "Enrollment for course " + title + " deleted.", Toast.LENGTH_SHORT).show();
+        } else {
+            // No matching enrollment found
+          //  Toast.makeText(context, "No enrollment found for course " + title + ".", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private int getOfferingIdByTitle(String title) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] columns = {COLUMN_OFFERING_ID};
+        String selection = COLUMN_USER_TITLE + " = ?";
+        String[] selectionArgs = {title};
+
+        Cursor cursor = db.query(TABLE_COURSES, columns, selection, selectionArgs, null, null, null);
+
+        int offeringId = 0;
+
+        if (cursor.moveToFirst()) {
+            int offeringindex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+            if (offeringindex>0)
+            offeringId = cursor.getInt(offeringindex);
+        }
+
+        cursor.close();
+        db.close();
+
+        return offeringId;
+    }
+
 
 }

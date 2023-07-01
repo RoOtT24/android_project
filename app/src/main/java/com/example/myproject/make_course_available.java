@@ -44,7 +44,7 @@ public class make_course_available extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_make_course_available, container, false);
 
-        courseIdEditText = view.findViewById(R.id.editTextCourseId);
+        courseIdEditText = view.findViewById(R.id.Title);
         instructorEmailEditText = view.findViewById(R.id.editTextInstructorEmail);
         registrationDeadlineEditText = view.findViewById(R.id.editTextRegistrationDeadline);
         courseStartDateEditText = view.findViewById(R.id.editTextCourseStartDate);

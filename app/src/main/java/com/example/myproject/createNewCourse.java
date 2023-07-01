@@ -78,13 +78,13 @@ public class createNewCourse extends Fragment {
 
 
         // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
-        editTextMainTopics = getActivity().findViewById(R.id.topices);
+        editTextTitle = getActivity().findViewById(R.id.Title);
+        editTextMainTopics = getActivity().findViewById(R.id.Schedule);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         editTextPhotoUrl = getActivity().findViewById(R.id.Photo);
 
         // Find the Create Course button
-        Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.create_course_button_admin);
+        Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.search_Button);
         buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

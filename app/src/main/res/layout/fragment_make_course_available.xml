@@ -9,7 +9,7 @@
     tools:context=".make_course_available">
 
     <EditText
-        android:id="@+id/editTextCourseId"
+        android:id="@+id/Title"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"
