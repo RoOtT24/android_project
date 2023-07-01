@@ -169,9 +169,9 @@ public class LoginActivity extends AppCompatActivity {
 //                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
                     if(cursor.getInt(5) == 0){
                         Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                        return false;
+                        //return false;
                     }
-                    else if (pass.equals(storedPassword)) {
+                    if (pass.equals(storedPassword)) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         if (rem[0]){
                             SharedPreferences.Editor editor = sharedPreferences.edit();

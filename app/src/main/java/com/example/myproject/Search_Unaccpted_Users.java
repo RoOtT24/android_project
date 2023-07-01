@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -97,7 +98,7 @@ public class Search_Unaccpted_Users extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                Student s = new Student(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getBlob(6));
+                Student s = new Student(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getBlob(6));
                 LinearLayout ly = new LinearLayout(getActivity());
                 ly.setOrientation(LinearLayout.HORIZONTAL);
                 TextView email = new TextView(getActivity());
@@ -152,7 +153,7 @@ public class Search_Unaccpted_Users extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                Instructor s = new Instructor(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(5), cursor.getString(6),  cursor.getBlob(9));
+                Instructor s = new Instructor(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(5), cursor.getString(6),  cursor.getBlob(9));
                 LinearLayout ly = new LinearLayout(getActivity());
                 ly.setOrientation(LinearLayout.HORIZONTAL);
                 TextView email = new TextView(getActivity());
@@ -207,7 +208,7 @@ public class Search_Unaccpted_Users extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                Admin s = new Admin(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3) ,cursor.getBlob(4));
+                Admin s = new Admin(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(3) ,cursor.getBlob(4));
                 LinearLayout ly = new LinearLayout(getActivity());
                 ly.setOrientation(LinearLayout.HORIZONTAL);
                 TextView email = new TextView(getActivity());
@@ -233,6 +234,7 @@ public class Search_Unaccpted_Users extends Fragment {
                 approve.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Toast.makeText(getActivity(), s.getEmail(), Toast.LENGTH_SHORT).show();
                         db.setAccepted(s.getEmail());
                         showAll();
                     }

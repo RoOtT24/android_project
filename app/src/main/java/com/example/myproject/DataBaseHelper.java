@@ -276,7 +276,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         values.put(COLUMN_USER_IMAGE, instructor.getImage());
 
-        db.insert(TABLE_USER, null, values);
+        db.insert(TABLE_INSTRUCTOR, null, values);
         db.close();
     }
 

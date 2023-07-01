@@ -1,0 +1,42 @@
+<!-- fragment_home.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/ritaj"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
+        android:id="@+id/textViewGreeting"
+        android:layout_width="361dp"
+        android:layout_height="114dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:fontFamily="serif"
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp"
+        android:paddingRight="20dp"
+        android:text="Welcome to Ritaj"
+        android:textColor="#FFFFFF"
+        android:textSize="36sp" />
+
+    <Button
+        android:id="@+id/getStarted"
+        android:layout_width="360dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="24dp"
+        android:background="#E24CAF50"
+        android:text="Get Started"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <!-- Add more views, animations, or custom designs as desired -->
+
+</LinearLayout>
