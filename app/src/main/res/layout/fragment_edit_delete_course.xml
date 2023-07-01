@@ -15,6 +15,20 @@
         android:contentDescription="Select a course"/>
 
     <EditText
+        android:id="@+id/course_id_edit_text"
+        android:layout_width="30dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:editable="false"
+        android:layout_marginLeft="130dp"
+        />
+
+
+    <EditText
         android:id="@+id/editTextCourseId"
         android:layout_width="match_parent"
         android:layout_height="58dp"
@@ -26,7 +40,7 @@
         android:textColorHint="#FFFFFF" />
 
     <EditText
-        android:id="@+id/topices"
+        android:id="@+id/topics_onCreate"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"

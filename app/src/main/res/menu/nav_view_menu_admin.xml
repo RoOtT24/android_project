@@ -11,6 +11,8 @@
         <item android:id="@+id/viewStudents" android:title="View the profiles of students"/>
         <item android:id="@+id/viewInstructors" android:title="View the profiles of instructors"/>
         <item android:id="@+id/viewOfferingHistory" android:title="View the offering history of a certain course"/>
+        <item android:id="@+id/logout" android:title="Logout"/>
+
     </group>
 
 </menu>

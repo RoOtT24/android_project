@@ -9,6 +9,13 @@ public class Admin {
 
     private byte []image;
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public Admin(String firstName, String lastName, String email, String password, byte[] image) {
         this.firstName = firstName;

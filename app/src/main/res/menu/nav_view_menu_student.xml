@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/search_course" android:title="Search Course" />
+        <item android:id="@+id/enrollInCourseAvailable" android:title="Enroll in an existing course"/>
+        <item android:id="@+id/viewMyCoursesFinshed" android:title="View the courses I already studied in the center"/>
+        <item android:id="@+id/viewCoursesHistory" android:title="View the courses history in the center"/>
+        <item android:id="@+id/MyProfile" android:title="My Profile"/>
+    </group>
+
+</menu>

@@ -82,6 +82,12 @@ public class createNewCourse extends Fragment {
         return inflater.inflate(R.layout.fragment_create_new_course, container, false);
     }
     private void createCourse() {
+
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
+        editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+        courseImage = getActivity().findViewById(R.id.course_photo);
+
         // Retrieve the input values from the EditText fields
         String title = editTextTitle.getText().toString();
         String mainTopics = editTextMainTopics.getText().toString();
@@ -102,10 +108,11 @@ public class createNewCourse extends Fragment {
         // Create a new course object using the input values
         Courses newCourse = new Courses(title, convertStringToArray(mainTopics), convertStringToArray(prerequisites), bytes);
         DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
-
+        Toast.makeText(getActivity(), newCourse.gettitle(), Toast.LENGTH_SHORT).show();
         db.insertCourse(newCourse);
 
         db.close();
+        Toast.makeText(getActivity(), "Course is inserted!", Toast.LENGTH_SHORT).show();
 
     }
     private String[] convertStringToArray(String string) {
@@ -121,8 +128,8 @@ public class createNewCourse extends Fragment {
 
 
         // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
-        editTextMainTopics = getActivity().findViewById(R.id.topices);
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         courseImage = getActivity().findViewById(R.id.course_photo);
 
@@ -139,10 +146,18 @@ public class createNewCourse extends Fragment {
         });
 
         // Find the Create Course button
-        Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.create_course_button_admin);
+        Button buttonCreateCourse = (Button)getActivity().findViewById(R.id.search_Button);
         buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+                editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
+                editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+                courseImage = getActivity().findViewById(R.id.course_photo);
+                editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
+                editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
+                editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+                courseImage = getActivity().findViewById(R.id.course_photo);
                 createCourse();
                 Toast.makeText(getContext(), "ALL DONE", Toast.LENGTH_SHORT).show();
 
