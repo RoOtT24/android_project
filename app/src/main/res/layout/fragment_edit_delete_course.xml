@@ -40,7 +40,7 @@
         android:textColorHint="#FFFFFF" />
 
     <EditText
-        android:id="@+id/topices"
+        android:id="@+id/Schedule"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginBottom="16dp"

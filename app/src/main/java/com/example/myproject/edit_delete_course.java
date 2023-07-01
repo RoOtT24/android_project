@@ -149,8 +149,8 @@ public class edit_delete_course extends Fragment {
         courseSpinner = getActivity().findViewById(R.id.courseSpinner);
         courseTitles = new ArrayList<>();
 
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
-        editTextMainTopics = getActivity().findViewById(R.id.topices);
+        editTextTitle = getActivity().findViewById(R.id.Title);
+        editTextMainTopics = getActivity().findViewById(R.id.Schedule);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         idEditText = getActivity().findViewById(R.id.course_id_edit_text);
         courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);

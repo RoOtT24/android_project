@@ -55,9 +55,6 @@ public class make_course_available extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_make_course_available, container, false);
-
-
-
         return view;
     }
 
@@ -116,6 +113,7 @@ public class make_course_available extends Fragment {
         courseScheduleEditText.setText("");
         venueEditText.setText("");
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
