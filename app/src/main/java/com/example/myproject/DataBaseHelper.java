@@ -3,6 +3,7 @@ package com.example.myproject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -79,10 +80,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "(" +
                 COLUMN_OFFERING_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 COLUMN_USER_COURSEID + " INTEGER NOT NULL," +
-                COLUMN_REGISTRATION_DEADLINE + " INTEGER," +
-                COLUMN_START_DATE+" INTEGER,"+
-                COLUMN_COURSE_SCHEDULE+" TEXT,"+
-                COLUMN_VENUE+" TEXT"+
+                COLUMN_USER_EMAIL+"TEXT NOT NULL,"+
+                COLUMN_REGISTRATION_DEADLINE + " INTEGER NOT NULL," +
+                COLUMN_START_DATE+" INTEGER NOT NULL,"+
+                COLUMN_COURSE_SCHEDULE+" TEXT NOT NULL,"+
+                COLUMN_VENUE+" TEXT NOT NULL"+
                 ")";
         db.execSQL(CREATE_OFFERING_TABLE);
 
@@ -478,8 +480,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOfferingStudents(String courseName){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USER + " INNER JOIN (SELECT * FROM "+ TABLE_OFFERING
-                + " INNER JOIN "+TABLE_COURSES+" ON "+COLUMN_USER_TITLE+" INNER JOIN (SELECT * FROM "+TABLE_ENROLL+" WHERE )) ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_TITLE+ " =?", new String[]{courseName});
+//        return db.rawQuery("SELECT * FROM " + TABLE_USER + " INNER JOIN (SELECT * FROM "+ TABLE_OFFERING
+//                + " INNER JOIN "+TABLE_COURSES+" ON "+COLUMN_USER_TITLE+" INNER JOIN (SELECT * FROM "+TABLE_ENROLL+" WHERE)) ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_TITLE+ " =?", new String[]{courseName});
+    return null;
     }
 
     public void setAccepted(String userEmail){
@@ -1044,6 +1047,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return offer;
     }
+    // return the history courses that deadline is done
     public List<Courses> getOfferedCoursesHistory() {
         List<Courses> offeredCourses = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1169,6 +1173,41 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return offeringId;
+    }
+
+    public Cursor getPreviousCoursesByInstructor(String instructorEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_USER_COURSEID +
+                " FROM " + TABLE_OFFERING +
+                " WHERE " + COLUMN_USER_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{instructorEmail});
+
+        List<Integer> courseIds = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int courseId=0 ;
+                        int index = cursor.getColumnIndex(COLUMN_USER_COURSEID);
+                if (index>0)
+                    courseId = cursor.getInt(index);
+                Courses course = getCourseById(courseId);
+                if (isRegistrationDeadlinePassed(course)) {
+                    courseIds.add(courseId);
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        // Create a new cursor with the filtered course ids
+        MatrixCursor filteredCursor = new MatrixCursor(new String[]{COLUMN_USER_COURSEID});
+        for (int courseId : courseIds) {
+            filteredCursor.addRow(new Object[]{courseId});
+        }
+
+        return filteredCursor;
     }
 
 

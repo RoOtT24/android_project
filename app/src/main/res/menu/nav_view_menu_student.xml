@@ -8,7 +8,11 @@
         <item android:id="@+id/enrollInCourseAvailable" android:title="Enroll in an existing course"/>
         <item android:id="@+id/viewMyCoursesFinshed" android:title="View the courses I already studied in the center"/>
         <item android:id="@+id/viewCoursesHistory" android:title="View the courses history in the center"/>
-        <item android:id="@+id/MyProfile" android:title="My Profile"/>
+        <item android:id="@+id/viewCourses_withdrow" android:title="View the courses I studies with the center."/>
+        <item
+            android:id="@+id/MyProfile"
+            android:title="My Profile" />
+
     </group>
 
 </menu>

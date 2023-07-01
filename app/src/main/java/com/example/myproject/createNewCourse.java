@@ -83,7 +83,7 @@ public class createNewCourse extends Fragment {
     }
     private void createCourse() {
 
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextTitle = getActivity().findViewById(R.id.email);
         editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         courseImage = getActivity().findViewById(R.id.course_photo);
@@ -128,7 +128,7 @@ public class createNewCourse extends Fragment {
 
 
         // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextTitle = getActivity().findViewById(R.id.email);
         editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         courseImage = getActivity().findViewById(R.id.course_photo);
@@ -150,7 +150,7 @@ public class createNewCourse extends Fragment {
         buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+                editTextTitle = getActivity().findViewById(R.id.email);
                 editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
                 editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
                 courseImage = getActivity().findViewById(R.id.course_photo);

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -42,11 +43,11 @@ EditText email ;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enroll_courses, container, false);
-        LinearLayout enrolledLayout = view.findViewById(R.id.coursesEnrolled);
+        LinearLayout enrolledLayout = view.findViewById(R.id.courses);
         email = view.findViewById(R.id.Email);
         String e = email.getText().toString().trim();
-        List<String> courses;
-        courses = dbHelper.enrollIN(e);
+        List<String> courses = dbHelper.enrollIN(e);
+
         if (courses != null) {
             for (String course : courses) {
                 String title = course;
@@ -58,19 +59,23 @@ EditText email ;
                 // Create a new Withdraw button for each course title
                 Button withdrawButton = new Button(getActivity());
                 withdrawButton.setText("Withdraw");
+
+                // Declare final courseLayout variable
+                final LinearLayout courseLayout = new LinearLayout(getActivity());
+                courseLayout.setOrientation(LinearLayout.HORIZONTAL);
+                courseLayout.addView(courseTitleTextView);
+                courseLayout.addView(withdrawButton);
+
                 withdrawButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Handle the withdraw button click event
-                        // You can implement the logic to withdraw from the course here
+                        dbHelper.deleteEnrollCource(e, title);
+                        enrolledLayout.removeView(courseLayout); // Remove the course layout from the enrolledLayout
+
+                        Toast.makeText(getActivity(), "Enrollment for course " + title + " deleted.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                // Create a new LinearLayout to hold the course title and withdraw button
-                LinearLayout courseLayout = new LinearLayout(getActivity());
-                courseLayout.setOrientation(LinearLayout.HORIZONTAL);
-                courseLayout.addView(courseTitleTextView);
-                courseLayout.addView(withdrawButton);
 
                 // Add the course layout to the enrolledLayout LinearLayout
                 enrolledLayout.addView(courseLayout);
