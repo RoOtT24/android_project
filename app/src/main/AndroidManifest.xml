@@ -18,6 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".homeInstructor"
+            android:exported="false" />
+        <activity
+            android:name=".homeStudent"
+            android:exported="false" />
+        <activity
             android:name=".Profiles"
             android:exported="false" />
         <activity

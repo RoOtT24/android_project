@@ -1,28 +1,26 @@
 package com.example.myproject;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import java.util.List;
 
 
-public class ViewHistoryCourses extends Fragment {
+public class ViewCoursesInCenterFragment extends Fragment {
     TextView history ;
     DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
-
-    public ViewHistoryCourses() {
+    public ViewCoursesInCenterFragment() {
         // Required empty public constructor
     }
 
-    public static ViewHistoryCourses newInstance() {
-        ViewHistoryCourses fragment = new ViewHistoryCourses();
+    public static ViewCoursesInCenterFragment newInstance() {
+        ViewCoursesInCenterFragment fragment = new ViewCoursesInCenterFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -35,16 +33,16 @@ public class ViewHistoryCourses extends Fragment {
 
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
         history = view.findViewById(R.id.courses);
-        displayCourseDetails();
+        displayCourse();
         return view;
     }
-    private void displayCourseDetails() {
-        List<Courses> courses = dbHelper.getOfferedCoursesHistory();
+    private void displayCourse() {
+        List<Courses> courses = dbHelper.getOfferedCourses();
 
         if (courses != null && !courses.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -58,6 +56,4 @@ public class ViewHistoryCourses extends Fragment {
             history.setText("No courses found");
         }
     }
-
-
 }
