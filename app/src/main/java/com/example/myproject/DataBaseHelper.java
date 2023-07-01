@@ -74,15 +74,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         String CREATE_OFFERING_TABLE = "CREATE TABLE " + TABLE_OFFERING +
                 "(" +
-                COLUMN_OFFERING_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                COLUMN_OFFERING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_USER_COURSEID + " INTEGER NOT NULL," +
                 COLUMN_REGISTRATION_DEADLINE + " INTEGER," +
-                COLUMN_START_DATE+" INTEGER,"+
-                COLUMN_COURSE_SCHEDULE+" TEXT,"+
-                COLUMN_VENUE+" TEXT"+
+                COLUMN_START_DATE + " INTEGER," +
+                COLUMN_COURSE_SCHEDULE + " TEXT," +
+                COLUMN_VENUE + " TEXT," +
+                "FOREIGN KEY (" + COLUMN_USER_COURSEID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_USER_COURSEID + ")" +
                 ")";
         db.execSQL(CREATE_OFFERING_TABLE);
 
@@ -98,52 +98,54 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER +
                 "(" +
+                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
-                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_PHONE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED + " INTEGER DEFAULT 0 CHECK(" + COLUMN_ACCPETED + " IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_USER_TABLE);
 
-
         String CREATE_Admin_TABLE = "CREATE TABLE " + TABLE_Admin +
                 "(" +
+                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
-                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED + " INTEGER DEFAULT 0 CHECK(" + COLUMN_ACCPETED + " IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_Admin_TABLE);
 
         String CREATE_INSTRUCTOR_TABLE = "CREATE TABLE " + TABLE_INSTRUCTOR +
                 "(" +
+                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_FIRST_NAME + " TEXT NOT NULL," +
                 COLUMN_USER_LAST_NAME + " TEXT NOT NULL," +
-                COLUMN_USER_EMAIL + " TEXT PRIMARY KEY NOT NULL," +
                 COLUMN_USER_PHONE + " TEXT," +
                 COLUMN_USER_COURSES + " TEXT NOT NULL," +
-                COLUMN_USER_SPECIALIZATION + " TEXT NOT NULL,"+
+                COLUMN_USER_SPECIALIZATION + " TEXT NOT NULL," +
                 COLUMN_USER_DEGREE + " TEXT," +
                 COLUMN_USER_ADDRESS + " TEXT," +
                 COLUMN_USER_PASSWORD + " TEXT NOT NULL," +
                 COLUMN_USER_IMAGE + " BLOB," +
-                COLUMN_ACCPETED+" INTEGER DEFAULT 0 CHECK("+COLUMN_ACCPETED+" IN (0, 1))" + // MAKE IT BOOLEAN
+                COLUMN_ACCPETED + " INTEGER DEFAULT 0 CHECK(" + COLUMN_ACCPETED + " IN (0, 1))" + // MAKE IT BOOLEAN
                 ")";
         db.execSQL(CREATE_INSTRUCTOR_TABLE);
 
-        String CREATE_ENROLL_TABLE = "CREATE TABLE "+TABLE_ENROLL+
-                " ("
-                +COLUMN_ENROLL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
-                +COLUMN_USER_EMAIL+" TEXT NOT NULL,"
-                +COLUMN_OFFERING_ID+" INT NOT NULL"+
+        String CREATE_ENROLL_TABLE = "CREATE TABLE " + TABLE_ENROLL +
+                "(" +
+                COLUMN_ENROLL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_USER_EMAIL + " TEXT NOT NULL," +
+                COLUMN_OFFERING_ID + " INT NOT NULL," +
+                "FOREIGN KEY (" + COLUMN_USER_EMAIL + ") REFERENCES " + TABLE_USER + "(" + COLUMN_USER_EMAIL + ")," +
+                "FOREIGN KEY (" + COLUMN_OFFERING_ID + ") REFERENCES " + TABLE_OFFERING + "(" + COLUMN_OFFERING_ID + ")" +
                 ")";
         db.execSQL(CREATE_ENROLL_TABLE);
+
     }
 
     @Override
@@ -476,10 +478,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public Cursor getOfferingStudents(String courseName){
+    public Cursor getOfferingStudents(String courseTitle){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USER + " INNER JOIN (SELECT * FROM "+ TABLE_OFFERING
-                + " INNER JOIN "+TABLE_COURSES+" ON "+COLUMN_USER_TITLE+" INNER JOIN (SELECT * FROM "+TABLE_ENROLL+" WHERE )) ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_TITLE+ " =?", new String[]{courseName});
+        String query = "SELECT " + TABLE_USER + ".*" +
+                " FROM " + TABLE_USER +
+                " JOIN " + TABLE_ENROLL + " ON " + TABLE_USER + "." + COLUMN_USER_EMAIL + " = " + TABLE_ENROLL + "." + COLUMN_USER_EMAIL +
+                " JOIN " + TABLE_OFFERING + " ON " + TABLE_OFFERING + "." + COLUMN_OFFERING_ID + " = " + TABLE_ENROLL + "." + COLUMN_OFFERING_ID +
+                " JOIN " + TABLE_COURSES + " ON " + TABLE_COURSES + "." + COLUMN_USER_COURSEID + " = " + TABLE_OFFERING + "." + COLUMN_USER_COURSEID +
+                " WHERE " + TABLE_COURSES + "." + COLUMN_USER_TITLE + " = ?";
+
+        return db.rawQuery(query, new String[]{courseTitle});
     }
 
     public void setAccepted(String userEmail){
