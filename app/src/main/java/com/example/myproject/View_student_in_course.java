@@ -107,7 +107,8 @@ public class View_student_in_course extends Fragment {
         int COLUMN_MAINTOPICES_INDEX = cursor.getColumnIndex("mainTopics");
         int COLUMN_PREEQUISITES_INDEX = cursor.getColumnIndex("prerequisites");
         int COLUMN_IMAGE_INDEX = cursor.getColumnIndex("Image");
-        LinearLayout linearLayout = getActivity().findViewById(R.id.All_students_LinearLayout);
+        LinearLayout linearLayout = getActivity().findViewById(R.id.All_instructors_LinearLayout);
+        linearLayout.removeAllViews();
         while(cursor.moveToNext()){
             int id = cursor.getInt(COLUMN_ID_INDEX);
             String title = cursor.getString(COLUMN_TITLE_INDEX);
@@ -173,6 +174,7 @@ public class View_student_in_course extends Fragment {
             ly2.addView(phone_text);
             ly2.addView(address_text);
             vertical.addView(ly2);
+            linearLayout.addView(vertical);
 
         }
     }}

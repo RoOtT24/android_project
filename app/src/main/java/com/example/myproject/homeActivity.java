@@ -34,14 +34,10 @@ public class homeActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view) ;
 
         // if user select item from the navigation view it will be detected here
-        final createNewCourse createNewCourse = new createNewCourse();
-        final edit_delete_course edit_delete_course = new edit_delete_course();
-        final make_course_available make_course_available = new make_course_available();
-        final ViewAllStudents viewAllStudents = new ViewAllStudents();
-        final Search_Unaccpted_Users search_unaccpted_users = new Search_Unaccpted_Users();
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.add(R.id.fragment_conatiner, createNewCourse, "create new course"); // initial fragment
+        ft.add(R.id.fragment_conatiner, new createNewCourse(), "create new course"); // initial fragment
         ft.commit();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -49,26 +45,33 @@ public class homeActivity extends AppCompatActivity {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 switch (menuItem.getItemId()){
                     case R.id.createCourse:
-                        ft.replace(R.id.fragment_conatiner, createNewCourse);
+                        ft.replace(R.id.fragment_conatiner, new createNewCourse());
 
                         break;
                     case R.id.editDeleteCourse :
-                        ft.replace(R.id.fragment_conatiner, edit_delete_course);
+                        ft.replace(R.id.fragment_conatiner, new edit_delete_course());
                         break;
                     case R.id.makeCourseAvailable :
-                        ft.replace(R.id.fragment_conatiner, make_course_available);
+                        ft.replace(R.id.fragment_conatiner, new make_course_available());
                         break;
                     case R.id.acceptReject:
-                        ft.replace(R.id.fragment_conatiner, search_unaccpted_users);
+                        ft.replace(R.id.fragment_conatiner, new Search_Unaccpted_Users());
                         break;
                     case R.id.viewStudents :
-                        ft.replace(R.id.fragment_conatiner, viewAllStudents);
+                        ft.replace(R.id.fragment_conatiner, new ViewAllStudents());
+                        break;
+                    case R.id.viewInstructors:
+                        ft.replace(R.id.fragment_conatiner, new ViewAllInstructors());
+                        break;
+                    case R.id.viewOfferingHistory:
+                        ft.replace(R.id.fragment_conatiner, new ViewHistoryCourses());
                         break;
                     case R.id.logout:
                         Intent intent = new Intent(homeActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
+
                 }
                 ft.addToBackStack(null);
                 ft.commit();

@@ -321,6 +321,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getAllApprovedStudents() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
+    }
+
+    public Cursor getAllApprovedInstructors() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
+    }
 
     public Cursor getStudentByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();

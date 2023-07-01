@@ -15,13 +15,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ViewAllStudents#newInstance} factory method to
+ * Use the {@link ViewAllInstructors#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ViewAllStudents extends Fragment {
+public class ViewAllInstructors extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +37,7 @@ public class ViewAllStudents extends Fragment {
 
     DataBaseHelper dbHelper;
 
-    public ViewAllStudents() {
+    public ViewAllInstructors() {
         // Required empty public constructor
     }
 
@@ -44,11 +47,11 @@ public class ViewAllStudents extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewAllStudents.
+     * @return A new instance of fragment ViewAllInstructors.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewAllStudents newInstance(String param1, String param2) {
-        ViewAllStudents fragment = new ViewAllStudents();
+    public static ViewAllInstructors newInstance(String param1, String param2) {
+        ViewAllInstructors fragment = new ViewAllInstructors();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,16 +72,17 @@ public class ViewAllStudents extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_all_students, container, false);
+        return inflater.inflate(R.layout.fragment_view_all_instructors, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
         dbHelper = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
 
-        Cursor cursor = dbHelper.getAllApprovedStudents();
+        Cursor cursor = dbHelper.getAllApprovedInstructors();
 
         LinearLayout linearLayout = getActivity().findViewById(R.id.All_instructors_LinearLayout);
         linearLayout.removeAllViews();
@@ -92,13 +96,23 @@ public class ViewAllStudents extends Fragment {
                 TextView name_text = new TextView(getActivity());
                 TextView email_text = new TextView(getActivity());
                 TextView phone_text = new TextView(getActivity());
+                TextView courses_text = new TextView(getActivity());
+                TextView specialization_text = new TextView(getActivity());
+                TextView degree_text = new TextView(getActivity());
                 TextView address_text = new TextView(getActivity());
+
                 ImageView iv = new ImageView(getActivity());
+                Toast.makeText(getActivity(),cursor.getString(0) , Toast.LENGTH_SHORT).show();
                 name_text.setText(cursor.getString(1)+" "+cursor.getString(2));
                 email_text.setText(cursor.getString(0));
                 phone_text.setText(cursor.getString(3));
-                address_text.setText(cursor.getString(4));
-                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(6), 0 , cursor.getBlob(6).length));
+                courses_text.setText(cursor.getString(4));
+                specialization_text.setText(cursor.getString(5));
+                degree_text.setText(cursor.getString(6));
+                address_text.setText(cursor.getString(7));
+
+
+                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(8), 0 , cursor.getBlob(8).length));
                 iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
                 iv.getLayoutParams().height = 300;
@@ -117,7 +131,7 @@ public class ViewAllStudents extends Fragment {
                 email_text.setLayoutParams(params);
                 ly2.addView(email_text);
                 ly2.addView(phone_text);
-                ly2.addView(address_text);
+                ly2.addView(courses_text);
                 vertical.addView(ly2);
                 GradientDrawable border = new GradientDrawable();
 //                border.setColor(0xFFFFFFFF); //white background
@@ -132,7 +146,7 @@ public class ViewAllStudents extends Fragment {
         }
         else {
             TextView tv = new TextView(getActivity());
-            tv.setText("no students found!");
+            tv.setText("no instructors found!");
             linearLayout.addView(tv);
         }
     }

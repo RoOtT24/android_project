@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ViewHistoryCourses extends Fragment {
     TextView history ;
-    DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
+    DataBaseHelper dbHelper ;
 
     public ViewHistoryCourses() {
         // Required empty public constructor
@@ -39,11 +39,10 @@ public class ViewHistoryCourses extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
-        history = view.findViewById(R.id.courses);
-        displayCourseDetails();
         return view;
     }
     private void displayCourseDetails() {
+        dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
         List<Courses> courses = dbHelper.getOfferedCoursesHistory();
 
         if (courses != null && !courses.isEmpty()) {
@@ -59,5 +58,11 @@ public class ViewHistoryCourses extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        history = getActivity().findViewById(R.id.coursesEnrolled);
+        displayCourseDetails();
+    }
 }

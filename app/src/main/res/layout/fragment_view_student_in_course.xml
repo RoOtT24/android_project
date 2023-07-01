@@ -18,7 +18,7 @@
     </ListView>
 
     <LinearLayout
-        android:id="@+id/All_students_LinearLayout"
+        android:id="@+id/All_instructors_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"></LinearLayout>
