@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -252,6 +253,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public void insertInstructor(Instructor instructor) {
+
+
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_FIRST_NAME, instructor.getFirstName());
@@ -268,7 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_USER_DEGREE, instructor.getDegree());
         values.put(COLUMN_USER_SPECIALIZATION, instructor.getSpecialization());
-        values.put(COLUMN_USER_COURSES, instructor.getCourses().toString());
+        values.put(COLUMN_USER_COURSES, convertArrayToString(instructor.getCourses()));
 
         if (isValidPassword(instructor.getPassword())) {
             values.put(COLUMN_USER_PASSWORD, instructor.getPassword());
@@ -293,7 +297,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    private String convertArrayToString(String[] array) {
+    public String convertArrayToString(String[] array) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             stringBuilder.append(array[i].trim());

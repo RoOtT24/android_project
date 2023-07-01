@@ -10,7 +10,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/instructor_profileImage"
         android:layout_width="122dp"
         android:layout_height="96dp"
         android:layout_marginLeft="130dp"

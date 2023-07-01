@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,19 @@ public class Instructor {
     }
 
     public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public Instructor(String firstName, String lastName, String email, String phone, String address, String password, String specialization, String degree, String[] courses, byte[] image) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+        this.specialization = specialization;
+        this.degree = degree;
+        this.courses = courses;
         this.image = image;
     }
 
@@ -118,5 +132,21 @@ public class Instructor {
     public void setCourses(String[] courses) {
 
         this.courses = courses;
+    }
+
+    @Override
+    public String toString() {
+        return "Instructor{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                ", specialization='" + specialization + '\'' +
+                ", degree='" + degree + '\'' +
+                ", courses=" + Arrays.toString(courses) +
+                ", image=" + Arrays.toString(image) +
+                '}';
     }
 }
