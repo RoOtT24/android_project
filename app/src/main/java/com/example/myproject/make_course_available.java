@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -120,7 +119,7 @@ public class make_course_available extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        courseIdEditText = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        courseIdEditText = getActivity().findViewById(R.id.email);
         instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
         registrationDeadlineEditText = getActivity().findViewById(R.id.editTextRegistrationDeadline);
         courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);
@@ -187,7 +186,7 @@ public class make_course_available extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                courseIdEditText = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+                courseIdEditText = getActivity().findViewById(R.id.email);
 //                Toast.makeText(getActivity(), Integer.toString(courses.get(i).getId()), Toast.LENGTH_SHORT).show();
 
                 courseIdEditText.setText(Integer.toString(courses.get(i).getId()));
@@ -221,7 +220,7 @@ public class make_course_available extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                courseIdEditText = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+                courseIdEditText = getActivity().findViewById(R.id.email);
                 instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
                 registrationDeadlineEditText = getActivity().findViewById(R.id.editTextRegistrationDeadline);
                 courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);

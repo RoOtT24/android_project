@@ -1,19 +1,28 @@
 package com.example.myproject;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,7 +30,8 @@ import java.util.regex.Pattern;
 public class SignUpInstructor extends AppCompatActivity {
 
     private  DataBaseHelper dbHelper ;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+//    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         int x =0;
@@ -40,13 +50,53 @@ public class SignUpInstructor extends AppCompatActivity {
         EditText address = findViewById(R.id.Address);
         EditText password = findViewById(R.id.Password);
         EditText confirmPassword = findViewById(R.id.ConfrimPassword);
+        ImageView profileImageView = findViewById(R.id.instructor_profileImage);
 
+
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode() == Activity.RESULT_OK ){
+                    Intent data = result.getData();
+                    Uri uri = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                        profileImageView.setImageBitmap(bitmap);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intent);
+            }
+        });
 
 
             signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditText firstName = findViewById(R.id.FirstName);
+                EditText lastName = findViewById(R.id.LastName);
+                EditText email = findViewById(R.id.Email);
+                EditText phone = findViewById(R.id.Phone);
+                EditText specialization = findViewById(R.id.specialization);
+                EditText degree = findViewById(R.id.Degree);
+                EditText courses = findViewById(R.id.Courses);
+                EditText address = findViewById(R.id.Address);
+                EditText password = findViewById(R.id.Password);
+                EditText confirmPassword = findViewById(R.id.ConfrimPassword);
+
+
                 String[] courseNames={};
+
+
                 String fName = firstName.getText().toString().trim();
                 String lName = lastName.getText().toString().trim();
                 String userEmail = email.getText().toString().trim();
@@ -123,21 +173,41 @@ public class SignUpInstructor extends AppCompatActivity {
                     password.setError("Invalid password format, must be 8-15 character and contain at least one number, one lowercase letter, and one uppercase letter. ");
                 }
 
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte []bytes = {};
+
+                if(bitmap != null){
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+                    bytes = byteArrayOutputStream.toByteArray();
+                }
+                else {
+                    isValid = false;
+                }
+
                 if (isValid && userPassword.equals(confirmPass)) {
                     // Create a new Student object
-                    Instructor instructor = new Instructor(fName, lName, userEmail, userPhone, userAddress, userPassword, userSpecialization,userDegree, courseNames);
+                    Instructor instructor = new Instructor(fName, lName, userEmail, userPhone, userAddress, userPassword, userSpecialization, userDegree, usercourse.split(","), bytes);// userPhone, userAddress, userPassword, userSpecialization,userDegree, courseNames, bytes);
                     // Insert the instructor into the database
+//                    Toast.makeText(SignUpInstructor.this, instructor.getFirstName(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getLastName(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getEmail(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getSpecialization(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getPhone(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpInstructor.this, dbHelper.convertArrayToString(instructor.getCourses()), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getAddress(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SignUpInstructor.this, instructor.getDegree(), Toast.LENGTH_SHORT).show();
+
                     dbHelper.insertInstructor(instructor);
 
                     // Show a success message
                     Toast.makeText(SignUpInstructor.this, "Signup successful", Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(SignUpInstructor.this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+//                    Intent intent = new Intent(SignUpInstructor.this,LoginActivity.class);
+//                    startActivity(intent);
+//                    finish();
 
                     // Clear the input fields
-                    clearInputFields();
+//                    clearInputFields();
                 } else {
                     Toast.makeText(SignUpInstructor.this, "Please fill in all required fields correctly", Toast.LENGTH_SHORT).show();
                 }
@@ -180,20 +250,20 @@ public class SignUpInstructor extends AppCompatActivity {
         return Pattern.matches(passwordPattern, password);
     }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-        }
-    }
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//
+//        }
+//    }
 
 }

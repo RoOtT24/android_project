@@ -147,7 +147,7 @@ public class edit_delete_course extends Fragment {
         courseSpinner = getActivity().findViewById(R.id.courseSpinner);
         courseTitles = new ArrayList<>();
 
-        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextTitle = getActivity().findViewById(R.id.email);
         editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         idEditText = getActivity().findViewById(R.id.course_id_edit_text);

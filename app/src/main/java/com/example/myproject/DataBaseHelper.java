@@ -3,8 +3,10 @@ package com.example.myproject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +30,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_USER_SPECIALIZATION = "specialization";
     private static final String COLUMN_USER_COURSES = "courses";
 
-//////////////////////////
+    //////////////////////////
     public static final String COLUMN_USER_PASSWORD = "Password";
 
     public static final String COLUMN_USER_IMAGE = "Image";
@@ -251,6 +253,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
     public void insertInstructor(Instructor instructor) {
+
+
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_FIRST_NAME, instructor.getFirstName());
@@ -267,7 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         values.put(COLUMN_USER_DEGREE, instructor.getDegree());
         values.put(COLUMN_USER_SPECIALIZATION, instructor.getSpecialization());
-        values.put(COLUMN_USER_COURSES, instructor.getCourses().toString());
+        values.put(COLUMN_USER_COURSES, convertArrayToString(instructor.getCourses()));
 
         if (isValidPassword(instructor.getPassword())) {
             values.put(COLUMN_USER_PASSWORD, instructor.getPassword());
@@ -292,7 +297,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-    private String convertArrayToString(String[] array) {
+    public String convertArrayToString(String[] array) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < array.length; i++) {
             stringBuilder.append(array[i].trim());
@@ -320,6 +325,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getAllApprovedStudents() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
+    }
+
+    public Cursor getAllApprovedInstructors() {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
+    }
 
     public Cursor getStudentByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -480,6 +494,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOfferingStudents(String courseTitle){
         SQLiteDatabase db = this.getReadableDatabase();
+
         String query = "SELECT " + TABLE_USER + ".*" +
                 " FROM " + TABLE_USER +
                 " JOIN " + TABLE_ENROLL + " ON " + TABLE_USER + "." + COLUMN_USER_EMAIL + " = " + TABLE_ENROLL + "." + COLUMN_USER_EMAIL +
@@ -488,6 +503,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " WHERE " + TABLE_COURSES + "." + COLUMN_USER_TITLE + " = ?";
 
         return db.rawQuery(query, new String[]{courseTitle});
+//        return db.rawQuery("SELECT * FROM " + TABLE_USER + " INNER JOIN (SELECT * FROM "+ TABLE_OFFERING
+//                + " INNER JOIN "+TABLE_COURSES+" ON "+COLUMN_USER_TITLE+" INNER JOIN (SELECT * FROM "+TABLE_ENROLL+" WHERE)) ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_TITLE+ " =?", new String[]{courseName});
+ 
     }
 
     public void setAccepted(String userEmail){
@@ -559,7 +577,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                     // Handle any other exceptions that may occur during the retrieval of the course name
                     e.printStackTrace();
                 }
-              //  courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
+                //  courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -771,8 +789,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_EMAIL, student.getEmail());
-       // Offer offer = getCourseofferById(course.getCourseId());
-       // values.put(COLUMN_OFFERING_ID, offer.);
+        // Offer offer = getCourseofferById(course.getCourseId());
+        // values.put(COLUMN_OFFERING_ID, offer.);
         long result = db.insert(TABLE_ENROLL, null, values);
 
         db.close();
@@ -808,7 +826,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Check if a student has completed the prerequisites for a specific course
-   public boolean hasCompletedPrerequisites(Student student, Courses course) {
+    public boolean hasCompletedPrerequisites(Student student, Courses course) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Check if the student has completed all the prerequisites for the course
@@ -882,7 +900,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (scheduleIndex >= 0) {
                 schedule = cursor.getString(scheduleIndex);
             }
-           /// String schedule = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE));
+            /// String schedule = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE));
 
             // Add the schedule to the course schedule list
             courseSchedule.add(schedule);
@@ -910,7 +928,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             if (courseIdIndex >= 0) {
                 courseId = cursor.getInt(courseIdIndex);
             }
-           // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
+            // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_USER_COURSEID));
             enrolledCourseIds.add(courseId);
         }
 
@@ -955,28 +973,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-// for search in available courses
-public List<Courses> getOfferedCourses() {
-    List<Courses> offeredCourses = new ArrayList<>();
-    SQLiteDatabase db = this.getReadableDatabase();
-    String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
-    Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+    // for search in available courses
+    public List<Courses> getOfferedCourses() {
+        List<Courses> offeredCourses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
 
-    while (cursor.moveToNext()) {
-        Integer courseId = 0;
-        int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
-        if (courseIdIndex >= 0) {
-            courseId = cursor.getInt(courseIdIndex);
+        while (cursor.moveToNext()) {
+            Integer courseId = 0;
+            int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+            if (courseIdIndex >= 0) {
+                courseId = cursor.getInt(courseIdIndex);
+            }
+            Courses course = getCourseById(courseId);
+            offeredCourses.add(course);
         }
-        Courses course = getCourseById(courseId);
-        offeredCourses.add(course);
+
+        cursor.close();
+        db.close();
+
+        return offeredCourses;
     }
-
-    cursor.close();
-    db.close();
-
-    return offeredCourses;
-}
 
     public Courses getCourseById(int courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1052,6 +1070,7 @@ public List<Courses> getOfferedCourses() {
 
         return offer;
     }
+    // return the history courses that deadline is done
     public List<Courses> getOfferedCoursesHistory() {
         List<Courses> offeredCourses = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1061,9 +1080,9 @@ public List<Courses> getOfferedCourses() {
         while (cursor.moveToNext()) {
             int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
             if (courseIdIndex >= 0) {
-                 courseId = cursor.getInt(courseIdIndex);
+                courseId = cursor.getInt(courseIdIndex);
             }
-           // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
+            // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
             Courses course = getCourseById(courseId);
 
 
@@ -1122,7 +1141,7 @@ public List<Courses> getOfferedCourses() {
             if (titleIndex >= 0) {
                 title = cursor.getString(titleIndex);
             }
-           // String title = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
+            // String title = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
             enrolledCourseTitles.add(title);
         }
 
@@ -1149,10 +1168,10 @@ public List<Courses> getOfferedCourses() {
 
         if (rowsAffected > 0) {
             // Deletion successful
-          //  Toast.makeText(, "Enrollment for course " + title + " deleted.", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(, "Enrollment for course " + title + " deleted.", Toast.LENGTH_SHORT).show();
         } else {
             // No matching enrollment found
-          //  Toast.makeText(context, "No enrollment found for course " + title + ".", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(context, "No enrollment found for course " + title + ".", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1170,7 +1189,7 @@ public List<Courses> getOfferedCourses() {
         if (cursor.moveToFirst()) {
             int offeringindex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
             if (offeringindex>0)
-            offeringId = cursor.getInt(offeringindex);
+                offeringId = cursor.getInt(offeringindex);
         }
 
         cursor.close();
@@ -1179,5 +1198,41 @@ public List<Courses> getOfferedCourses() {
         return offeringId;
     }
 
+    public Cursor getPreviousCoursesByInstructor(String instructorEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_USER_COURSEID +
+                " FROM " + TABLE_OFFERING +
+                " WHERE " + COLUMN_USER_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{instructorEmail});
+
+        List<Integer> courseIds = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int courseId=0 ;
+                        int index = cursor.getColumnIndex(COLUMN_USER_COURSEID);
+                if (index>0)
+                    courseId = cursor.getInt(index);
+                Courses course = getCourseById(courseId);
+                if (isRegistrationDeadlinePassed(course)) {
+                    courseIds.add(courseId);
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        // Create a new cursor with the filtered course ids
+        MatrixCursor filteredCursor = new MatrixCursor(new String[]{COLUMN_USER_COURSEID});
+        for (int courseId : courseIds) {
+            filteredCursor.addRow(new Object[]{courseId});
+        }
+
+        return filteredCursor;
+    }
+
 
 }
+
