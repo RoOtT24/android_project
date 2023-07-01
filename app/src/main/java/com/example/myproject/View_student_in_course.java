@@ -1,9 +1,6 @@
 package com.example.myproject;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -26,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class View_student_in_course extends Fragment {
@@ -112,7 +107,7 @@ public class View_student_in_course extends Fragment {
         int COLUMN_MAINTOPICES_INDEX = cursor.getColumnIndex("mainTopics");
         int COLUMN_PREEQUISITES_INDEX = cursor.getColumnIndex("prerequisites");
         int COLUMN_IMAGE_INDEX = cursor.getColumnIndex("Image");
-        LinearLayout linearLayout = getActivity().findViewById(R.id.student_linear_layout_ViewInCourse);
+        LinearLayout linearLayout = getActivity().findViewById(R.id.All_students_LinearLayout);
         while(cursor.moveToNext()){
             int id = cursor.getInt(COLUMN_ID_INDEX);
             String title = cursor.getString(COLUMN_TITLE_INDEX);

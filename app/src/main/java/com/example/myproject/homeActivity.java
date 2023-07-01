@@ -37,7 +37,7 @@ public class homeActivity extends AppCompatActivity {
         final createNewCourse createNewCourse = new createNewCourse();
         final edit_delete_course edit_delete_course = new edit_delete_course();
         final make_course_available make_course_available = new make_course_available();
-        final View_student_in_course view_student_in_course = new View_student_in_course();
+        final ViewAllStudents viewAllStudents = new ViewAllStudents();
         final Search_Unaccpted_Users search_unaccpted_users = new Search_Unaccpted_Users();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -62,7 +62,7 @@ public class homeActivity extends AppCompatActivity {
                         ft.replace(R.id.fragment_conatiner, search_unaccpted_users);
                         break;
                     case R.id.viewStudents :
-                        ft.replace(R.id.fragment_conatiner, view_student_in_course);
+                        ft.replace(R.id.fragment_conatiner, viewAllStudents);
                         break;
                     case R.id.logout:
                         Intent intent = new Intent(homeActivity.this, LoginActivity.class);
