@@ -29,7 +29,7 @@
         app:srcCompat="@drawable/pick_an_image" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/emailSechedule"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"

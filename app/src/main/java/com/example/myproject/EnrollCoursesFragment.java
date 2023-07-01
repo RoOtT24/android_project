@@ -43,7 +43,7 @@ EditText email ;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enroll_courses, container, false);
-        LinearLayout enrolledLayout = view.findViewById(R.id.courses);
+        LinearLayout enrolledLayout = view.findViewById(R.id.coursesSechedule);
         email = view.findViewById(R.id.Email);
         String e = email.getText().toString().trim();
         List<String> courses = dbHelper.enrollIN(e);

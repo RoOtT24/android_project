@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -11,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class viewPreviousCoursesInstructor extends Fragment {
- EditText email ;
- TextView courses;
+public class viewCurrentSchedule extends Fragment {
+    EditText email ;
+    TextView courses;
     DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
 
-    public viewPreviousCoursesInstructor() {
+    public viewCurrentSchedule() {
         // Required empty public constructor
     }
     public static viewPreviousCoursesInstructor newInstance() {
@@ -34,34 +35,34 @@ public class viewPreviousCoursesInstructor extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
-        TextView coursesTextView = view.findViewById(R.id.coursesSechedule);
-        email = view.findViewById(R.id.emailSechedule);
-        String e = email.getText().toString().trim();
-        Cursor cursor = dbHelper.getPreviousCoursesByInstructor(e);
+        TextView coursesTextView = view.findViewById(R.id.emailSechedule);
+        email = view.findViewById(R.id.coursesSechedule);
+        String instructorEmail = email.getText().toString().trim();
+        Cursor cursor = dbHelper.getCurrentScheduleByInstructor(instructorEmail);
 
         StringBuilder coursesBuilder = new StringBuilder();
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int courseId = 0;
-                int index = cursor.getColumnIndex(dbHelper.COLUMN_USER_COURSEID);
-                if (index >0 )
-                    courseId=  cursor.getInt(index);
+                @SuppressLint("Range") int courseId = cursor.getInt(cursor.getColumnIndex(dbHelper.COLUMN_USER_COURSEID));
+                @SuppressLint("Range")String courseSchedule = cursor.getString(cursor.getColumnIndex(dbHelper.COLUMN_COURSE_SCHEDULE));
+
                 Courses course = dbHelper.getCourseById(courseId);
-                String courseTitle = course.getTitle();
-                coursesBuilder.append(courseTitle).append("\n");
+
+                if (course != null) {
+                    String courseTitle = course.getTitle();
+
+                    coursesBuilder.append(courseTitle).append(": ").append(courseSchedule).append("\n");
+                }
             } while (cursor.moveToNext());
         }
 
         cursor.close();
 
-        // Set the course titles in the TextView
+        // Set the course titles and schedules in the TextView
         coursesTextView.setText(coursesBuilder.toString());
 
         return view;
-    }
-
-}
+    }}

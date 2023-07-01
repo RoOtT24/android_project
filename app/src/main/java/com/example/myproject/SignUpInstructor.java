@@ -202,9 +202,9 @@ public class SignUpInstructor extends AppCompatActivity {
                     // Show a success message
                     Toast.makeText(SignUpInstructor.this, "Signup successful", Toast.LENGTH_SHORT).show();
 
-//                    Intent intent = new Intent(SignUpInstructor.this,LoginActivity.class);
-//                    startActivity(intent);
-//                    finish();
+                    Intent intent = new Intent(SignUpInstructor.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
 
                     // Clear the input fields
 //                    clearInputFields();

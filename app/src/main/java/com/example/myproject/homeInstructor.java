@@ -31,7 +31,7 @@ public class homeInstructor extends AppCompatActivity {
 
         // if user select item from the navigation view it will be detected here
        final viewPreviousCoursesInstructor PreviousCourses = new viewPreviousCoursesInstructor();
-//        final Enroll enroll = new Enroll();
+        final viewCurrentSchedule CurrentSchedule = new viewCurrentSchedule();
 //        final ViewHistoryCourses viewHistory = new ViewHistoryCourses();
 //        final EnrollCoursesFragment EnrollCoursesFragment = new EnrollCoursesFragment();
 
@@ -48,13 +48,13 @@ public class homeInstructor extends AppCompatActivity {
                         ft.replace(R.id.fragment_conatiner, PreviousCourses);
 
                         break;
-                    case R.id.viewStudents :
-                      //  ft.replace(R.id.fragment_conatiner, enroll);
+                    case R.id.Myschedule :
+                      ft.replace(R.id.fragment_conatiner, CurrentSchedule);
                         break;
                     case R.id.MyProfile :
                        // ft.replace(R.id.fragment_conatiner, viewHistory);
                         break;
-                    case R.id.Myschedule:
+                    case R.id.viewStudents:
                       //  ft.replace(R.id.fragment_conatiner, ViewCoursesInCenterFragment);
                         break;
 //                    case R.id.logout:

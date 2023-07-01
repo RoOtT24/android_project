@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -1232,6 +1233,67 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return filteredCursor;
     }
+
+
+public Cursor getCurrentScheduleByInstructor(String instructorEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_OFFERING_ID + ", " + COLUMN_COURSE_SCHEDULE +
+        " FROM " + TABLE_OFFERING +
+        " WHERE " + COLUMN_USER_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{instructorEmail});
+
+        List<Offer> offerings = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+        do {
+        @SuppressLint("Range") int offeringId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
+        @SuppressLint("Range") String courseSchedule = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE));
+
+        Courses course = getCourseById(offeringId);
+        if (course != null && !isRegistrationDeadlinePassed(course)) {
+        Offer offering = new Offer(offeringId,null ,null , null,courseSchedule ,null);
+        offerings.add(offering);
+        }
+        } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        // Convert the list of offerings to a MatrixCursor
+        MatrixCursor offeringCursor = new MatrixCursor(new String[]{COLUMN_OFFERING_ID, COLUMN_COURSE_SCHEDULE});
+        for (Offer offering : offerings) {
+        offeringCursor.addRow(new Object[]{offering.getCourseId(), offering.getCourseSchedule()});
+        }
+
+        return offeringCursor;
+        }
+
+public Cursor getAllCoursesByInstructor(String instructorEmail) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_OFFERING_ID + ", " + COLUMN_USER_COURSEID +
+                " FROM " + TABLE_OFFERING +
+                " WHERE " + COLUMN_USER_EMAIL + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{instructorEmail});
+
+        return cursor;
+}
+
+public Cursor getAllStudentsByCourse(int courseId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT " + COLUMN_USER_FIRST_NAME + COLUMN_USER_LAST_NAME +
+                " FROM " + TABLE_ENROLL +
+                " WHERE " + COLUMN_USER_COURSEID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+
+        return cursor;
+}
+
 
 
 }
