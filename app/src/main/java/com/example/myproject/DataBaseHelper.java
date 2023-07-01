@@ -188,6 +188,25 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public Cursor getUnApprovedStudents(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USER+" WHERE "+COLUMN_ACCPETED+" =?";
+        return db.rawQuery(query, new String[]{Integer.toString(0)});
+    }
+
+    public Cursor getUnApprovedInstructors(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_INSTRUCTOR+" WHERE "+COLUMN_ACCPETED+" =?";
+        return db.rawQuery(query, new String[]{Integer.toString(0)});
+    }
+
+    public Cursor getUnApprovedAdmins(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_Admin+" WHERE "+COLUMN_ACCPETED+" =?";
+        return db.rawQuery(query, new String[]{Integer.toString(0)});
+    }
+
     public void insertAdmin(Admin admin) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -472,40 +491,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
 
-//        public Cursor getStudentsByCourseId(int courseId) {
-//        SQLiteDatabase db = getReadableDatabase();
-//        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " =" + courseId + "";
-//        return db.rawQuery(query, null);
-//    }
+
     public Cursor getAllCourses() {
         List<String> courseList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
         String query = "SELECT * FROM " + TABLE_COURSES;
         Cursor cursor = db.rawQuery(query, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                String courseName = null;
-//                try {
-//                    int columnIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
-//                    if (columnIndex >= 0) {
-//                        courseName = cursor.getString(columnIndex);
-//                    } else {
-//                        // Handle the case when the column index is -1 (column not found)
-//                        // You can choose to assign a default value or take appropriate action here
-//                    }
-//                } catch (Exception e) {
-//                    // Handle any other exceptions that may occur during the retrieval of the course name
-//                    e.printStackTrace();
-//                }
-//               // String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_USER_TITLE));
-//                courseList.add(courseName);
-//            } while (cursor.moveToNext());
-//        }
-//
-//        cursor.close();
-//        return courseList;
+
         return cursor;
     }
     public int getCourseId(String courseName) {
