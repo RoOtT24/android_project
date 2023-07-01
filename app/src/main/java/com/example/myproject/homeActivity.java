@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -37,6 +38,7 @@ public class homeActivity extends AppCompatActivity {
         final edit_delete_course edit_delete_course = new edit_delete_course();
         final make_course_available make_course_available = new make_course_available();
         final View_student_in_course view_student_in_course = new View_student_in_course();
+        final Search_Unaccpted_Users search_unaccpted_users = new Search_Unaccpted_Users();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, createNewCourse, "create new course"); // initial fragment
@@ -56,8 +58,16 @@ public class homeActivity extends AppCompatActivity {
                     case R.id.makeCourseAvailable :
                         ft.replace(R.id.fragment_conatiner, make_course_available);
                         break;
+                    case R.id.acceptReject:
+                        ft.replace(R.id.fragment_conatiner, search_unaccpted_users);
+                        break;
                     case R.id.viewStudents :
                         ft.replace(R.id.fragment_conatiner, view_student_in_course);
+                        break;
+                    case R.id.logout:
+                        Intent intent = new Intent(homeActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
                 }
                 ft.addToBackStack(null);

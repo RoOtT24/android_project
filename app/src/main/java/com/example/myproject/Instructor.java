@@ -14,6 +14,25 @@ public class Instructor {
     private String degree;
     private String[] courses;
 
+    private byte[] image;
+
+    public Instructor(String firstName, String lastName, String email, String specialization, String degree, byte[] image) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.specialization = specialization;
+        this.degree = degree;
+        this.image = image;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public Instructor(String firstName, String lastName, String email, String phone, String address, String password,
                       String specialization, String degree, String[] courses) {
         this.firstName = firstName;

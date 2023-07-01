@@ -12,6 +12,15 @@
     <ListView
         android:id="@+id/studentListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/darker_gray" >
+
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/student_linear_layout_ViewInCourse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
 
 </LinearLayout>
