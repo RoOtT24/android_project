@@ -32,8 +32,6 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 
 public class edit_delete_course extends Fragment {
@@ -149,8 +147,8 @@ public class edit_delete_course extends Fragment {
         courseSpinner = getActivity().findViewById(R.id.courseSpinner);
         courseTitles = new ArrayList<>();
 
-        editTextTitle = getActivity().findViewById(R.id.Title);
-        editTextMainTopics = getActivity().findViewById(R.id.Schedule);
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         idEditText = getActivity().findViewById(R.id.course_id_edit_text);
         courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);
@@ -172,7 +170,7 @@ public class edit_delete_course extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
-                editTextMainTopics = getActivity().findViewById(R.id.topices);
+                editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
                 editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
                 courseImage = getActivity().findViewById(R.id.course_Image_on_update_fragment);
                 update = getActivity().findViewById(R.id.ceate_course);

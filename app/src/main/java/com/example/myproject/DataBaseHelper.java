@@ -1,16 +1,12 @@
 package com.example.myproject;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -225,10 +221,32 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             throw new IllegalArgumentException("Invalid password format");
         }
+        values.put(COLUMN_USER_IMAGE, admin.getImage());
 
         db.insert(TABLE_Admin, null, values);
         db.close();
     }
+
+    public void removeStudent(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_USER+" WHERE "+COLUMN_USER_EMAIL+" = '"+email+"'";
+        db.execSQL(query);
+    }
+
+
+    public void removeInstructor(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_USER_EMAIL+" = '"+email+"'";
+        db.execSQL(query);
+    }
+
+
+    public void removeAdmin(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM "+TABLE_Admin+" WHERE "+COLUMN_USER_EMAIL+" = '"+email+"'";
+        db.execSQL(query);
+    }
+
 
     public void insertInstructor(Instructor instructor) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -254,6 +272,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         } else {
             throw new IllegalArgumentException("Invalid password format");
         }
+        values.put(COLUMN_USER_IMAGE, instructor.getImage());
 
         db.insert(TABLE_USER, null, values);
         db.close();
@@ -457,10 +476,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public Cursor getOfferingStudents(int courseId){
+    public Cursor getOfferingStudents(String courseName){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_OFFERING + " INNER JOIN "+ TABLE_USER
-                + " ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_COURSEID+ " =?", new String[]{Integer.toString(courseId)});
+        return db.rawQuery("SELECT * FROM " + TABLE_USER + " INNER JOIN (SELECT * FROM "+ TABLE_OFFERING
+                + " INNER JOIN "+TABLE_COURSES+" ON "+COLUMN_USER_TITLE+" INNER JOIN (SELECT * FROM "+TABLE_ENROLL+" WHERE )) ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_TITLE+ " =?", new String[]{courseName});
     }
 
     public void setAccepted(String userEmail){

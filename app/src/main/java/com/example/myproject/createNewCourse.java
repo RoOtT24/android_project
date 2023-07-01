@@ -82,6 +82,12 @@ public class createNewCourse extends Fragment {
         return inflater.inflate(R.layout.fragment_create_new_course, container, false);
     }
     private void createCourse() {
+
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
+        editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+        courseImage = getActivity().findViewById(R.id.course_photo);
+
         // Retrieve the input values from the EditText fields
         String title = editTextTitle.getText().toString();
         String mainTopics = editTextMainTopics.getText().toString();
@@ -122,8 +128,8 @@ public class createNewCourse extends Fragment {
 
 
         // Find the EditText fields
-        editTextTitle = getActivity().findViewById(R.id.Title);
-        editTextMainTopics = getActivity().findViewById(R.id.Schedule);
+        editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+        editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
         editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
         courseImage = getActivity().findViewById(R.id.course_photo);
 
@@ -144,8 +150,12 @@ public class createNewCourse extends Fragment {
         buttonCreateCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editTextTitle = getActivity().findViewById(R.id.editTextCourseId_onMakeAvauilable);
+                editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
+                editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
+                courseImage = getActivity().findViewById(R.id.course_photo);
                 editTextTitle = getActivity().findViewById(R.id.editTextCourseId);
-                editTextMainTopics = getActivity().findViewById(R.id.topices);
+                editTextMainTopics = getActivity().findViewById(R.id.topics_onCreate);
                 editTextPrerequisites = getActivity().findViewById(R.id.Prerequisites);
                 courseImage = getActivity().findViewById(R.id.course_photo);
                 createCourse();
