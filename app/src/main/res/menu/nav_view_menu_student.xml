@@ -12,6 +12,8 @@
         <item
             android:id="@+id/MyProfile"
             android:title="My Profile" />
+        <item android:id="@+id/logoutStudent" android:title="logout"/>
+
 
     </group>
 

@@ -51,16 +51,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(loginUser()) {
+                loginUser();
                    // if (dbHelper.getUserType(emailEditText.getText().toString()) == 2) {// admin
-                    Intent intent = new Intent(LoginActivity.this, homeActivity.class);
-                    startActivity(intent);
-                    finish();
+
                 //}
                     // add another cases 1+3
                 }
 //                getUsers();
-            }
+
         });
 
         Signupbtn.setOnClickListener(new View.OnClickListener() {
@@ -94,13 +92,13 @@ public class LoginActivity extends AppCompatActivity {
 //        startActivity(intent);
 //        finish();
 //    }
-    private boolean loginUser() {
+    private void loginUser() {
         String username = emailEditText.getText().toString().trim();
         String pass = password.getText().toString().trim();
 
         if (username.isEmpty() || pass.isEmpty()) {
             Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show();
-            return false;
+            return ;
         }
 
         if (dbHelper.isEmailExists(username)) {
@@ -109,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                 @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
                 if(cursor.getInt(7) == 0){
                     Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                    return false;
+                    return ;
                 }
 
                 else if (pass.equals(storedPassword)) {
@@ -127,7 +125,11 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("password", "");
                         editor.apply();
                     }
-                    return true;
+                    Intent intent = new Intent(LoginActivity.this, homeStudent.class);
+                    startActivity(intent);
+                    finish();
+                    return;
+//                    return true;
                 } else {
 
                     Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
@@ -138,9 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                 if(cursor.moveToFirst()){
                     @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
 //                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
-                    if(cursor.getInt(5) == 0){
+                    if(cursor.getInt(10) == 0){
                         Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                        return false;
+                        return ;
                     }
                     else if (pass.equals(storedPassword)) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
@@ -157,7 +159,12 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("password", "");
                             editor.apply();
                         }
-                        return true;
+
+                        Intent intent = new Intent(LoginActivity.this, homeInstructor.class);
+                        intent.putExtra("email",username);
+                        startActivity(intent);
+                        finish();
+                        return;
                     } else {
 
                         Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
@@ -170,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
                     if(cursor.getInt(5) == 0){
                         Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                        return false;
+                        return ;
                     }
                     else if (pass.equals(storedPassword)) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
@@ -187,7 +194,10 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("password", "");
                             editor.apply();
                         }
-                        return true;
+                        Intent intent = new Intent(LoginActivity.this, homeActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return;
                     } else {
 
                         Toast.makeText(this, "Invalid password", Toast.LENGTH_SHORT).show();
@@ -199,7 +209,7 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, "User does not exist", Toast.LENGTH_SHORT).show();
         }
-        return false;
+        return ;
     }
     public void getUsers(){
         Cursor c =dbHelper.getAllStudent();

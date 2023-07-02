@@ -19,7 +19,7 @@ import java.util.List;
 public class EnrollCoursesFragment extends Fragment {
 TextView Enrolled ;
 EditText email ;
-    DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
+    DataBaseHelper dbHelper ;
 
     public EnrollCoursesFragment() {
         // Required empty public constructor
@@ -46,6 +46,7 @@ EditText email ;
         LinearLayout enrolledLayout = view.findViewById(R.id.courses);
         email = view.findViewById(R.id.Email);
         String e = email.getText().toString().trim();
+        dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
         List<String> courses = dbHelper.enrollIN(e);
 
         if (courses != null) {

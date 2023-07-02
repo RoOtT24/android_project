@@ -281,7 +281,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         values.put(COLUMN_USER_IMAGE, instructor.getImage());
 
-        db.insert(TABLE_USER, null, values);
+        db.insert(TABLE_INSTRUCTOR, null, values);
         db.close();
     }
 
@@ -330,6 +330,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
     }
 
+    public Cursor getAllCoursesOfInstructor(String instructorEmail){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String query = "SELECT " + TABLE_COURSES + ".*" +
+                " FROM " + TABLE_COURSES +
+                " JOIN " + TABLE_OFFERING + " ON " + TABLE_OFFERING + "." + COLUMN_USER_COURSEID + " = " + TABLE_COURSES + "." + COLUMN_USER_COURSEID +
+                " JOIN " + TABLE_INSTRUCTOR + " ON " + TABLE_INSTRUCTOR + "." + COLUMN_USER_EMAIL + " = ?" +
+                " WHERE " + COLUMN_USER_EMAIL + " = ?";
+        return  sqLiteDatabase.rawQuery(query, new String[]{instructorEmail});
+    }
     public Cursor getAllApprovedInstructors() {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_INSTRUCTOR+" WHERE "+COLUMN_ACCPETED+" =?", new String[]{Integer.toString(1)});
@@ -1201,9 +1210,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public Cursor getPreviousCoursesByInstructor(String instructorEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT " + COLUMN_USER_COURSEID +
-                " FROM " + TABLE_OFFERING +
-                " WHERE " + COLUMN_USER_EMAIL + " = ?";
+        String query = "SELECT * " +
+                "FROM " + TABLE_OFFERING +
+                " JOIN " + TABLE_COURSES + " ON " + TABLE_COURSES + "." + COLUMN_USER_COURSEID + " = " + TABLE_OFFERING + "." + COLUMN_USER_COURSEID +
+                " JOIN " + TABLE_ENROLL + " ON " + TABLE_ENROLL + "." + COLUMN_OFFERING_ID + " = " + TABLE_OFFERING + "." + COLUMN_OFFERING_ID +
+                " WHERE " + TABLE_ENROLL + "." + COLUMN_USER_EMAIL + " = ?";
 
         Cursor cursor = db.rawQuery(query, new String[]{instructorEmail});
 
