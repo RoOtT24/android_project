@@ -63,11 +63,13 @@ public class homeStudent extends AppCompatActivity {
                     case R.id.viewCourses_withdrow :
                         ft.replace(R.id.fragment_conatiner, EnrollCoursesFragment);
                         break;
-//                    case R.id.logout:
-//                        Intent intent = new Intent(homeActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                        break;
+                    case R.id.MyProfile:
+                        break;
+                    case R.id.logoutStudent:
+                        Intent intent = new Intent(homeStudent.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                 }
                 ft.addToBackStack(null);
                 ft.commit();

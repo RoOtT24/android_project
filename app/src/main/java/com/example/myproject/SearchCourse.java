@@ -2,6 +2,7 @@ package com.example.myproject;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -48,31 +49,6 @@ public class SearchCourse extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_course, container, false);
-        textViewTitle = view.findViewById(R.id.textViewTitle);
-        searchButton = view.findViewById(R.id.search_Button);
-        courseOffried = view.findViewById(R.id.courseOffried);
-        courseTitles = new ArrayList<>();
-        spinner = view.findViewById(R.id.spinner);
-        refreshSpinner();
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String selectedCourse = courseTitles.get(position);
-                // Retrieve course data from the database based on the selected course title
-                Courses courseData = dbHelper.getCourseData(selectedCourse);
-                if (courseData != null) {
-                    int courseid = courseData.getId();
-                    displayCourseDetails(courseid);
-                }
-                else {
-                    Toast.makeText(getActivity(), "No course found", Toast.LENGTH_SHORT).show();
-                }
-            }
-            public void onNothingSelected(AdapterView<?> parent) {
-                courseOffried.setText(" ");
-            }
-        });
 
        return view;
     }
@@ -124,5 +100,40 @@ public class SearchCourse extends Fragment {
         }
 
         return courseTitles;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        dbHelper = new DataBaseHelper(getActivity().getBaseContext(), "db", null, 1);
+
+        textViewTitle = getActivity().findViewById(R.id.textViewTitle);
+        searchButton = getActivity().findViewById(R.id.search_Button);
+        courseOffried = getActivity().findViewById(R.id.courseOffried);
+        courseTitles = new ArrayList<>();
+        spinner = getActivity().findViewById(R.id.spinner);
+        refreshSpinner();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                String selectedCourse = courseTitles.get(position);
+                // Retrieve course data from the database based on the selected course title
+                Courses courseData = dbHelper.getCourseData(selectedCourse);
+                if (courseData != null) {
+                    int courseid = courseData.getId();
+                    displayCourseDetails(courseid);
+                }
+                else {
+                    Toast.makeText(getActivity(), "No course found", Toast.LENGTH_SHORT).show();
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+                courseOffried.setText(" ");
+            }
+        });
+
     }
 }

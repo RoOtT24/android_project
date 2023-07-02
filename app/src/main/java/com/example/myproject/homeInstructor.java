@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -29,15 +30,10 @@ public class homeInstructor extends AppCompatActivity {
 
         navigationView = (NavigationView) findViewById(R.id.nav_view) ;
 
-        // if user select item from the navigation view it will be detected here
-       final viewPreviousCoursesInstructor PreviousCourses = new viewPreviousCoursesInstructor();
-        final viewCurrentSchedule CurrentSchedule = new viewCurrentSchedule();
-//        final ViewHistoryCourses viewHistory = new ViewHistoryCourses();
-//        final EnrollCoursesFragment EnrollCoursesFragment = new EnrollCoursesFragment();
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-       // ft.add(R.id.fragment_conatiner, SearchCourse, "Search Course"); // initial fragment
+        ft.add(R.id.fragment_conatiner, new viewPreviousCoursesInstructor(), "previous Course instructor"); // initial fragment
         ft.commit();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -45,23 +41,19 @@ public class homeInstructor extends AppCompatActivity {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 switch (menuItem.getItemId()){
                     case R.id.previously_course:
-                        ft.replace(R.id.fragment_conatiner, PreviousCourses);
-
+                        ft.replace(R.id.fragment_conatiner, new viewPreviousCoursesInstructor());
                         break;
-                    case R.id.Myschedule :
-                      ft.replace(R.id.fragment_conatiner, CurrentSchedule);
+                    case R.id.viewStudents :
+                        ft.replace(R.id.fragment_conatiner, new View_student_in_course());
                         break;
-                    case R.id.MyProfile :
-                       // ft.replace(R.id.fragment_conatiner, viewHistory);
+                    case R.id.Myschedule:
+                        ft.replace(R.id.fragment_conatiner, new Instructor_Schedule());
                         break;
-                    case R.id.viewStudents:
-                      //  ft.replace(R.id.fragment_conatiner, ViewCoursesInCenterFragment);
+                    case R.id.logoutInstructor:
+                        Intent intent = new Intent(homeInstructor.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
-//                    case R.id.logout:
-//                        Intent intent = new Intent(homeActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                        break;
                 }
                 ft.addToBackStack(null);
                 ft.commit();

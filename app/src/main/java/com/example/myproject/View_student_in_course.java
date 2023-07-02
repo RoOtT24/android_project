@@ -96,8 +96,15 @@ public class View_student_in_course extends Fragment {
         courseSpinner = getActivity().findViewById(R.id.courseSpinner);
         studentListView = getActivity().findViewById(R.id.studentListView);
 
+        Bundle extras = getActivity().getIntent().getExtras();
+        String email = new String();
+        if (extras != null) {
+            email = extras.getString("email");
+            //The key argument here must match that used in the other activity
+        }
+
         // Set up the course spinner
-        Cursor cursor = dbHelper.getAllCourses();
+        Cursor cursor = dbHelper.getAllCoursesOfInstructor(email);
         ArrayList<Courses> courses = new ArrayList<>();
         ArrayList<String> courses_names = new ArrayList<>();
 

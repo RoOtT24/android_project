@@ -188,15 +188,6 @@ public class SignUpInstructor extends AppCompatActivity {
                     // Create a new Student object
                     Instructor instructor = new Instructor(fName, lName, userEmail, userPhone, userAddress, userPassword, userSpecialization, userDegree, usercourse.split(","), bytes);// userPhone, userAddress, userPassword, userSpecialization,userDegree, courseNames, bytes);
                     // Insert the instructor into the database
-//                    Toast.makeText(SignUpInstructor.this, instructor.getFirstName(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getLastName(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getEmail(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getSpecialization(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getPhone(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(SignUpInstructor.this, dbHelper.convertArrayToString(instructor.getCourses()), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getAddress(), Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(SignUpInstructor.this, instructor.getDegree(), Toast.LENGTH_SHORT).show();
-
                     dbHelper.insertInstructor(instructor);
 
                     // Show a success message
