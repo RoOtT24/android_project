@@ -29,16 +29,22 @@
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
+<<<<<<< HEAD
     <EditText
         android:id="@+id/emailSechedule"
+=======
+
+    <Spinner
+        android:id="@+id/Title"
+>>>>>>> Roa
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="Course Title"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:layout_height="64dp"
+        android:layout_margin="10dp" />
+    <Spinner
+        android:id="@+id/OfferID"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_margin="10dp" />
 
     <Button
         android:id="@+id/Enroll_Button"
