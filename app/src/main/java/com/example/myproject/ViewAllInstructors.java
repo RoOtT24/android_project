@@ -82,7 +82,7 @@ public class ViewAllInstructors extends Fragment {
 
         dbHelper = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
 
-        Cursor cursor = dbHelper.getAllApprovedInstructors();
+        Cursor cursor = dbHelper.getAllInstructors();
 
         LinearLayout linearLayout = getActivity().findViewById(R.id.All_instructors_LinearLayout);
         linearLayout.removeAllViews();

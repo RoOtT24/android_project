@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -85,8 +86,8 @@ public class Search_Unaccpted_Users extends Fragment {
     public void showAll(){
         DataBaseHelper db = new DataBaseHelper(getActivity().getBaseContext(), "DB", null, 1);
 
-        FrameLayout fl = getActivity().findViewById(R.id.search_unaccpted_layout);
-        Cursor cursor = db.getUnApprovedStudents();
+//        FrameLayout fl = getActivity().findViewById(R.id.search_unaccpted_layout);
+        Cursor cursor = db.getUnApprovedRegistrations();
         LinearLayout linearLayout = getActivity().findViewById(R.id.unaccepted_linear_layout);
         linearLayout.removeAllViews();
         if(cursor.getCount() > 0){
@@ -98,7 +99,8 @@ public class Search_Unaccpted_Users extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                Student s = new Student(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getBlob(6));
+                @SuppressLint("Range") Student s = new Student(cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_FIRST_NAME)), cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_LAST_NAME)), cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_EMAIL)), cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PHONE)), cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_ADDRESS)), cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD)), cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)));
+                @SuppressLint("Range") final int enrollId = cursor.getInt(cursor.getColumnIndex(DataBaseHelper.COLUMN_ENROLL_ID));
                 LinearLayout ly = new LinearLayout(getActivity());
                 ly.setOrientation(LinearLayout.HORIZONTAL);
                 TextView email = new TextView(getActivity());
@@ -116,7 +118,7 @@ public class Search_Unaccpted_Users extends Fragment {
                 deny.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        db.removeStudent(s.getEmail());
+                        db.removeEnroll(enrollId);
                         showAll();
                     }
                 });
@@ -124,7 +126,7 @@ public class Search_Unaccpted_Users extends Fragment {
                 approve.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        db.setAccepted(s.getEmail());
+                        db.setAccepted(enrollId);
                         showAll();
                     }
                 });
@@ -142,116 +144,116 @@ public class Search_Unaccpted_Users extends Fragment {
         }
         cursor.close();
 
-
-        cursor = db.getUnApprovedInstructors();
-        if(cursor.getCount() > 0){
-            TextView instructorText = new TextView(getActivity());
-            instructorText.setText("Instructors");
-            linearLayout.addView(instructorText);
-            while(cursor.moveToNext()){
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                Instructor s = new Instructor(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(5), cursor.getString(6),  cursor.getBlob(9));
-                LinearLayout ly = new LinearLayout(getActivity());
-                ly.setOrientation(LinearLayout.HORIZONTAL);
-                TextView email = new TextView(getActivity());
-                email.setText(s.getEmail());
-                params.setMargins(100, 0 , 0, 0);
-                email.setLayoutParams(params);
-                ImageView iv = new ImageView(getActivity());
-                iv.setImageBitmap(BitmapFactory.decodeByteArray(s.getImage(), 0 , s.getImage().length));
-
-                Button deny = new Button(getActivity());
-                deny.setText("deny");
-                Button approve = new Button(getActivity());
-                approve.setText("approve");
-
-                deny.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.removeInstructor(s.getEmail());
-                        showAll();
-                    }
-                });
-
-                approve.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.setAccepted(s.getEmail());
-                        showAll();
-                    }
-                });
-
-                ly.addView(email,0);
-                ly.addView(iv,1);
-                iv.getLayoutParams().height = 150;
-                iv.getLayoutParams().width = 250;
-                iv.requestLayout();
-                ly.addView(deny,2);
-                ly.addView(approve, 3);
-
-                linearLayout.addView(ly);
-            }
-        }
-        cursor.close();
-
-
-        cursor = db.getUnApprovedAdmins();
-        if(cursor.getCount() > 0){
-            TextView AdminText = new TextView(getActivity());
-            AdminText.setText("Admins");
-            linearLayout.addView(AdminText);
-            while(cursor.moveToNext()){
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                Admin s = new Admin(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(3) ,cursor.getBlob(4));
-                LinearLayout ly = new LinearLayout(getActivity());
-                ly.setOrientation(LinearLayout.HORIZONTAL);
-                TextView email = new TextView(getActivity());
-                email.setText(s.getEmail());
-                params.setMargins(100, 0 , 0, 0);
-                email.setLayoutParams(params);
-                ImageView iv = new ImageView(getActivity());
-                iv.setImageBitmap(BitmapFactory.decodeByteArray(s.getImage(), 0 , s.getImage().length));
-
-                Button deny = new Button(getActivity());
-                deny.setText("deny");
-                Button approve = new Button(getActivity());
-                approve.setText("approve");
-
-                deny.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.removeAdmin(s.getEmail());
-                        showAll();
-                    }
-                });
-
-                approve.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(getActivity(), s.getEmail(), Toast.LENGTH_SHORT).show();
-                        db.setAccepted(s.getEmail());
-                        showAll();
-                    }
-                });
-
-                ly.addView(email,0);
-                ly.addView(iv,1);
-                iv.getLayoutParams().height = 150;
-                iv.getLayoutParams().width = 250;
-                iv.requestLayout();
-                ly.addView(deny,2);
-                ly.addView(approve, 3);
-
-                linearLayout.addView(ly);
-            }
-        }
-        cursor.close();
+//
+//        cursor = db.getUnApprovedInstructors();
+//        if(cursor.getCount() > 0){
+//            TextView instructorText = new TextView(getActivity());
+//            instructorText.setText("Instructors");
+//            linearLayout.addView(instructorText);
+//            while(cursor.moveToNext()){
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT
+//                );
+//                Instructor s = new Instructor(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(5), cursor.getString(6),  cursor.getBlob(9));
+//                LinearLayout ly = new LinearLayout(getActivity());
+//                ly.setOrientation(LinearLayout.HORIZONTAL);
+//                TextView email = new TextView(getActivity());
+//                email.setText(s.getEmail());
+//                params.setMargins(100, 0 , 0, 0);
+//                email.setLayoutParams(params);
+//                ImageView iv = new ImageView(getActivity());
+//                iv.setImageBitmap(BitmapFactory.decodeByteArray(s.getImage(), 0 , s.getImage().length));
+//
+//                Button deny = new Button(getActivity());
+//                deny.setText("deny");
+//                Button approve = new Button(getActivity());
+//                approve.setText("approve");
+//
+//                deny.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        db.removeInstructor(s.getEmail());
+//                        showAll();
+//                    }
+//                });
+//
+//                approve.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        db.setAccepted(s.getEmail());
+//                        showAll();
+//                    }
+//                });
+//
+//                ly.addView(email,0);
+//                ly.addView(iv,1);
+//                iv.getLayoutParams().height = 150;
+//                iv.getLayoutParams().width = 250;
+//                iv.requestLayout();
+//                ly.addView(deny,2);
+//                ly.addView(approve, 3);
+//
+//                linearLayout.addView(ly);
+//            }
+//        }
+//        cursor.close();
+//
+//
+//        cursor = db.getUnApprovedAdmins();
+//        if(cursor.getCount() > 0){
+//            TextView AdminText = new TextView(getActivity());
+//            AdminText.setText("Admins");
+//            linearLayout.addView(AdminText);
+//            while(cursor.moveToNext()){
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.WRAP_CONTENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT
+//                );
+//                Admin s = new Admin(cursor.getString(1), cursor.getString(2), cursor.getString(0), cursor.getString(3) ,cursor.getBlob(4));
+//                LinearLayout ly = new LinearLayout(getActivity());
+//                ly.setOrientation(LinearLayout.HORIZONTAL);
+//                TextView email = new TextView(getActivity());
+//                email.setText(s.getEmail());
+//                params.setMargins(100, 0 , 0, 0);
+//                email.setLayoutParams(params);
+//                ImageView iv = new ImageView(getActivity());
+//                iv.setImageBitmap(BitmapFactory.decodeByteArray(s.getImage(), 0 , s.getImage().length));
+//
+//                Button deny = new Button(getActivity());
+//                deny.setText("deny");
+//                Button approve = new Button(getActivity());
+//                approve.setText("approve");
+//
+//                deny.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        db.removeAdmin(s.getEmail());
+//                        showAll();
+//                    }
+//                });
+//
+//                approve.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Toast.makeText(getActivity(), s.getEmail(), Toast.LENGTH_SHORT).show();
+//                        db.setAccepted(s.getEmail());
+//                        showAll();
+//                    }
+//                });
+//
+//                ly.addView(email,0);
+//                ly.addView(iv,1);
+//                iv.getLayoutParams().height = 150;
+//                iv.getLayoutParams().width = 250;
+//                iv.requestLayout();
+//                ly.addView(deny,2);
+//                ly.addView(approve, 3);
+//
+//                linearLayout.addView(ly);
+//            }
+//        }
+//        cursor.close();
 
     }
 }

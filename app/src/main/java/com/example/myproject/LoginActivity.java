@@ -105,12 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             Cursor cursor = dbHelper.getStudentByEmail(username);
             if (cursor.moveToFirst()) {
                 @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
-                if(cursor.getInt(7) == 0){
-                    Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                    return ;
-                }
-
-                else if (pass.equals(storedPassword)) {
+                 if (pass.equals(storedPassword)) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                     if (rem[0]){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -140,11 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(cursor.moveToFirst()){
                     @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
 //                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
-                    if(cursor.getInt(10) == 0){
-                        Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                        return ;
-                    }
-                    else if (pass.equals(storedPassword)) {
+                    if (pass.equals(storedPassword)) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         if (rem[0]){
                             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -175,10 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(cursor.moveToFirst()){
                     @SuppressLint("Range") String storedPassword = cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_PASSWORD));
 //                    Toast.makeText(this, storedPassword, Toast.LENGTH_SHORT).show();
-                    if(cursor.getInt(5) == 0){
-                        Toast.makeText(this, "This User is not approved yet", Toast.LENGTH_SHORT).show();
-                    return ;
-                    }
+
                     if (pass.equals(storedPassword)) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         if (rem[0]){
