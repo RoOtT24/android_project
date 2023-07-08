@@ -1,7 +1,9 @@
 package com.example.myproject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -15,9 +17,15 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Message;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.se.omapi.Session;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +39,11 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 
 public class edit_delete_course extends Fragment {
@@ -75,7 +87,7 @@ public class edit_delete_course extends Fragment {
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == Activity.RESULT_OK ){
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     Uri uri = data.getData();
                     try {
@@ -192,8 +204,7 @@ public class edit_delete_course extends Fragment {
                     editTextMainTopics.setText(convertArrayToString(courseData.getMainTopics()));
                     editTextPrerequisites.setText(convertArrayToString(courseData.getPrerequisites()));
                     courseImage.setImageBitmap(BitmapFactory.decodeByteArray(courseData.getImage(), 0, courseData.getImage().length));
-                }
-                else {
+                } else {
                     Toast.makeText(getActivity(), "no data found", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -218,13 +229,13 @@ public class edit_delete_course extends Fragment {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 int id = Integer.parseInt(idEditText.getText().toString());
 
-                byte []bytes;
+                byte[] bytes;
 
-                if(bitmap == null){
-                    bitmap = ((BitmapDrawable)courseImage.getDrawable()).getBitmap();
+                if (bitmap == null) {
+                    bitmap = ((BitmapDrawable) courseImage.getDrawable()).getBitmap();
                 }
 
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                 bytes = byteArrayOutputStream.toByteArray();
 
                 // Update the course data in the database
@@ -233,6 +244,13 @@ public class edit_delete_course extends Fragment {
 
                 // Show a success message or perform any other necessary actions
                 Toast.makeText(getActivity(), "Course updated successfully", Toast.LENGTH_SHORT).show();
+                if (dbHelper.isCourseOffered(courseData.getId())) {
+                    List<String> students = dbHelper.getEnrolledStudents(courseData.getId());
+                    for (String email : students) {
+                        // Generate notification for the user
+                        generateNotification(getActivity(), email, courseData.getTitle());
+                    }
+                }
             }
         });
 
@@ -258,4 +276,48 @@ public class edit_delete_course extends Fragment {
             }
         });
     }
-}
+
+    // Method to generate a notification for a specific user
+//    private void generateNotification(Context context, String email, String courseTitle) {
+//        // Create a notification builder
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
+//                .setContentTitle("Course Update")
+//                .setContentText("Course " + courseTitle + " has an update.")
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .setAutoCancel(true);
+//
+//        // Show the notification
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+//
+//        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+//
+//            return;
+//        }
+//        notificationManager.notify(email.hashCode(), builder.build());
+//    }
+
+
+    private void generateNotification(Context context, String email, String courseTitle) {
+        // Create the email intent
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + email));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Course Update");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Course " + courseTitle + " has an update.");
+
+        // Check if there's an email client available to handle the intent
+        if (emailIntent.resolveActivity(context.getPackageManager()) != null) {
+            // Start the email intent
+            context.startActivity(emailIntent);
+
+            // Show a success message or perform any other necessary actions
+            Toast.makeText(context, "Opening email client...", Toast.LENGTH_SHORT).show();
+        } else {
+            // Handle the case where no email client is available
+            Toast.makeText(context, "No email client found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    }
+

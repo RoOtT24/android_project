@@ -6,7 +6,7 @@ public class Offer {
 
 
     private int courseId;
-
+private int offerid;
     private String instructorEmail;
 
     private Date registrationDeadline;
@@ -24,7 +24,15 @@ public class Offer {
         this.courseSchedule = courseSchedule;
         this.venue = venue;
     }
-
+    public Offer(int offerid,int courseId, String instructorEmail, Date registrationDeadline, Date courseStartDate, String courseSchedule, String venue) {
+        this.offerid = offerid;
+        this.courseId = courseId;
+        this.instructorEmail = instructorEmail;
+        this.registrationDeadline = registrationDeadline;
+        this.courseStartDate = courseStartDate;
+        this.courseSchedule = courseSchedule;
+        this.venue = venue;
+    }
 
     public int getCourseId() {
         return courseId;
@@ -32,6 +40,13 @@ public class Offer {
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+    public int getofferId() {
+        return offerid;
+    }
+
+    public void setofferId(int courseId) {
+        this.offerid = offerid;
     }
 
     public String getInstructorEmail() {

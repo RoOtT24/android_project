@@ -64,7 +64,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     //////////////////////////
 
     private String TABLE_OFFERING = "offering";
-    private String COLUMN_OFFERING_ID = "offer_id";
+    public String COLUMN_OFFERING_ID = "offer_id";
 
     ///////////////////////////////////////
 
@@ -281,7 +281,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         values.put(COLUMN_USER_IMAGE, instructor.getImage());
 
-        db.insert(TABLE_USER, null, values);
+        db.insert(TABLE_INSTRUCTOR, null, values);
         db.close();
     }
 
@@ -537,8 +537,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + " ON "+ COLUMN_USER_EMAIL +" WHERE "+COLUMN_USER_COURSEID+ "=?", new String[]{Integer.toString(courseId)});
     }
 
-
-
     public Cursor getStudentsByCourseId(int courseId) {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_USER_COURSES + " LIKE '%" + courseId + "%'";
@@ -768,7 +766,30 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return isOffered;
     }
     //////////////////////////////// new for student enroll
-    public boolean enrollStudentInCourse(String studentEmail, String courseTitle) {
+    public ArrayList<Integer> getOfferingIDsByCourseTitle(String courseTitle) {
+        ArrayList<Integer> offeringIDs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_OFFERING_ID};
+        String selection = COLUMN_USER_COURSEID + " IN (SELECT " + COLUMN_USER_COURSEID + " FROM " + TABLE_COURSES + " WHERE " + COLUMN_USER_TITLE + " = ?)";
+        String[] selectionArgs = {courseTitle};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int index = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+            if (index >= 0) {
+                int value = cursor.getInt(index);
+                offeringIDs.add(value);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return offeringIDs;
+    }
+
+    public boolean enrollStudentInCourse(String studentEmail, String courseTitle, int offerid) {
         Student student = getStudentByEmailforEnroll(studentEmail);
         Courses course = getCourseData(courseTitle);
         // Check if the course is available
@@ -789,8 +810,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_EMAIL, student.getEmail());
-        // Offer offer = getCourseofferById(course.getCourseId());
-        // values.put(COLUMN_OFFERING_ID, offer.);
+        values.put(COLUMN_OFFERING_ID,offerid);
         long result = db.insert(TABLE_ENROLL, null, values);
 
         db.close();
@@ -1029,6 +1049,49 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return course;
     }
+    public Offer getCourseOfferByofferId(int offerId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_REGISTRATION_DEADLINE, COLUMN_START_DATE, COLUMN_COURSE_SCHEDULE, COLUMN_VENUE};
+        String selection = COLUMN_OFFERING_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(offerId)};
+        Cursor cursor = db.query(TABLE_OFFERING, columns, selection, selectionArgs, null, null, null);
+
+        Offer offer = null;
+        if (cursor.moveToFirst()) {
+            Date deadline = null;
+            int deadlineIndex = cursor.getColumnIndex(COLUMN_REGISTRATION_DEADLINE);
+            if (deadlineIndex >= 0) {
+                long deadlineValue = cursor.getLong(deadlineIndex);
+                deadline = new Date(deadlineValue);
+            }
+
+            Date startDate = null;
+            int startDateIndex = cursor.getColumnIndex(COLUMN_START_DATE);
+            if (startDateIndex >= 0) {
+                long startDateValue = cursor.getLong(startDateIndex);
+                startDate = new Date(startDateValue);
+            }
+
+            String schedule = null;
+            int scheduleIndex = cursor.getColumnIndex(COLUMN_COURSE_SCHEDULE);
+            if (scheduleIndex >= 0) {
+                schedule = cursor.getString(scheduleIndex);
+            }
+
+            String venue = null;
+            int venueIndex = cursor.getColumnIndex(COLUMN_VENUE);
+            if (venueIndex >= 0) {
+                venue = cursor.getString(venueIndex);
+            }
+
+            offer = new Offer(offerId, null, deadline, startDate, schedule, venue);
+        }
+
+        cursor.close();
+        db.close();
+
+        return offer;
+    }
 
     public Offer getCourseofferById(int courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1149,6 +1212,35 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return enrolledCourseTitles;
+    }
+    public List<String> getEnrolledStudents(int courseId) {
+        List<String> enrolledStudents = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to join the TABLE_USER and TABLE_ENROLL tables
+        String query = "SELECT " +
+                TABLE_USER + "." + COLUMN_USER_EMAIL +
+                " FROM " + TABLE_USER +
+                " INNER JOIN " + TABLE_ENROLL +
+                " ON " + TABLE_USER + "." + COLUMN_USER_EMAIL + " = " + TABLE_ENROLL + "." + COLUMN_USER_EMAIL +
+                " WHERE " + TABLE_ENROLL + "." + COLUMN_OFFERING_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
+
+        while (cursor.moveToNext()) {
+            String email = null;
+            int emailIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
+            if (emailIndex >= 0) {
+                email = cursor.getString(emailIndex);
+            }
+            // String email = cursor.getString(cursor.getColumnIndex(COLUMN_USER_EMAIL));
+            enrolledStudents.add(email);
+        }
+
+        cursor.close();
+        db.close();
+
+        return enrolledStudents;
     }
 
     public void deleteEnrollCource(String email, String title) {
