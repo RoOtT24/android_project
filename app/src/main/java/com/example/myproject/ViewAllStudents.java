@@ -78,7 +78,7 @@ public class ViewAllStudents extends Fragment {
 
         dbHelper = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
 
-        Cursor cursor = dbHelper.getAllApprovedStudents();
+        Cursor cursor = dbHelper.getAllStudents();
 
         LinearLayout linearLayout = getActivity().findViewById(R.id.All_instructors_LinearLayout);
         linearLayout.removeAllViews();

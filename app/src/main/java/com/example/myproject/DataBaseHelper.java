@@ -192,7 +192,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Cursor getUnApprovedRegistrations(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_ENROLL +" JOIN "+TABLE_USER+" ON "+COLUMN_USER_EMAIL+" WHERE "+COLUMN_ACCPETED+" =?";
+        String query = "SELECT * FROM " + TABLE_ENROLL +" JOIN "+TABLE_USER+" ON "+TABLE_ENROLL+"."+COLUMN_USER_EMAIL+" WHERE "+COLUMN_ACCPETED+" =?";
         return db.rawQuery(query, new String[]{Integer.toString(0)});
     }
 
@@ -294,10 +294,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return Pattern.matches(passwordPattern, password);
     }
 
-    public Cursor getAllStudent() {
-        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
-        return sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_USER, null);
-    }
 
 
     public Cursor getAllStudents() {
@@ -559,167 +555,167 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return courseId;
     }
 
-//    public List<Instructor> getAllInstructors() {
-//        List<Instructor> instructors = new ArrayList<>();
-//
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = null;
-//
-//        try {
-//            cursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR, null);
-//
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    String firstName = null;
-//                    String lastName = null;
-//                    String email = null;
-//                    String phone = null;
-//                    String address = null;
-//                    String degree = null;
-//                    String specialization = null;
-//                    String[] courses = null;
-//                    String password = null;
-//                    byte[] image = null;
-//
-//                    int firstNameColumnIndex = cursor.getColumnIndex(COLUMN_USER_FIRST_NAME);
-//                    if (firstNameColumnIndex >= 0) {
-//                        firstName = cursor.getString(firstNameColumnIndex);
-//                    }
-//
-//                    int lastNameColumnIndex = cursor.getColumnIndex(COLUMN_USER_LAST_NAME);
-//                    if (lastNameColumnIndex >= 0) {
-//                        lastName = cursor.getString(lastNameColumnIndex);
-//                    }
-//
-//                    int emailColumnIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
-//                    if (emailColumnIndex >= 0) {
-//                        email = cursor.getString(emailColumnIndex);
-//                    }
-//
-//                    int phoneColumnIndex = cursor.getColumnIndex(COLUMN_USER_PHONE);
-//                    if (phoneColumnIndex >= 0) {
-//                        phone = cursor.getString(phoneColumnIndex);
-//                    }
-//
-//                    int addressColumnIndex = cursor.getColumnIndex(COLUMN_USER_ADDRESS);
-//                    if (addressColumnIndex >= 0) {
-//                        address = cursor.getString(addressColumnIndex);
-//                    }
-//
-//                    int degreeColumnIndex = cursor.getColumnIndex(COLUMN_USER_DEGREE);
-//                    if (degreeColumnIndex >= 0) {
-//                        degree = cursor.getString(degreeColumnIndex);
-//                    }
-//
-//                    int specializationColumnIndex = cursor.getColumnIndex(COLUMN_USER_SPECIALIZATION);
-//                    if (specializationColumnIndex >= 0) {
-//                        specialization = cursor.getString(specializationColumnIndex);
-//                    }
-//
-//                    int coursesColumnIndex = cursor.getColumnIndex(COLUMN_USER_COURSES);
-//                    if (coursesColumnIndex >= 0) {
-//                        courses = convertStringToArray(cursor.getString(coursesColumnIndex));
-//                    }
-//
-//                    int passwordColumnIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
-//                    if (passwordColumnIndex >= 0) {
-//                        password = cursor.getString(passwordColumnIndex);
-//                    }
-//
-//                    int imageColumnIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
-//                    if (imageColumnIndex >= 0) {
-//                        image = cursor.getBlob(imageColumnIndex);
-//                    }
-//
-//                    // Create an Instructor object with the retrieved data
-//                    Instructor instructor = new Instructor(firstName, lastName, email, phone, address, password, specialization, degree, courses);
-//
-//
-//                    // Add the instructor to the list
-//                    instructors.add(instructor);
-//                } while (cursor.moveToNext());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (cursor != null) {
-//                cursor.close();
-//            }
-//        }
-//
-//        return instructors;
-//    }
+    public List<Instructor> getAllInstructorsList() {
+        List<Instructor> instructors = new ArrayList<>();
 
-//    public List<Student> getAllStudents() {
-//        List<Student> studentList = new ArrayList<>();
-//
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = null;
-//
-//        try {
-//            // Query the database for all student records
-//            cursor = db.rawQuery("SELECT * FROM " + TABLE_USER, null);
-//
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    String firstName = null;
-//                    int firstNameIndex = cursor.getColumnIndex(COLUMN_USER_FIRST_NAME);
-//                    if (firstNameIndex >= 0) {
-//                        firstName = cursor.getString(firstNameIndex);
-//                    }
-//
-//                    String lastName = null;
-//                    int lastNameIndex = cursor.getColumnIndex(COLUMN_USER_LAST_NAME);
-//                    if (lastNameIndex >= 0) {
-//                        lastName = cursor.getString(lastNameIndex);
-//                    }
-//
-//                    String email = null;
-//                    int emailIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
-//                    if (emailIndex >= 0) {
-//                        email = cursor.getString(emailIndex);
-//                    }
-//
-//                    String phone = null;
-//                    int phoneIndex = cursor.getColumnIndex(COLUMN_USER_PHONE);
-//                    if (phoneIndex >= 0) {
-//                        phone = cursor.getString(phoneIndex);
-//                    }
-//
-//                    String address = null;
-//                    int addressIndex = cursor.getColumnIndex(COLUMN_USER_ADDRESS);
-//                    if (addressIndex >= 0) {
-//                        address = cursor.getString(addressIndex);
-//                    }
-//
-//                    String password = null;
-//                    int passwordIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
-//                    if (passwordIndex >= 0) {
-//                        password = cursor.getString(passwordIndex);
-//                    }
-//
-//                    byte[] image = null;
-//                    int imageIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
-//                    if (imageIndex >= 0) {
-//                        image = cursor.getBlob(imageIndex);
-//                    }
-//
-//                    // Create a new Student object with the retrieved data
-//                    Student student = new Student(firstName, lastName, email, phone, address, password, image);
-//                    // Add the student to the list
-//                    studentList.add(student);
-//                } while (cursor.moveToNext());
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (cursor != null) {
-//                cursor.close();
-//            }
-//        }
-//
-//        return studentList;
-//    }
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_INSTRUCTOR, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String firstName = null;
+                    String lastName = null;
+                    String email = null;
+                    String phone = null;
+                    String address = null;
+                    String degree = null;
+                    String specialization = null;
+                    String[] courses = null;
+                    String password = null;
+                    byte[] image = null;
+
+                    int firstNameColumnIndex = cursor.getColumnIndex(COLUMN_USER_FIRST_NAME);
+                    if (firstNameColumnIndex >= 0) {
+                        firstName = cursor.getString(firstNameColumnIndex);
+                    }
+
+                    int lastNameColumnIndex = cursor.getColumnIndex(COLUMN_USER_LAST_NAME);
+                    if (lastNameColumnIndex >= 0) {
+                        lastName = cursor.getString(lastNameColumnIndex);
+                    }
+
+                    int emailColumnIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
+                    if (emailColumnIndex >= 0) {
+                        email = cursor.getString(emailColumnIndex);
+                    }
+
+                    int phoneColumnIndex = cursor.getColumnIndex(COLUMN_USER_PHONE);
+                    if (phoneColumnIndex >= 0) {
+                        phone = cursor.getString(phoneColumnIndex);
+                    }
+
+                    int addressColumnIndex = cursor.getColumnIndex(COLUMN_USER_ADDRESS);
+                    if (addressColumnIndex >= 0) {
+                        address = cursor.getString(addressColumnIndex);
+                    }
+
+                    int degreeColumnIndex = cursor.getColumnIndex(COLUMN_USER_DEGREE);
+                    if (degreeColumnIndex >= 0) {
+                        degree = cursor.getString(degreeColumnIndex);
+                    }
+
+                    int specializationColumnIndex = cursor.getColumnIndex(COLUMN_USER_SPECIALIZATION);
+                    if (specializationColumnIndex >= 0) {
+                        specialization = cursor.getString(specializationColumnIndex);
+                    }
+
+                    int coursesColumnIndex = cursor.getColumnIndex(COLUMN_USER_COURSES);
+                    if (coursesColumnIndex >= 0) {
+                        courses = convertStringToArray(cursor.getString(coursesColumnIndex));
+                    }
+
+                    int passwordColumnIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
+                    if (passwordColumnIndex >= 0) {
+                        password = cursor.getString(passwordColumnIndex);
+                    }
+
+                    int imageColumnIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
+                    if (imageColumnIndex >= 0) {
+                        image = cursor.getBlob(imageColumnIndex);
+                    }
+
+                    // Create an Instructor object with the retrieved data
+                    Instructor instructor = new Instructor(firstName, lastName, email, phone, address, password, specialization, degree, courses);
+
+
+                    // Add the instructor to the list
+                    instructors.add(instructor);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instructors;
+    }
+
+    public List<Student> getAllStudentsList() {
+        List<Student> studentList = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+
+        try {
+            // Query the database for all student records
+            cursor = db.rawQuery("SELECT * FROM " + TABLE_USER, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String firstName = null;
+                    int firstNameIndex = cursor.getColumnIndex(COLUMN_USER_FIRST_NAME);
+                    if (firstNameIndex >= 0) {
+                        firstName = cursor.getString(firstNameIndex);
+                    }
+
+                    String lastName = null;
+                    int lastNameIndex = cursor.getColumnIndex(COLUMN_USER_LAST_NAME);
+                    if (lastNameIndex >= 0) {
+                        lastName = cursor.getString(lastNameIndex);
+                    }
+
+                    String email = null;
+                    int emailIndex = cursor.getColumnIndex(COLUMN_USER_EMAIL);
+                    if (emailIndex >= 0) {
+                        email = cursor.getString(emailIndex);
+                    }
+
+                    String phone = null;
+                    int phoneIndex = cursor.getColumnIndex(COLUMN_USER_PHONE);
+                    if (phoneIndex >= 0) {
+                        phone = cursor.getString(phoneIndex);
+                    }
+
+                    String address = null;
+                    int addressIndex = cursor.getColumnIndex(COLUMN_USER_ADDRESS);
+                    if (addressIndex >= 0) {
+                        address = cursor.getString(addressIndex);
+                    }
+
+                    String password = null;
+                    int passwordIndex = cursor.getColumnIndex(COLUMN_USER_PASSWORD);
+                    if (passwordIndex >= 0) {
+                        password = cursor.getString(passwordIndex);
+                    }
+
+                    byte[] image = null;
+                    int imageIndex = cursor.getColumnIndex(COLUMN_USER_IMAGE);
+                    if (imageIndex >= 0) {
+                        image = cursor.getBlob(imageIndex);
+                    }
+
+                    // Create a new Student object with the retrieved data
+                    Student student = new Student(firstName, lastName, email, phone, address, password, image);
+                    // Add the student to the list
+                    studentList.add(student);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return studentList;
+    }
     public boolean isCourseOffered(int courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
 

@@ -29,14 +29,9 @@
         android:padding="10dp"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
-<<<<<<< HEAD
-    <EditText
-        android:id="@+id/emailSechedule"
-=======
 
     <Spinner
         android:id="@+id/Title"
->>>>>>> Roa
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_margin="10dp" />

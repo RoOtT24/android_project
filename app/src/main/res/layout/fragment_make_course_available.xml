@@ -15,19 +15,6 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp" />
 
-    <EditText
-        android:id="@+id/emailSechedule"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="Course ID"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:enabled="false"
-        />
-
     <Spinner
         android:id="@+id/instructor_spinner_available"
         android:layout_width="match_parent"
@@ -35,18 +22,6 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp" />
 
-    <EditText
-        android:id="@+id/editTextInstructorEmail"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="Instructor email"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:enabled="false"
-        />
     <EditText
         android:id="@+id/editTextRegistrationDeadline"
         android:layout_width="match_parent"

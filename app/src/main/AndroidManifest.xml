@@ -32,9 +32,9 @@
         <activity
             android:name=".nav_header_admin"
             android:exported="false" />
-        <activity
-            android:name=".Edit_DeleteCourse"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".Edit_DeleteCourse"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".homeActivity"
             android:exported="false" />
