@@ -37,7 +37,7 @@ public class homeStudent extends AppCompatActivity {
         final ViewHistoryCourses viewHistory = new ViewHistoryCourses();
         final EnrollCoursesFragment EnrollCoursesFragment = new EnrollCoursesFragment();
         final ViewCoursesInCenterFragment ViewCoursesInCenterFragment = new ViewCoursesInCenterFragment();
-
+        final MyProfileStudentFragment MyProfileStudentFragment = new MyProfileStudentFragment();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, SearchCourse, "Search Course"); // initial fragment
@@ -63,6 +63,7 @@ public class homeStudent extends AppCompatActivity {
                     case R.id.viewCourses_withdrow :
                         ft.replace(R.id.fragment_conatiner, EnrollCoursesFragment);
                         break;
+<<<<<<< HEAD
                     case R.id.MyProfile:
                         break;
                     case R.id.logoutStudent:
@@ -70,6 +71,16 @@ public class homeStudent extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+=======
+                    case R.id.MyProfile :
+                        ft.replace(R.id.fragment_conatiner, MyProfileStudentFragment);
+                        break;
+//                    case R.id.logout:
+//                        Intent intent = new Intent(homeActivity.this, LoginActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                        break;
+>>>>>>> Roa
                 }
                 ft.addToBackStack(null);
                 ft.commit();
