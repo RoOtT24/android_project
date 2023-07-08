@@ -104,16 +104,6 @@ public class SearchCourse extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
-   /* private String convertArrayToString(String[] array) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < array.length; i++) {
-            stringBuilder.append(array[i]);
-            if (i < array.length - 1) {
-                stringBuilder.append(", ");
-            }
-        }
-        return stringBuilder.toString();
-    }*/
 
     private ArrayList<String> offeredCourses(List<Courses> courses){
         ArrayList<String> courseTitles = new ArrayList<>();
