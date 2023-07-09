@@ -52,7 +52,7 @@ public class SearchCourse extends Fragment {
         Courses course = dbHelper.getCourseById(courseId);
         Offer offer = dbHelper.getCourseofferById(courseId);
 
-        if (course != null && offer!=null) { // ?????????????????????????????
+        if (course != null && offer!=null) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Course ID: ").append(course.getId()).append("\n");
             stringBuilder.append("Title: ").append(course.getTitle()).append("\n");
@@ -85,8 +85,9 @@ public class SearchCourse extends Fragment {
         ArrayList<String> courseTitles = new ArrayList<>();
 
         for (Courses course : courses) {
-            String title = course.getTitle();
-            courseTitles.add(title);
+//            String title = course.getTitle();
+//            courseTitles.add(title);
+            Toast.makeText(getActivity(), course.getTitle(), Toast.LENGTH_SHORT).show();
         }
 
         return courseTitles;
@@ -104,7 +105,7 @@ public class SearchCourse extends Fragment {
         courseOffried = getActivity().findViewById(R.id.courseOffried);
         courseTitles = new ArrayList<>();
         spinner = getActivity().findViewById(R.id.spinnerCourseSearch);
-        refreshSpinner();
+       refreshSpinner();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

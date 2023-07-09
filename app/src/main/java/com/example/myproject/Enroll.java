@@ -56,7 +56,7 @@ public class Enroll extends Fragment {
 
 
         enrollButton = view.findViewById(R.id.Enroll_Button);
-        OFFERID = view.findViewById(R.id.OfferID);
+       OFFERID = view.findViewById(R.id.OfferID);
         ////////spinner
         Course_titles = view.findViewById(R.id.Title);
         dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
@@ -68,7 +68,7 @@ public class Enroll extends Fragment {
 
         ArrayAdapter<String> adaptere = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Offering_courses);
         adaptere.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        OFFERID.setAdapter(adaptere);
+        Course_titles.setAdapter(adaptere);
         /////////////////////////////////////////////////
         Course_titles.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

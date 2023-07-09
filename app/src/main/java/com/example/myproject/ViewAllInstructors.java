@@ -112,7 +112,7 @@ public class ViewAllInstructors extends Fragment {
                 specialization_text.setText(cursor.getString(5));
                 degree_text.setText(cursor.getString(6));
                 address_text.setText(cursor.getString(7));
-
+                Toast.makeText(getActivity(), cursor.getString(1)+" "+cursor.getString(2), Toast.LENGTH_SHORT).show();
 
                 iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)), 0 , cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)).length));
 //                iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,

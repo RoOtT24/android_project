@@ -32,6 +32,7 @@ public class homeInstructor extends AppCompatActivity {
 
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
+        final MyProfileInstructorFragment MyProfileInstructorFragment = new MyProfileInstructorFragment();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, new viewPreviousCoursesInstructor(), "previous Course instructor"); // initial fragment
         ft.commit();
@@ -48,6 +49,9 @@ public class homeInstructor extends AppCompatActivity {
                         break;
                     case R.id.Myschedule:
                         ft.replace(R.id.fragment_conatiner, new Instructor_Schedule());
+                        break;
+                    case R.id.MyProfile:
+                        ft.replace(R.id.fragment_conatiner, MyProfileInstructorFragment);
                         break;
                     case R.id.logoutInstructor:
                         Intent intent = new Intent(homeInstructor.this, LoginActivity.class);

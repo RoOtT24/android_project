@@ -36,13 +36,9 @@ public class homeStudent extends AppCompatActivity {
         final Enroll enroll = new Enroll();
         final ViewHistoryCourses viewHistory = new ViewHistoryCourses();
         final EnrollCoursesFragment EnrollCoursesFragment = new EnrollCoursesFragment();
-<<<<<<< HEAD
-        final ViewCoursesInCenterFragment ViewCoursesInCenterFragment = new ViewCoursesInCenterFragment();
+        final viewCoursesEnrolledHistory viewCoursesEnrolledHistory = new viewCoursesEnrolledHistory();
         final MyProfileStudentFragment MyProfileStudentFragment = new MyProfileStudentFragment();
-=======
 
-
->>>>>>> Tariq
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, SearchCourse, "Search Course"); // initial fragment
@@ -53,39 +49,30 @@ public class homeStudent extends AppCompatActivity {
                 FragmentTransaction ft = fragmentManager.beginTransaction();
                 switch (menuItem.getItemId()){
                     case R.id.search_course:
-                        ft.replace(R.id.fragment_conatiner, SearchCourse);
+                        ft.replace(R.id.fragment_conatiner, SearchCourse);//
 
                         break;
                     case R.id.enrollInCourseAvailable :
-                        ft.replace(R.id.fragment_conatiner, enroll);
+                        ft.replace(R.id.fragment_conatiner, enroll);//
                         break;
                     case R.id.viewMyCoursesFinshed :
-                        ft.replace(R.id.fragment_conatiner, viewHistory);
+                        ft.replace(R.id.fragment_conatiner, viewCoursesEnrolledHistory); //
                         break;
                     case R.id.viewCoursesHistory:
-                        ft.replace(R.id.fragment_conatiner, new viewCoursesEnrolledHistory());
+                        ft.replace(R.id.fragment_conatiner, viewHistory);//
                         break;
                     case R.id.viewCourses_withdrow :
                         ft.replace(R.id.fragment_conatiner, EnrollCoursesFragment);
                         break;
-<<<<<<< HEAD
-                    case R.id.MyProfile:
-                        break;
+
                     case R.id.logoutStudent:
                         Intent intent = new Intent(homeStudent.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
-=======
                     case R.id.MyProfile :
-                        ft.replace(R.id.fragment_conatiner, MyProfileStudentFragment);
+                        ft.replace(R.id.fragment_conatiner, MyProfileStudentFragment);//
                         break;
-//                    case R.id.logout:
-//                        Intent intent = new Intent(homeActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                        break;
->>>>>>> Roa
                 }
                 ft.addToBackStack(null);
                 ft.commit();

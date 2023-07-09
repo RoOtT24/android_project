@@ -52,12 +52,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 loginUser();
-                   // if (dbHelper.getUserType(emailEditText.getText().toString()) == 2) {// admin
 
-                //}
-                    // add another cases 1+3
                 }
-//                getUsers();
 
         });
 
@@ -65,11 +61,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                toSignup(view);
                 Intent intent = new Intent(LoginActivity.this,WhoAreYou.class);
                 startActivity(intent);
                 finish();
-//                getUsers();
             }
         });
 
@@ -86,12 +80,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
-//    public void toSignup(View view) {
-//        Intent intent = new Intent(LoginActivity.this,WhoAreYou.class);
-//        startActivity(intent);
-//        finish();
-//    }
     private void loginUser() {
         String username = emailEditText.getText().toString().trim();
         String pass = password.getText().toString().trim();

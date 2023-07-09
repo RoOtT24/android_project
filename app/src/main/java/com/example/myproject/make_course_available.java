@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -38,7 +39,7 @@ public class make_course_available extends Fragment {
     private EditText courseScheduleEditText;
     private EditText venueEditText;
     private Button addButton;
-
+private  EditText enddate;
     private Calendar calendar;
     private DateFormat dateFormat;
 
@@ -110,6 +111,7 @@ public class make_course_available extends Fragment {
         registrationDeadlineEditText.setText("");
         courseStartDateEditText.setText("");
         courseScheduleEditText.setText("");
+        enddate.setText("");
         venueEditText.setText("");
     }
 
@@ -126,6 +128,7 @@ public class make_course_available extends Fragment {
         courseScheduleEditText = getActivity().findViewById(R.id.editTextCourseSchedule);
         venueEditText = getActivity().findViewById(R.id.editTextVenue);
         addButton = getActivity().findViewById(R.id.buttonAdd);
+        enddate = getActivity().findViewById(R.id.editTextCourseEndDate);
         course_spinner = getActivity().findViewById(R.id.courses_spinner_available);
         instructor_spinner = getActivity().findViewById(R.id.instructor_spinner_available);
 
@@ -217,6 +220,13 @@ public class make_course_available extends Fragment {
             }
         });
 
+        enddate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(enddate);
+            }
+        });
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,13 +236,14 @@ public class make_course_available extends Fragment {
                 courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);
                 courseScheduleEditText = getActivity().findViewById(R.id.editTextCourseSchedule);
                 venueEditText = getActivity().findViewById(R.id.editTextVenue);
+                enddate = getActivity().findViewById(R.id.editTextCourseEndDate);
                 addButton = getActivity().findViewById(R.id.buttonAdd);
                 course_spinner = getActivity().findViewById(R.id.courses_spinner_available);
                 instructor_spinner = getActivity().findViewById(R.id.instructor_spinner_available);
 
                 int id = -1;
                 for(int i = 0 ; i < courses.size(); ++i)
-                    if(courses.get(i).getId() == Integer.parseInt(instructor_spinner.getSelectedItem().toString())){
+                    if(courses.get(i).gettitle().equals(course_spinner.getSelectedItem().toString()) ){
                         id = courses.get(i).getId();
                         break;
                     }
@@ -240,12 +251,14 @@ public class make_course_available extends Fragment {
                     try {
                         Date deadline = dateFormat.parse(registrationDeadlineEditText.getText().toString()) ;
                         Date startDate = dateFormat.parse(courseStartDateEditText.getText().toString());
+                        Date Enddate = dateFormat.parse(enddate.getText().toString());
 
 
                     String schedule = courseScheduleEditText.getText().toString().trim();
                     String venue = venueEditText.getText().toString().trim();
-                Offer offer = new Offer(id, instructor_spinner.getSelectedItem().toString(), deadline, startDate, schedule, venue);
-
+                Offer offer = new Offer(id,Enddate, instructor_spinner.getSelectedItem().toString(), deadline, startDate, schedule, venue);
+                Toast.makeText(getActivity(), "add succsiflly", Toast.LENGTH_SHORT).show();
+                        clear();
 
                 db.addOffer(offer);
                     } catch (ParseException e) {
@@ -253,5 +266,13 @@ public class make_course_available extends Fragment {
                     }
             }
         });
+    }
+
+    void clear(){
+        registrationDeadlineEditText.setText("");
+        courseStartDateEditText.setText("");
+        courseScheduleEditText.setText("");
+        venueEditText.setText("");
+        enddate.setText("");
     }
 }
