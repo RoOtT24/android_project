@@ -444,6 +444,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.update(TABLE_COURSES, contentValues, COLUMN_USER_COURSEID+" = ?", new String[]{Integer.toString(course.getId())});
         sqLiteDatabase.close();
     }
+    public void updateStudentData(Student student) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USER_EMAIL, student.getEmail());
+        contentValues.put(COLUMN_USER_FIRST_NAME,student.getFirstName() );
+        contentValues.put(COLUMN_USER_LAST_NAME, student.getLastName());
+        contentValues.put(COLUMN_USER_PHONE, student.getPhone());
+        contentValues.put(COLUMN_USER_ADDRESS, student.getAddress());
+        contentValues.put(COLUMN_USER_PASSWORD, student.getPassword());
+        contentValues.put(COLUMN_USER_IMAGE, student.getImage());
+        sqLiteDatabase.update(TABLE_USER, contentValues, COLUMN_USER_EMAIL+" = ?", new String[]{student.getEmail()});
+        sqLiteDatabase.close();
+    }
+    public void updateInstrucorData(Instructor instructor) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_USER_EMAIL, instructor.getEmail());
+        contentValues.put(COLUMN_USER_FIRST_NAME,instructor.getFirstName() );
+        contentValues.put(COLUMN_USER_LAST_NAME, instructor.getLastName());
+        contentValues.put(COLUMN_USER_PHONE, instructor.getPhone());
+        contentValues.put(COLUMN_USER_ADDRESS, instructor.getAddress());
+        contentValues.put(COLUMN_USER_PASSWORD, instructor.getPassword());
+        contentValues.put(COLUMN_USER_IMAGE, instructor.getImage());
+        contentValues.put(COLUMN_USER_COURSES, convertArrayToString(instructor.getCourses()));
+        contentValues.put(COLUMN_USER_SPECIALIZATION, instructor.getSpecialization());
+        contentValues.put(COLUMN_USER_DEGREE, instructor.getDegree());
+      //  contentValues.put(COLUMN_ACCPETED, instructor.getaccpeted());
+        sqLiteDatabase.update(TABLE_INSTRUCTOR, contentValues, COLUMN_USER_EMAIL+" = ?", new String[]{instructor.getEmail()});
+        sqLiteDatabase.close();
+    }
 
     public void deleteCourse(String courseName) {
         SQLiteDatabase db = this.getWritableDatabase();

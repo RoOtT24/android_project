@@ -22,7 +22,7 @@ public class Profiles extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        personalImg = findViewById(R.id.personalImg);
+        personalImg = findViewById(R.id.img);
         nameTextView = findViewById(R.id.name);
         typeTextView = findViewById(R.id.type);
         emailTextView = findViewById(R.id.emailtext);
