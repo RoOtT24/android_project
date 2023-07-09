@@ -271,8 +271,8 @@ public class edit_delete_course extends Fragment {
                 refreshSpinner();
 
                 // Navigate back to a different activity
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+               // Intent intent = new Intent(getActivity(), MainActivity.class);
+               // startActivity(intent);
             }
         });
     }

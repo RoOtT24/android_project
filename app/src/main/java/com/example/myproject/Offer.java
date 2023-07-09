@@ -12,6 +12,7 @@ private int offerid;
     private Date registrationDeadline;
 
     private Date courseStartDate;
+    private Date courseEndDate;
     private String courseSchedule;
 
     private String venue;
@@ -27,6 +28,16 @@ private int offerid;
     public Offer(int offerid,int courseId, String instructorEmail, Date registrationDeadline, Date courseStartDate, String courseSchedule, String venue) {
         this.offerid = offerid;
         this.courseId = courseId;
+        this.instructorEmail = instructorEmail;
+        this.registrationDeadline = registrationDeadline;
+        this.courseStartDate = courseStartDate;
+        this.courseSchedule = courseSchedule;
+        this.venue = venue;
+    }
+    public Offer(int courseId,Date enddate, String instructorEmail, Date registrationDeadline, Date courseStartDate, String courseSchedule, String venue) {
+        this.offerid = offerid;
+        this.courseId = courseId;
+        this.courseEndDate = enddate;
         this.instructorEmail = instructorEmail;
         this.registrationDeadline = registrationDeadline;
         this.courseStartDate = courseStartDate;
@@ -71,6 +82,14 @@ private int offerid;
 
     public void setCourseStartDate(Date courseStartDate) {
         this.courseStartDate = courseStartDate;
+    }
+
+    public Date getCourseEndDate() {
+        return courseEndDate;
+    }
+
+    public void setCourseEndDate(Date courseEndDate) {
+        this.courseEndDate = courseEndDate;
     }
 
     public String getCourseSchedule() {

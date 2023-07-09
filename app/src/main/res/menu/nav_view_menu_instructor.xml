@@ -7,6 +7,7 @@
         <item android:id="@+id/previously_course" android:title="View the courses previously taught" />
         <item android:id="@+id/viewStudents" android:title="View the list of students"/>
         <item android:id="@+id/Myschedule" android:title="My schedule"/>
+        <item android:id="@+id/MyProfile" android:title="My Profile"/>
         <item android:id="@+id/logoutInstructor" android:title="logout"/>
 
 

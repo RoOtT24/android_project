@@ -44,12 +44,19 @@ EditText email ;
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_enroll_courses, container, false);
         LinearLayout enrolledLayout = view.findViewById(R.id.coursesSechedule);
-        email = view.findViewById(R.id.Email);
-        String e = email.getText().toString().trim();
+        Bundle extras = getActivity().getIntent().getExtras();
+        final String[] userEmail = {""};
+        if (extras != null) {
+            userEmail[0] = extras.getString("email");
+            //The key argument here must match that used in the other activity
+        }
+//        email = view.findViewById(R.id.Email);
+//        String e = email.getText().toString().trim();
         dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
-        List<String> courses = dbHelper.enrollIN(e);
+        List<String> courses = dbHelper.enrollIN(userEmail[0]);
 
-        if (courses != null) {
+        Toast.makeText(getActivity(), Integer.toString(courses.size()), Toast.LENGTH_SHORT).show();
+        if (courses.size() > 0) {
             for (String course : courses) {
                 String title = course;
 
@@ -71,7 +78,7 @@ EditText email ;
                     @Override
                     public void onClick(View v) {
                         // Handle the withdraw button click event
-                        dbHelper.deleteEnrollCource(e, title);
+                        dbHelper.deleteEnrollCource(userEmail[0], title);
                         enrolledLayout.removeView(courseLayout); // Remove the course layout from the enrolledLayout
 
                         Toast.makeText(getActivity(), "Enrollment for course " + title + " deleted.", Toast.LENGTH_SHORT).show();
