@@ -229,8 +229,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public void insertInstructor(Instructor instructor) {
 
-
-
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_FIRST_NAME, instructor.getFirstName());
