@@ -36,8 +36,13 @@ public class homeStudent extends AppCompatActivity {
         final Enroll enroll = new Enroll();
         final ViewHistoryCourses viewHistory = new ViewHistoryCourses();
         final EnrollCoursesFragment EnrollCoursesFragment = new EnrollCoursesFragment();
+<<<<<<< HEAD
         final ViewCoursesInCenterFragment ViewCoursesInCenterFragment = new ViewCoursesInCenterFragment();
         final MyProfileStudentFragment MyProfileStudentFragment = new MyProfileStudentFragment();
+=======
+
+
+>>>>>>> Tariq
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(R.id.fragment_conatiner, SearchCourse, "Search Course"); // initial fragment
@@ -58,7 +63,7 @@ public class homeStudent extends AppCompatActivity {
                         ft.replace(R.id.fragment_conatiner, viewHistory);
                         break;
                     case R.id.viewCoursesHistory:
-                        ft.replace(R.id.fragment_conatiner, ViewCoursesInCenterFragment);
+                        ft.replace(R.id.fragment_conatiner, new viewCoursesEnrolledHistory());
                         break;
                     case R.id.viewCourses_withdrow :
                         ft.replace(R.id.fragment_conatiner, EnrollCoursesFragment);

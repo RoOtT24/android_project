@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
@@ -72,13 +73,14 @@ public class ViewAllStudents extends Fragment {
         return inflater.inflate(R.layout.fragment_view_all_students, container, false);
     }
 
+    @SuppressLint("Range")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         dbHelper = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
 
-        Cursor cursor = dbHelper.getAllApprovedStudents();
+        Cursor cursor = dbHelper.getAllStudents();
 
         LinearLayout linearLayout = getActivity().findViewById(R.id.All_instructors_LinearLayout);
         linearLayout.removeAllViews();
@@ -98,23 +100,39 @@ public class ViewAllStudents extends Fragment {
                 email_text.setText(cursor.getString(0));
                 phone_text.setText(cursor.getString(3));
                 address_text.setText(cursor.getString(4));
-                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(6), 0 , cursor.getBlob(6).length));
+                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)), 0 , cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)).length));
                 iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
-                iv.getLayoutParams().height = 300;
-                iv.getLayoutParams().width = 300;
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-                params.setMargins(100, 50 , 50, 50);
+                params.setMargins(100, 50 , 0, 50);
+                iv.setLayoutParams(params);
+                iv.getLayoutParams().height = 300;
+                iv.getLayoutParams().width = 300;
+                params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(300, 100 , 50, 50);
                 name_text.setLayoutParams(params);
-                ly.addView(name_text);
+                ly.addView(name_text,0);
                 ly.addView(iv);
                 vertical.addView(ly);
                 LinearLayout ly2 = new LinearLayout(getActivity());
-                params.setMargins(100, 0, 300, 50);
+                params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(100, 0, 100, 50);
                 email_text.setLayoutParams(params);
+                params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 0, 100, 50);
+                phone_text.setLayoutParams(params);
                 ly2.addView(email_text);
                 ly2.addView(phone_text);
                 ly2.addView(address_text);

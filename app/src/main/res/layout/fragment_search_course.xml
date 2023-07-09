@@ -20,7 +20,7 @@
         android:textSize="24sp" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinnerCourseSearch"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/border"

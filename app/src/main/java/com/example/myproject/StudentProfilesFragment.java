@@ -77,7 +77,7 @@ public class StudentProfilesFragment extends Fragment {
         DataBaseHelper dbHelper = new DataBaseHelper(getActivity().getApplicationContext(), "DATABASE", null, 1);
 
         // Call the getAllInstructors method to retrieve the instructor profiles
-        List<Student> students = dbHelper.getAllStudents();
+        List<Student> students = dbHelper.getAllStudentsList();
 
         // Create an ArrayAdapter to populate the ListView
         ArrayAdapter<Student> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, students);

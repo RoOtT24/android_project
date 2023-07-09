@@ -1,9 +1,13 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,28 +45,41 @@ public class ViewHistoryCourses extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
         return view;
     }
+    @SuppressLint("Range")
     private void displayCourseDetails() {
+        LinearLayout linearLayout = getActivity().findViewById(R.id.viewOfferingsLayout);
+        linearLayout.removeAllViews();
         dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
-        List<Courses> courses = dbHelper.getOfferedCoursesHistory();
 
-        if (courses != null && !courses.isEmpty()) {
-            StringBuilder stringBuilder = new StringBuilder();
+        Cursor cursor = dbHelper.getAllOfferedCoursesHistory();
 
-            for (Courses course : courses) {
-                stringBuilder.append("Title: ").append(course.getTitle()).append("\n");
+        if (cursor.getCount()>0) {
+            while(cursor.moveToNext()){
+                LinearLayout ly = new LinearLayout(getActivity());
+                ly.setOrientation(LinearLayout.VERTICAL);
+                EditText courseNameText = new EditText(getActivity());
+                EditText scheduleEditText = new EditText(getActivity());
+                EditText instructorText = new EditText(getActivity());
+                instructorText.setText(cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_FIRST_NAME))+" "+cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_LAST_NAME)));
+                scheduleEditText.setText(cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_COURSE_SCHEDULE)));
+                courseNameText.setText(cursor.getString(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_TITLE)));
+                ly.addView(instructorText);
+                ly.addView(scheduleEditText);
+                ly.addView(courseNameText);
+                linearLayout.addView(ly);
             }
-
-            history.setText(stringBuilder.toString());
         } else {
-            history.setText("No courses found");
+            history = new TextView(getActivity());
+            history.setText("No Offerings found");
+            linearLayout.addView(history);
         }
+        cursor.close();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        history = getActivity().findViewById(R.id.coursesEnrolled);
         displayCourseDetails();
     }
 }

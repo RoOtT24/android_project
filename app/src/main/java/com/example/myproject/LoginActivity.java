@@ -121,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.apply();
                     }
                     Intent intent = new Intent(LoginActivity.this, homeStudent.class);
+                    intent.putExtra("email",username);
                     startActivity(intent);
                     finish();
                     return;
@@ -200,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
         return ;
     }
     public void getUsers(){
-        Cursor c =dbHelper.getAllStudent();
+        Cursor c =dbHelper.getAllStudents();
         while(c.moveToNext()){
             Toast.makeText(this, "email : "+c.getString(2), Toast.LENGTH_SHORT).show();
         }

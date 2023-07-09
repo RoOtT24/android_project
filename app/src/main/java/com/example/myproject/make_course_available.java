@@ -31,8 +31,8 @@ public class make_course_available extends Fragment {
         // Required empty public constructor
     }
 
-    private EditText courseIdEditText;
-    private EditText instructorEmailEditText;
+//    private EditText courseIdEditText;
+//    private EditText instructorEmailEditText;
     private EditText registrationDeadlineEditText;
     private EditText courseStartDateEditText;
     private EditText courseScheduleEditText;
@@ -105,8 +105,8 @@ public class make_course_available extends Fragment {
 //    }
 
     private void clearFields() {
-        courseIdEditText.setText("");
-        instructorEmailEditText.setText("");
+//        courseIdEditText.setText("");
+//        instructorEmailEditText.setText("");
         registrationDeadlineEditText.setText("");
         courseStartDateEditText.setText("");
         courseScheduleEditText.setText("");
@@ -119,8 +119,8 @@ public class make_course_available extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
-        courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
-        instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
+//        courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
+//        instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
         registrationDeadlineEditText = getActivity().findViewById(R.id.editTextRegistrationDeadline);
         courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);
         courseScheduleEditText = getActivity().findViewById(R.id.editTextCourseSchedule);
@@ -133,7 +133,7 @@ public class make_course_available extends Fragment {
         ///////////////////////////////////////////////////////////
         // filling instructors spinner
         DataBaseHelper db = new DataBaseHelper( getActivity().getBaseContext(), "DATABASE", null , 1);
-        ArrayList<Instructor> instructors = (ArrayList<Instructor>) db.getAllInstructors();
+        ArrayList<Instructor> instructors = (ArrayList<Instructor>) db.getAllInstructorsList();
 
         ArrayList<String> instructorEmails = new ArrayList<>();
         for (int i = 0; i < instructors.size(); ++i)
@@ -171,14 +171,14 @@ public class make_course_available extends Fragment {
         instructor_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
-                instructorEmailEditText.setText(instructorEmails.get(i));
+//                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
+//                instructorEmailEditText.setText(instructorEmails.get(i));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
-                instructorEmailEditText.setText("");
+//                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
+//                instructorEmailEditText.setText("");
             }
         });
 
@@ -186,16 +186,16 @@ public class make_course_available extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
+//                courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
 //                Toast.makeText(getActivity(), Integer.toString(courses.get(i).getId()), Toast.LENGTH_SHORT).show();
 
-                courseIdEditText.setText(Integer.toString(courses.get(i).getId()));
+//                courseIdEditText.setText(Integer.toString(courses.get(i).getId()));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                courseIdEditText = getActivity().findViewById(R.id.editTextCourseId);
-                courseIdEditText.setText("");
+//                courseIdEditText = getActivity().findViewById(R.id.editTextCourseId);
+//                courseIdEditText.setText("");
             }
         });
 
@@ -220,8 +220,8 @@ public class make_course_available extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
-                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
+//                courseIdEditText = getActivity().findViewById(R.id.emailSechedule);
+//                instructorEmailEditText = getActivity().findViewById(R.id.editTextInstructorEmail);
                 registrationDeadlineEditText = getActivity().findViewById(R.id.editTextRegistrationDeadline);
                 courseStartDateEditText = getActivity().findViewById(R.id.editTextCourseStartDate);
                 courseScheduleEditText = getActivity().findViewById(R.id.editTextCourseSchedule);
@@ -232,7 +232,7 @@ public class make_course_available extends Fragment {
 
                 int id = -1;
                 for(int i = 0 ; i < courses.size(); ++i)
-                    if(courses.get(i).getId() == Integer.parseInt(courseIdEditText.getText().toString())){
+                    if(courses.get(i).getId() == Integer.parseInt(instructor_spinner.getSelectedItem().toString())){
                         id = courses.get(i).getId();
                         break;
                     }
@@ -244,7 +244,7 @@ public class make_course_available extends Fragment {
 
                     String schedule = courseScheduleEditText.getText().toString().trim();
                     String venue = venueEditText.getText().toString().trim();
-                Offer offer = new Offer(id, instructorEmailEditText.getText().toString(), deadline, startDate, schedule, venue);
+                Offer offer = new Offer(id, instructor_spinner.getSelectedItem().toString(), deadline, startDate, schedule, venue);
 
 
                 db.addOffer(offer);
