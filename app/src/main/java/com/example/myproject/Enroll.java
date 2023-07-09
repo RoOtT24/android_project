@@ -55,6 +55,11 @@ public class Enroll extends Fragment {
 
        // courseTitleEditText = view.findViewById(R.id.emailSechedule);
         //scheduleEditText = view.findViewById(R.id.Schedule);
+       // courseTitleEditText = view.findViewById(R.id.emailSechedule);
+        //scheduleEditText = view.findViewById(R.id.Schedule);
+//        textViewTitle = view.findViewById(R.id.textViewTitle);
+//        emailEditText = view.findViewById(R.id.Email);
+
 
 
         enrollButton = view.findViewById(R.id.Enroll_Button);

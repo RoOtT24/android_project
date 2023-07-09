@@ -80,6 +80,7 @@ public class SearchCourse extends Fragment {
         spinner.setAdapter(adapter);
     }
 
+
     private ArrayList<String> offeredCourses(List<Courses> courses){
         ArrayList<String> courseTitles = new ArrayList<>();
 
