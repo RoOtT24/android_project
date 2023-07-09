@@ -47,6 +47,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_START_DATE = "start_date";
 
+    public static final String COLUMN_END_DATE = "end_date";
+
 //    public static final String COLUMN_END_DATE = "end_date";
 
     public static final String COLUMN_COURSE_SCHEDULE = "course_schedule";
@@ -83,10 +85,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 COLUMN_USER_COURSEID + " INTEGER NOT NULL," +
                 COLUMN_REGISTRATION_DEADLINE + " INTEGER," +
                 COLUMN_START_DATE + " INTEGER," +
+                COLUMN_END_DATE + " INTEGER," +
                 COLUMN_COURSE_SCHEDULE + " TEXT," +
                 COLUMN_VENUE + " TEXT," +
-                "FOREIGN KEY (" + COLUMN_USER_COURSEID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_USER_COURSEID + ")" +
+                COLUMN_USER_EMAIL + " TEXT NOT NULL," + // Add the instructor email column
+                "FOREIGN KEY (" + COLUMN_USER_COURSEID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_USER_COURSEID + ")," +
+                "FOREIGN KEY (" + COLUMN_USER_EMAIL + ") REFERENCES " + TABLE_INSTRUCTOR + "(" + COLUMN_USER_EMAIL + ")" +
                 ")";
+
         db.execSQL(CREATE_OFFERING_TABLE);
 
         String CREATE_COURSE_TABLE = "CREATE TABLE " + TABLE_COURSES +
@@ -1131,31 +1137,78 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return offer;
     }
     // return the history courses that deadline is done
-    public List<Courses> getOfferedCoursesHistory() {
-        List<Courses> offeredCourses = new ArrayList<>();
+
+    public Cursor getAllOfferedCoursesHistory() {
+//        List<Courses> offeredCourses = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
-        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
-        int courseId = 0;
-        while (cursor.moveToNext()) {
-            int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
-            if (courseIdIndex >= 0) {
-                courseId = cursor.getInt(courseIdIndex);
-            }
-            // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
-            Courses course = getCourseById(courseId);
+//        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+//        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+//        int offerId = 0;
+//        while (cursor.moveToNext()) {
+//            int offerIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+//            if (offerIdIndex >= 0) {
+//                offerId = cursor.getInt(offerIdIndex);
+//            }
+//            // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
+//            Courses course = getCourseById(offerId);
+//
+//
+//            // Check if the course's registration deadline has passed
+//            if (isRegistrationDeadlinePassed(course)) {
+//                offeredCourses.add(course);
+//            }
+//        }
+//
+//        cursor.close();
+//        db.close();
+//
+//        return offeredCourses;
+        String query = "SELECT " +
+                TABLE_OFFERING + ".*," +
+                TABLE_COURSES + ".*," +
+                TABLE_INSTRUCTOR + "." + COLUMN_USER_FIRST_NAME + "," +
+                TABLE_INSTRUCTOR + "." + COLUMN_USER_LAST_NAME +
+                " FROM " + TABLE_OFFERING +
+                " JOIN " + TABLE_COURSES + " ON " + TABLE_COURSES + "." + COLUMN_USER_COURSEID + " = " + TABLE_OFFERING + "." + COLUMN_USER_COURSEID +
+                " JOIN " + TABLE_INSTRUCTOR + " ON " + TABLE_INSTRUCTOR + "." + COLUMN_USER_EMAIL + " = " + TABLE_OFFERING + "." + COLUMN_USER_EMAIL ;
 
+        return db.rawQuery(query, null);
+    }
+    public Cursor getOfferedCoursesHistory(String email) {
+//        List<Courses> offeredCourses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+//        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+//        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+//        int offerId = 0;
+//        while (cursor.moveToNext()) {
+//            int offerIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+//            if (offerIdIndex >= 0) {
+//                offerId = cursor.getInt(offerIdIndex);
+//            }
+//            // int courseId = cursor.getInt(cursor.getColumnIndex(COLUMN_OFFERING_ID));
+//            Courses course = getCourseById(offerId);
+//
+//
+//            // Check if the course's registration deadline has passed
+//            if (isRegistrationDeadlinePassed(course)) {
+//                offeredCourses.add(course);
+//            }
+//        }
+//
+//        cursor.close();
+//        db.close();
+//
+//        return offeredCourses;
+        String query = "SELECT " +
+                TABLE_OFFERING + ".*," +
+                TABLE_COURSES + ".*," +
+                TABLE_INSTRUCTOR + "." + COLUMN_USER_FIRST_NAME + "," +
+                TABLE_INSTRUCTOR + "." + COLUMN_USER_LAST_NAME +
+                " FROM " + TABLE_OFFERING +
+                " JOIN " + TABLE_COURSES + " ON " + TABLE_COURSES + "." + COLUMN_USER_COURSEID + " = " + TABLE_OFFERING + "." + COLUMN_USER_COURSEID +
+                " JOIN " + TABLE_INSTRUCTOR + " ON " + TABLE_INSTRUCTOR + "." + COLUMN_USER_EMAIL + " = " + TABLE_OFFERING + "." + COLUMN_USER_EMAIL + " WHERE "+COLUMN_USER_EMAIL+"=?";
 
-            // Check if the course's registration deadline has passed
-            if (isRegistrationDeadlinePassed(course)) {
-                offeredCourses.add(course);
-            }
-        }
-
-        cursor.close();
-        db.close();
-
-        return offeredCourses;
+        return db.rawQuery(query, new String[]{email});
     }
 
     private boolean isRegistrationDeadlinePassed(Courses course) {

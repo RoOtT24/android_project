@@ -38,7 +38,6 @@ public class ViewCoursesInCenterFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view, container, false);
 
-        history = view.findViewById(R.id.coursesEnrolled);
         displayCourse();
         return view;
     }

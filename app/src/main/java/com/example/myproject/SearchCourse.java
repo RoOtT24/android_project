@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +26,6 @@ public class SearchCourse extends Fragment {
     List<String> courseTitles;
     DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
 
-    public SearchCourse() {
-        // Required empty public constructor
-    }
 
     public static SearchCourse newInstance() {
         SearchCourse fragment = new SearchCourse();
@@ -56,7 +52,7 @@ public class SearchCourse extends Fragment {
         Courses course = dbHelper.getCourseById(courseId);
         Offer offer = dbHelper.getCourseofferById(courseId);
 
-        if (course != null && offer!=null) {
+        if (course != null && offer!=null) { // ?????????????????????????????
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Course ID: ").append(course.getId()).append("\n");
             stringBuilder.append("Title: ").append(course.getTitle()).append("\n");
@@ -73,13 +69,20 @@ public class SearchCourse extends Fragment {
     }
 
     private void refreshSpinner() {
+        spinner = getActivity().findViewById(R.id.spinnerCourseSearch);
         courseTitles.clear();
         List<Courses> courses = dbHelper.getOfferedCourses();
-       courseTitles = offeredCourses(courses);
+        courseTitles = offeredCourses(courses);
+        if(courseTitles.size() == 0)
+            courseTitles.add("no courses available");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, courseTitles);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> Tariq
 
     private ArrayList<String> offeredCourses(List<Courses> courses){
         ArrayList<String> courseTitles = new ArrayList<>();
@@ -103,7 +106,7 @@ public class SearchCourse extends Fragment {
         searchButton = getActivity().findViewById(R.id.search_Button);
         courseOffried = getActivity().findViewById(R.id.courseOffried);
         courseTitles = new ArrayList<>();
-        spinner = getActivity().findViewById(R.id.spinner);
+        spinner = getActivity().findViewById(R.id.spinnerCourseSearch);
         refreshSpinner();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -113,8 +116,8 @@ public class SearchCourse extends Fragment {
                 // Retrieve course data from the database based on the selected course title
                 Courses courseData = dbHelper.getCourseData(selectedCourse);
                 if (courseData != null) {
-                    int courseid = courseData.getId();
-                    displayCourseDetails(courseid);
+                    int courseId = courseData.getId();
+                    displayCourseDetails(courseId);
                 }
                 else {
                     Toast.makeText(getActivity(), "No course found", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 package com.example.myproject;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
@@ -75,6 +76,7 @@ public class ViewAllInstructors extends Fragment {
         return inflater.inflate(R.layout.fragment_view_all_instructors, container, false);
     }
 
+    @SuppressLint("Range")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -112,7 +114,7 @@ public class ViewAllInstructors extends Fragment {
                 address_text.setText(cursor.getString(7));
 
 
-                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(9), 0 , cursor.getBlob(9).length));
+                iv.setImageBitmap(BitmapFactory.decodeByteArray(cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)), 0 , cursor.getBlob(cursor.getColumnIndex(DataBaseHelper.COLUMN_USER_IMAGE)).length));
 //                iv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
 //                        LinearLayout.LayoutParams.WRAP_CONTENT));
 

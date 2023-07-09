@@ -23,15 +23,15 @@ import java.util.ArrayList;
 
 public class Enroll extends Fragment {
 
-    private TextView textViewTitle;
-    private EditText emailEditText;
+//    private TextView textViewTitle;
+//    private EditText emailEditText;
    // private EditText courseTitleEditText;
    // private EditText scheduleEditText;
     private Button enrollButton;
   //  private TextView scheduleTextView;
     Spinner Course_titles;
     Spinner OFFERID;
-    DataBaseHelper dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
+    DataBaseHelper dbHelper;
     public Enroll() {
         // Required empty public constructor
     }
@@ -49,14 +49,14 @@ public class Enroll extends Fragment {
         View view = inflater.inflate(R.layout.fragment_enroll, container, false);
 
         // Initialize views
-        textViewTitle = view.findViewById(R.id.textViewTitle);
-        emailEditText = view.findViewById(R.id.Email);
+//        textViewTitle = view.findViewById(R.id.textViewTitle);
+//        emailEditText = view.findViewById(R.id.Email);
 
         enrollButton = view.findViewById(R.id.Enroll_Button);
         OFFERID = view.findViewById(R.id.OfferID);
         ////////spinner
         Course_titles = view.findViewById(R.id.Title);
-
+        dbHelper = new DataBaseHelper(getActivity(), "DATABASE", null, 1);
         ArrayList<Courses> courses = (ArrayList<Courses>) dbHelper.getOfferedCourses();
 
         ArrayList<String> Offering_courses = new ArrayList<>();
@@ -95,7 +95,12 @@ public class Enroll extends Fragment {
             @Override
             public void onClick(View v) {
                 // Get the entered values
-                String email = emailEditText.getText().toString();
+                Bundle extras = getActivity().getIntent().getExtras();
+                String email = new String();
+                if (extras != null) {
+                    email = extras.getString("email");
+                    //The key argument here must match that used in the other activity
+                }
                 String selectedCourseTitle = Course_titles.getSelectedItem().toString();
                 int selectedOfferingID = (int) OFFERID.getSelectedItem();
 
