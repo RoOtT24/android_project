@@ -49,8 +49,13 @@ public class Enroll extends Fragment {
         View view = inflater.inflate(R.layout.fragment_enroll, container, false);
 
         // Initialize views
+
 //        textViewTitle = view.findViewById(R.id.textViewTitle);
 //        emailEditText = view.findViewById(R.id.Email);
+
+       // courseTitleEditText = view.findViewById(R.id.emailSechedule);
+        //scheduleEditText = view.findViewById(R.id.Schedule);
+
 
         enrollButton = view.findViewById(R.id.Enroll_Button);
         OFFERID = view.findViewById(R.id.OfferID);

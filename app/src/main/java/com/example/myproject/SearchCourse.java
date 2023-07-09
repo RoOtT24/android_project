@@ -79,10 +79,6 @@ public class SearchCourse extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> Tariq
 
     private ArrayList<String> offeredCourses(List<Courses> courses){
         ArrayList<String> courseTitles = new ArrayList<>();
