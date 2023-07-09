@@ -85,9 +85,9 @@ public class SearchCourse extends Fragment {
         ArrayList<String> courseTitles = new ArrayList<>();
 
         for (Courses course : courses) {
-//            String title = course.getTitle();
-//            courseTitles.add(title);
-            Toast.makeText(getActivity(), course.getTitle(), Toast.LENGTH_SHORT).show();
+            String title = course.getTitle();
+            courseTitles.add(title);
+            //Toast.makeText(getActivity(), course.getTitle(), Toast.LENGTH_SHORT).show();
         }
 
         return courseTitles;

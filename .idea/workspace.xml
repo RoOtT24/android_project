@@ -10,31 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2487f748-8b25-4fd0-9982-6f141d190b71" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/myProject.app.androidTest.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/myProject.app.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/myProject.app.main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/myProject.app.unitTest.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/DataBaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/DataBaseHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Enroll.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Enroll.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/EnrollCoursesFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/EnrollCoursesFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/LoginActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/MyProfileStudentFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/MyProfileStudentFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Offer.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Offer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/SearchCourse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/SearchCourse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Search_Unaccpted_Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/Search_Unaccpted_Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/ViewAllInstructors.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/ViewAllInstructors.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/ViewHistoryCourses.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/ViewHistoryCourses.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/edit_delete_course.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/edit_delete_course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/homeInstructor.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/homeInstructor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/homeStudent.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/homeStudent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/make_course_available.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/myproject/make_course_available.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_enroll_courses.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_enroll_courses.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_make_course_available.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_make_course_available.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/nav_view_menu_instructor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/nav_view_menu_instructor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/nav_view_menu_student.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/nav_view_menu_student.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

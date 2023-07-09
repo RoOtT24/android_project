@@ -1009,6 +1009,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // for search in available courses
+//    public List<Courses> getOfferedCourses() {
+//        List<Courses> offeredCourses = new ArrayList<>();
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        String[] columns = {COLUMN_OFFERING_ID, COLUMN_USER_COURSEID};
+//        Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
+//
+//        while (cursor.moveToNext()) {
+//            Integer courseId = 0;
+//            int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+//            if (courseIdIndex >= 0) {
+//                courseId = cursor.getInt(courseIdIndex);
+//            }
+//            Courses course = getCourseById(courseId);
+//            offeredCourses.add(course);
+//        }
+//
+//        cursor.close();
+//        db.close();
+//
+//        return offeredCourses;
+//    }
     public List<Courses> getOfferedCourses() {
         List<Courses> offeredCourses = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1016,13 +1037,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_OFFERING, columns, null, null, null, null, null);
 
         while (cursor.moveToNext()) {
-            Integer courseId = 0;
-            int courseIdIndex = cursor.getColumnIndex(COLUMN_OFFERING_ID);
+            int courseIdIndex = cursor.getColumnIndex(COLUMN_USER_COURSEID);
             if (courseIdIndex >= 0) {
-                courseId = cursor.getInt(courseIdIndex);
+                int courseId = cursor.getInt(courseIdIndex);
+                Courses course = getCourseById(courseId);
+                if (course != null) {
+                    offeredCourses.add(course);
+                }
             }
-            Courses course = getCourseById(courseId);
-            offeredCourses.add(course);
         }
 
         cursor.close();
@@ -1033,37 +1055,43 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     public Courses getCourseById(int courseId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        //String[] columns = {COLUMN_USER_TITLE, COLUMN_USER_MAINTOPICES, COLUMN_USER_PREEQUISITES};
-        String selection = COLUMN_USER_COURSEID + " = ?";
-        String[] selectionArgs = {String.valueOf(courseId)};
-        Cursor cursor = db.query(TABLE_COURSES, null, selection, selectionArgs, null, null, null);
+        String query = "SELECT * FROM " + TABLE_COURSES + " WHERE " + COLUMN_USER_COURSEID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(courseId)});
 
         Courses course = null;
         if (cursor.moveToFirst()) {
+            boolean isValid = true;
             String title = null;
             int titleIndex = cursor.getColumnIndex(COLUMN_USER_TITLE);
             if (titleIndex >= 0) {
                 title = cursor.getString(titleIndex);
+            } else {
+                isValid = false;
             }
             String[] mainTopics = null;
             int mainTopicsIndex = cursor.getColumnIndex(COLUMN_USER_MAINTOPICES);
             if (mainTopicsIndex >= 0) {
                 mainTopics = convertStringToArray(cursor.getString(mainTopicsIndex));
+            } else {
+                isValid = false;
             }
             String[] prerequisites = null;
             int prerequisitesIndex = cursor.getColumnIndex(COLUMN_USER_PREEQUISITES);
             if (prerequisitesIndex >= 0) {
                 prerequisites = convertStringToArray(cursor.getString(prerequisitesIndex));
+            } else {
+                isValid = false;
             }
-
-            course = new Courses(courseId, title, mainTopics, prerequisites, null);
+            if (isValid) {
+                course = new Courses(courseId, title, mainTopics, prerequisites, null);
+            }
         }
-
         cursor.close();
         db.close();
 
         return course;
     }
+
 
     public Offer getCourseOfferByofferId(int offerId) {
         SQLiteDatabase db = this.getReadableDatabase();
